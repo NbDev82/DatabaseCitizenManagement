@@ -20,7 +20,7 @@ drop table [Citizens]
 CREATE TABLE [Accounts](
 	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD),
 	matkhau nvarchar(max)  NOT NULL,
-	phanquyen int  NOT NULL DEFAULT 0
+	phanquyen bit /*chỉ nhận 2 giá trị 0 hoặc 1*/
 )
 /*
 drop table [Accounts]
@@ -148,7 +148,7 @@ CREATE table [Certificates](
 	QuocTich NVARCHAR(max) NOT NULL,
 	QueQuan NVARCHAR(max) NOT NULL,
 	NoiThuongTru NVARCHAR(max) NOT NULL,
-	HanSuDung NVARCHAR(max) NOT NULL,
+	HanSuDung Date NOT NULL,
 	DacDiemNhanDang NVARCHAR(max) NOT NULL DEFAULT N'Không',
 	Avatar image NOT NULL
 )
@@ -258,161 +258,19 @@ BEGIN
 END
 */
 
---KHOA
+--KHOA----------------------------------------------------------------------------------------------------------------------
 
 /* 
 CREATE DATABASE CityzenManagement
 GO 
 */
 
-USE CityzenManagement
-GO
-
-CREATE table [Citizens](
-	MaCD int PRIMARY KEY IDENTITY(1,1)  NOT NULL,
-	HoTen NVARCHAR(max) NOT NULL,
-	GioiTinh NVARCHAR(max) NOT NULL, -- Nam | Nữ
-	NgheNghiep NVARCHAR(max) NOT NULL DEFAULT N'NONE',
-	DanToc NVARCHAR(max) NOT NULL,
-	TonGiao NVARCHAR(max) NOT NULL DEFAULT N'NONE',
-	TinhTrang NVARCHAR(max) DEFAULT N'Còn sống' NOT NULL, -- Đã chết | Còn sống
-	MaHN int NOT NULL DEFAULT -1, -- -1: Độc thân
-)
-
-CREATE TABLE [Accounts](
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD),
-	matkhau nvarchar(max)  NOT NULL,
-	--Khoa
-	phanquyen bit /*chỉ nhận 2 giá trị 0 hoặc 1*/
-	--Khoa
-	
-)
-
-CREATE TABLE [Births] (
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-    NgaySinh DATE  NOT NULL,
-	NoiSinh NVARCHAR(255) NOT NULL,
-    MaCD_Cha int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-    MaCD_Me int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-    NgayKhai DATE NOT NULL DEFAULT GETDATE(),
-	NgayDuyet DATE NULL,
-
-	--Khoa
-	CONSTRAINT CHK_Births_NgKhaiNgDuyet CHECK (NgayDuyet is null OR NgayDuyet >= NgayKhai)
-	--Khoa
-);
-GO
+ALTER TABLE [Births]
+ADD CONSTRAINT CHK_Births_NgKhaiNgDuyet CHECK (NgayDuyet is null OR NgayDuyet >= NgayKhai)
 
 
-
-CREATE TABLE [Users_Deleted](
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL UNIQUE,
-	NguoiKhai int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	NguyenNhan NVARCHAR(max) NOT NULL DEFAULT N'NONE',
-	NgayTu DATE NOT NULL,
-	NgayKhai DATE NOT NULL DEFAULT GETDATE(),
-	NgayDuyet DATE NULL -- Đã duyệt | Chưa duyệt
-)
-GO
-
-CREATE TABLE [Households](
-	MaHo INT IDENTITY(1,1) PRIMARY KEY,
-	ChuHo int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	TinhThanh NVARCHAR(255) NOT NULL,
-	QuanHuyen NVARCHAR(255) NOT NULL,
-	PhuongXa NVARCHAR(255) NOT NULL,
-	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'NONE', -- 1: Đã duyệt | 0: Chưa duyệt
-)
-GO
-
-ALTER TABLE [Citizens]
-ADD MaHoKhau INT FOREIGN KEY REFERENCES [Households](MaHo) NULL;
-
-CREATE TABLE [Detail_Households](
-	MaHo int FOREIGN KEY REFERENCES [Households](MaHo) NOT NULL,
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	TinhTrangCuTru NVARCHAR(255) NOT NULL DEFAULT N'Thường trú', -- 1: Thường trú | 0: Tạm vắng | 2: Tạm trú
-	QuanHeVoiChuHo NVARCHAR(255) NOT NULL DEFAULT N'NONE',
-	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	TrangThai NVARCHAR(255) DEFAULT N'NONE' NOT NULL, -- 1: Đã duyệt | 0: Chưa duyệt | 2: Đã xác nhận
-	PRIMARY KEY (MaHo, MaCD)
-)
-GO
-----------------
-
-
-
-
-CREATE TABLE [People_Marriage](
-	MaHN INT IDENTITY PRIMARY KEY,
-	MaCDChong int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	MaCDVo int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	Loai NVARCHAR(255) NOT NULL DEFAULT N'Kết hôn', -- 1: Kết hôn | 0: Ly hôn
-	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	XacNhanLan1 int REFERENCES [Citizens](MaCD) DEFAULT NULL,
-	XacNhanLan2 int REFERENCES [Citizens](MaCD) DEFAULT NULL,
-	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'Chưa duyệt'-- 1: Đã duyệt | 0: Chưa duyệt
-
-	CONSTRAINT CHK_People_Marriage_Loai CHECK (Loai = 'Kết hôn' OR Loai ='Ly hôn')
-)
-GO
-
-CREATE TABLE [Mails](
-	MaMail INT IDENTITY PRIMARY KEY,
-	TieuDe NVARCHAR(MAX) NOT NULL DEFAULT N'NONE',
-	Ngay DATE NOT NULL DEFAULT GETDATE(),
-	NguoiGui int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	NguoiNhan int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-	NoiDung NVARCHAR(MAX) NOT NULL
-)
-GO
-
-CREATE TABLE Temporarily_Absent (
-	ID int PRIMARY KEY IDENTITY(1,1),
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-    MaCCCD VARCHAR(max) NOT NULL,
-    Tinh NVARCHAR(max) NOT NULL,
-    Huyen NVARCHAR(max) NOT NULL,
-    Xa NVARCHAR(max) NOT NULL,
-    LyDo NVARCHAR(max) NOT NULL,
-    thoi_gian_bat_dau DATE NOT NULL,
-    thoi_gian_ket_thuc DATE NOT NULL,
-	TrangThai NVARCHAR(max) NOT NULL DEFAULT N'Chưa duyệt',
-);
-
-
-CREATE TABLE Temporarily_Staying (
-	ID int PRIMARY KEY IDENTITY(1,1),
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
-    MaCCCD VARCHAR(max) NOT NULL,
-    Tinh NVARCHAR(max) NOT NULL,
-    Huyen NVARCHAR(max) NOT NULL,
-    Xa NVARCHAR(max) NOT NULL,
-    LyDo NVARCHAR(max) NOT NULL,
-    thoi_gian_bat_dau DATE NOT NULL,
-	TrangThai NVARCHAR(max) NOT NULL DEFAULT N'Chưa duyệt',
-);
-
-CREATE table [Certificates](
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) UNIQUE NOT NULL,
-	MaCCCD VARCHAR(max) NOT NULL,
-	QuocTich NVARCHAR(max) NOT NULL,
-	QueQuan NVARCHAR(max) NOT NULL,
-	NoiThuongTru NVARCHAR(max) NOT NULL,
-	HanSuDung NVARCHAR(max) NOT NULL,
-	DacDiemNhanDang NVARCHAR(max) NOT NULL DEFAULT N'Không',
-	Avatar image NOT NULL
-)
-
-/*CREATE table [Avatars](
-	MaCD int FOREIGN KEY REFERENCES [Citizens](MaCD) UNIQUE NOT NULL,
-	Avatar Image
-)*/
-
-
-
-
+ALTER TABLE [People_Marriage]
+ADD CONSTRAINT CHK_People_Marriage_Loai CHECK (Loai = 'Kết hôn' OR Loai ='Ly hôn')
 
 GO
 
@@ -509,14 +367,6 @@ END
 DROP TABLE
 
 */
-
-
-
-
-
-
-
-
 
 
 --KHOA
@@ -638,7 +488,7 @@ RETURN(
 	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
 	FROM Citizens cti
 	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @ChuHo))
---Khoa
+--Khoa----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -646,21 +496,17 @@ RETURN(
 
 
 
---MẠNH
+--MẠNH----------------------------------------------------------------------------------------------------------------------
 -- Ngày duyệt phải lớn hơn ngày khai
 ALTER TABLE [Births]
 ADD CONSTRAINT [CK_Births_Validation] CHECK (NgayDuyet > NgayKhai);
 
 -- Mã chủ hộ không được trùng (Households) -- thêm UNIQUE vào trường ChuHo
-CREATE TABLE [Households](
-	MaHo INT IDENTITY(1,1) PRIMARY KEY,
-	ChuHo int FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL UNIQUE,
-	TinhThanh NVARCHAR(255) NOT NULL,
-	QuanHuyen NVARCHAR(255) NOT NULL,
-	PhuongXa NVARCHAR(255) NOT NULL,
-	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'NONE', -- 1: Đã duyệt | 0: Chưa duyệt
-)
+
+
+ALTER TABLE [Households]
+ADD CONSTRAINT UC_ChuHo UNIQUE (ChuHo);
+GO
 
 -- Tính toán tuổi của một người (Births)
 CREATE FUNCTION dbo.Fn_CalculateAge(@MaCD int)
@@ -678,8 +524,8 @@ BEGIN
 
     RETURN @age;
 END;
-SELECT dbo.Fn_CalculateAge(2)
-
+-- SELECT dbo.Fn_CalculateAge(2)
+GO
 -- Hàm tính số lượng người cùng trong 1 hộ khẩu (thông số truyền vào là mã hộ) (Detail_Households)
 CREATE FUNCTION dbo.Fn_CountPeopleInHousehold(@MaHo int)
 RETURNS int
@@ -693,8 +539,8 @@ BEGIN
 
     RETURN @count;
 END;
-SELECT dbo.Fn_CountPeopleInHousehold(1)
-
+-- SELECT dbo.Fn_CountPeopleInHousehold(1)
+GO
 --  Trả về chuỗi địa chỉ tỉnh+ huyện+ xã  (Temporarily_Absent)
 CREATE FUNCTION dbo.Fn_GetAddress(@MaCD int)
 RETURNS nvarchar(max)
@@ -708,8 +554,8 @@ BEGIN
 
     RETURN @address;
 END;
-SELECT dbo.Fn_GetAddress(1) as Address;
-
+-- SELECT dbo.Fn_GetAddress(1) as Address;
+GO
 -- Hàm đếm số lượng người tạm chú tại 1 khu vực (tham số: thành phố, huyện, xã)
 CREATE FUNCTION dbo.Fn_CountTemporarilyStaying(@Tinh NVARCHAR(max), @Huyen NVARCHAR(max), @Xa NVARCHAR(max))
 RETURNS int
@@ -723,8 +569,8 @@ BEGIN
 
     RETURN @count;
 END;
-SELECT dbo.Fn_CountTemporarilyStaying('', '', '')
-
+-- SELECT dbo.Fn_CountTemporarilyStaying('', '', '')
+GO
 -- Tính số người chết trong năm(truyền vào năm cần xem)
 CREATE FUNCTION dbo.Fn_CountDeathInYear(@year int)
 RETURNS int
@@ -738,8 +584,8 @@ BEGIN
 
     RETURN @count;
 END;
-SELECT dbo.Fn_CountDeathInYear(2022)
-
+-- SELECT dbo.Fn_CountDeathInYear(2022)
+GO
 -- Liệt kê các công dân hiện chưa có cccd (citizens)
 CREATE VIEW [Citizens_Without_Certificates]
 AS
@@ -748,6 +594,7 @@ FROM Citizens
 WHERE MaCD NOT IN (SELECT MaCD FROM Certificates);
 SELECT * FROM Citizens_Without_Certificates;
 
+GO
 -- 
 CREATE FUNCTION Fn_CountHouseholdsInArea
 (
@@ -769,9 +616,9 @@ BEGIN
     RETURN @soLuongHo;
 END
 
-drop function Fn_CountHouseholdsInArea
+--drop function Fn_CountHouseholdsInArea
 
-SELECT dbo.Fn_CountHouseholdsInArea(N'Hà Nội', N'Ba Đình', N'Trúc Bạch') as CountHouseholdsInArea
+--SELECT dbo.Fn_CountHouseholdsInArea(N'Hà Nội', N'Ba Đình', N'Trúc Bạch') as CountHouseholdsInArea
 --Mạnh
 
 
@@ -837,11 +684,6 @@ ON [Mails]
 AFTER INSERT
 AS
 BEGIN
-    -- Insert data into [Mails] table
-    --INSERT INTO [Mails] (TieuDe, Ngay, NguoiGui, NguoiNhan, NoiDung)
-    --SELECT I.TieuDe, I.Ngay, I.NguoiGui, I.NguoiNhan, I.NoiDung
-    --FROM inserted as I, [Mails] as M
-	--WHERE I.NguoiGui = M.NguoiGui
     
     -- Check if the sender or recipient is a manager
     IF EXISTS (
@@ -1290,3 +1132,105 @@ VALUES
 (36, 37, N'Kết hôn', '2023-04-10', NULL, NULL, N'Chưa duyệt'),
 (42, 41, N'Kết hôn', '2023-04-10', NULL, NULL, N'Chưa duyệt'),
 (47, 46, N'Kết hôn', '2023-04-10', NULL, NULL, N'Chưa duyệt');
+
+--certificates mails temporary-absent temporary-staying
+
+INSERT INTO Certificates (MaCD, MaCCCD, QuocTich, QueQuan, NoiThuongTru, HanSuDung, DacDiemNhanDang, Avatar)
+VALUES
+    (1, 'CCCD001', N'Việt Nam', N'Kon Tum', N'Đắk Hà', N'2033-01-01', N'Không', 'image1.jpg'),
+	(2, 'CCCD002', N'Việt Nam', N'Đà Nẵng', N'Hải Châu', N'2034-01-01', N'Không', 'image2.jpg'),
+    (3, 'CCCD003', N'Việt Nam', N'Hà Nội', N'Cầu Giấy', N'2035-01-01', N'Không', 'image3.jpg'),
+    (4, 'CCCD004', N'Việt Nam', N'Hồ Chí Minh', N'Quận 1', N'2036-01-01', N'Không', 'image4.jpg'),
+    (5, 'CCCD005', N'Việt Nam', N'Đồng Nai', N'Biên Hòa', N'2037-01-01', N'Không', 'image5.jpg'),
+    (6, 'CCCD006', N'Việt Nam', N'Bình Dương', N'Thủ Dầu Một', N'2038-01-01', N'Không', 'image6.jpg'),
+    (7, 'CCCD007', N'Việt Nam', N'Nghệ An', N'Vinh', N'2039-01-01', N'Không', 'image7.jpg'),
+    (8, 'CCCD008', N'Việt Nam', N'Hải Phòng', N'Hồng Bàng', N'2040-01-01', N'Không', 'image8.jpg'),
+    (9, 'CCCD009', N'Việt Nam', N'Khánh Hòa', N'Nha Trang', N'2041-01-01', N'Không', 'image9.jpg'),
+    (10, 'CCCD010', N'Việt Nam', N'Bà Rịa - Vũng Tàu', N'Vũng Tàu', N'2042-01-01', N'Không', 'image10.jpg'),
+    (11, 'CCCD011', N'Việt Nam', N'Quảng Ngãi', N'Quảng Ngãi', N'2043-01-01', N'Không', 'image11.jpg'),
+    (12, 'CCCD012', N'Việt Nam', N'Đắk Lắk', N'Buôn Ma Thuột', N'2044-01-01', N'Không', 'image12.jpg'),
+    (13, 'CCCD013', N'Việt Nam', N'Lâm Đồng', N'Đà Lạt', N'2045-01-01', N'Không', 'image13.jpg').
+	(14, 'CCCD014', N'Việt Nam', N'Thừa Thiên Huế', N'Huế', N'2046-01-01', N'Không', 'image14.jpg'),
+    (15, 'CCCD015', N'Việt Nam', N'Hà Tĩnh', N'Hà Tĩnh', N'2047-01-01', N'Không', 'image15.jpg'),
+    (16, 'CCCD016', N'Việt Nam', N'Thanh Hóa', N'Thanh Hóa', N'2048-01-01', N'Không', 'image16.jpg'),
+    (17, 'CCCD017', N'Việt Nam', N'Nam Định', N'Nam Định', N'2049-01-01', N'Không', 'image17.jpg'),
+    (18, 'CCCD018', N'Việt Nam', N'Bắc Ninh', N'Bắc Ninh', N'2050-01-01', N'Không', 'image18.jpg'),
+    (19, 'CCCD019', N'Việt Nam', N'Phú Thọ', N'Việt Trì', N'2051-01-01', N'Không', 'image19.jpg'),
+    (20, 'CCCD020', N'Việt Nam', N'Bắc Giang', N'Bắc Giang', N'2052-01-01', N'Không', 'image20.jpg'),
+    (21, 'CCCD021', N'Việt Nam', N'Hòa Bình', N'Hòa Bình', N'2053-01-01', N'Không', 'image21.jpg'),
+    (22, 'CCCD022', N'Việt Nam', N'Hưng Yên', N'Hưng Yên', N'2054-01-01', N'Không', 'image22.jpg'),
+    (23, 'CCCD023', N'Việt Nam', N'Hà Nam', N'Phủ Lý', N'2055-01-01', N'Không', 'image23.jpg'),
+    (24, 'CCCD024', N'Việt Nam', N'Thái Bình', N'Thái Bình', N'2056-01-01', N'Không', 'image24.jpg'),
+    (25, 'CCCD025', N'Việt Nam', N'Hải Dương', N'Hải Dương', N'2057-01-01', N'Không', 'image25.jpg'),
+    (26, 'CCCD026', N'Việt Nam', N'Hải Dương', N'Chí Linh', N'2058-01-01', N'Không', 'image26.jpg'),
+    (27, 'CCCD027', N'Việt Nam', N'Quảng Ninh', N'Hạ Long', N'2059-01-01', N'Không', 'image27.jpg');
+
+
+INSERT INTO Mails (TieuDe, Ngay, NguoiGui, NguoiNhan, NoiDung)
+VALUES
+    (N'Mail 1', '2022-01-01', 1, 2, N'Nội dung mail 1'),
+    (N'Mail 2', '2022-02-05', 1, 4, N'Nội dung mail 2'),
+    (N'Mail 3', '2022-03-10', 1, 6, N'Nội dung mail 3'),
+    (N'Mail 4', '2022-04-15', 1, 8, N'Nội dung mail 4'),
+    (N'Mail 5', '2022-05-20', 1, 10, N'Nội dung mail 5'),
+    (N'Mail 6', '2022-06-25', 1, 12, N'Nội dung mail 6'),
+    (N'Mail 7', '2022-07-30', 1, 14, N'Nội dung mail 7'),
+    (N'Mail 8', '2022-08-04', 1, 16, N'Nội dung mail 8'),
+    (N'Mail 9', '2022-09-09', 1, 18, N'Nội dung mail 9'),
+    (N'Mail 10', '2022-10-14', 1, 20, N'Nội dung mail 10'),
+    (N'Mail 11', '2022-11-19', 1, 22, N'Nội dung mail 11'),
+    (N'Mail 12', '2022-12-24', 1, 24, N'Nội dung mail 12'),
+    (N'Mail 13', '2023-01-29', 1, 26, N'Nội dung mail 13'),
+    (N'Mail 14', '2023-03-05', 1, 28, N'Nội dung mail 14'),
+    (N'Mail 15', '2023-04-10', 1, 30, N'Nội dung mail 15'),
+    (N'Mail 16', '2023-05-15', 1, 32, N'Nội dung mail 16'),
+    (N'Mail 17', '2023-06-20', 1, 34, N'Nội dung mail 17'),
+    (N'Mail 18', '2023-07-25', 1, 36, N'Nội dung mail 18'),
+    (N'Mail 19', '2023-08-30', 1, 38, N'Nội dung mail 19'),
+    (N'Mail 20', '2023-10-04', 1, 40, N'Nội dung mail 20'),
+	(N'Mail 21', '2023-10-09', 2, 1, N'Nội dung mail 21'),
+    (N'Mail 22', '2023-09-04', 4, 1, N'Nội dung mail 22'),
+    (N'Mail 23', '2023-08-01', 6, 1, N'Nội dung mail 23'),
+    (N'Mail 24', '2023-07-01', 8, 1, N'Nội dung mail 24'),
+    (N'Mail 25', '2023-06-05', 10, 1, N'Nội dung mail 25'),
+    (N'Mail 26', '2023-05-08', 12, 1, N'Nội dung mail 26'),
+    (N'Mail 27', '2023-04-02', 14, 1, N'Nội dung mail 27'),
+    (N'Mail 28', '2023-03-01', 16, 1, N'Nội dung mail 28'),
+    (N'Mail 29', '2023-02-02', 18, 1, N'Nội dung mail 29'),
+    (N'Mail 30', '2023-01-06', 20, 1, N'Nội dung mail 30'),
+    (N'Mail 31', '2022-12-10', 22, 1, N'Nội dung mail 31'),
+    (N'Mail 32', '2022-11-14', 24, 1, N'Nội dung mail 32'),
+    (N'Mail 33', '2022-10-19', 26, 1, N'Nội dung mail 33'),
+    (N'Mail 34', '2022-09-23', 28, 1, N'Nội dung mail 34'),
+    (N'Mail 35', '2022-08-27', 30, 1, N'Nội dung mail 35'),
+    (N'Mail 36', '2022-07-31', 32, 1, N'Nội dung mail 36'),
+    (N'Mail 37', '2022-07-03', 34, 1, N'Nội dung mail 37'),
+    (N'Mail 38', '2022-06-05', 36, 1, N'Nội dung mail 38'),
+    (N'Mail 39', '2022-05-09', 38, 1, N'Nội dung mail 39'),
+    (N'Mail 40', '2022-04-13', 40, 1, N'Nội dung mail 40');
+
+INSERT INTO Temporarily_Absent (MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau, thoi_gian_ket_thuc)
+VALUES
+  (1, 'CCCD001', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01', '2023-05-07'),
+  (2, 'CCCD002', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02', '2023-05-08'),
+  (3, 'CCCD003', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03', '2023-05-09'),
+  (4, 'CCCD004', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04', '2023-05-10'),
+  (5, 'CCCD005', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05', '2023-05-11'),
+  (6, 'CCCD006', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06', '2023-05-12'),
+  (7, 'CCCD007', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07', '2023-05-13'),
+  (8, 'CCCD008', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08', '2023-05-14'),
+  (9, 'CCCD009', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09', '2023-05-15'),
+  (10, 'CCCD010', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10', '2023-05-16');
+
+INSERT INTO Temporarily_Staying (MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau)
+VALUES
+  (11, 'CCCD011', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01'),
+  (12, 'CCCD012', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02'),
+  (13, 'CCCD013', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03'),
+  (14, 'CCCD014', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04'),
+  (15, 'CCCD015', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05'),
+  (16, 'CCCD016', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06'),
+  (17, 'CCCD017', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07'),
+  (18, 'CCCD018', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08'),
+  (19, 'CCCD019', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09'),
+  (20, 'CCCD020', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10');
