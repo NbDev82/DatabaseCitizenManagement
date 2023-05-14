@@ -822,16 +822,23 @@ RETURN
 --hoàng
 
 -----VIEW------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
+--Khoa
+--Tạo view thông tin cá nhân
+GO
+CREATE OR ALTER VIEW PERSONAL_INFORMATION
+AS
+SELECT *
+FROM [Citizens]
+--Tạo view hòm thư
+GO
+CREATE OR ALTER VIEW MAILBOX
+AS
+SELECT MaMail, TieuDe, Ngay, ctz1.HoTen AS TenNguoiGui,ctz2.HoTen AS TenNguoiNhan, NoiDung
+FROM 
+	Mails m
+	INNER JOIN [Citizens] ctz1 ON m.NguoiGui = ctz1.MaCD
+	INNER JOIN [Citizens] ctz2 ON m.NguoiNhan = ctz2.MaCD
+GO
 --DATA
 /*USE CityzenManagement
 GO*/
@@ -1234,3 +1241,6 @@ VALUES
   (18, 'CCCD018', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08'),
   (19, 'CCCD019', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09'),
   (20, 'CCCD020', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10');
+
+SELECT *
+FROM MAILBOX
