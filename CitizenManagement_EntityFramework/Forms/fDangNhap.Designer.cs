@@ -37,8 +37,12 @@
             this.cbShowPassword = new System.Windows.Forms.CheckBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.rdoAutCitizen = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rdoAutControler = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -59,7 +63,7 @@
             this.txtAccount.Name = "txtAccount";
             this.txtAccount.Size = new System.Drawing.Size(464, 34);
             this.txtAccount.TabIndex = 0;
-            this.txtAccount.Text = "1";
+            this.txtAccount.Text = "households_manager";
             // 
             // label1
             // 
@@ -90,7 +94,7 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(464, 34);
             this.txtPassword.TabIndex = 2;
-            this.txtPassword.Text = "12345";
+            this.txtPassword.Text = "manager";
             this.txtPassword.UseSystemPasswordChar = true;
             // 
             // label2
@@ -127,6 +131,7 @@
             this.btnLogin.TabIndex = 16;
             this.btnLogin.Text = "Đăng nhập";
             this.btnLogin.UseVisualStyleBackColor = false;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnExit
             // 
@@ -141,11 +146,44 @@
             this.btnExit.Text = "Thoát";
             this.btnExit.UseVisualStyleBackColor = false;
             // 
+            // rdoAutCitizen
+            // 
+            this.rdoAutCitizen.AutoSize = true;
+            this.rdoAutCitizen.Checked = true;
+            this.rdoAutCitizen.Location = new System.Drawing.Point(3, 8);
+            this.rdoAutCitizen.Name = "rdoAutCitizen";
+            this.rdoAutCitizen.Size = new System.Drawing.Size(93, 22);
+            this.rdoAutCitizen.TabIndex = 19;
+            this.rdoAutCitizen.TabStop = true;
+            this.rdoAutCitizen.Text = "Công dân";
+            this.rdoAutCitizen.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rdoAutControler);
+            this.panel3.Controls.Add(this.rdoAutCitizen);
+            this.panel3.Location = new System.Drawing.Point(19, 162);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(287, 46);
+            this.panel3.TabIndex = 20;
+            // 
+            // rdoAutControler
+            // 
+            this.rdoAutControler.AutoSize = true;
+            this.rdoAutControler.Location = new System.Drawing.Point(142, 8);
+            this.rdoAutControler.Name = "rdoAutControler";
+            this.rdoAutControler.Size = new System.Drawing.Size(79, 22);
+            this.rdoAutControler.TabIndex = 19;
+            this.rdoAutControler.TabStop = true;
+            this.rdoAutControler.Text = "Quản lý";
+            this.rdoAutControler.UseVisualStyleBackColor = true;
+            // 
             // fDangNhap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 299);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.cbShowPassword);
@@ -154,10 +192,13 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "fDangNhap";
             this.Text = "fDangNhap";
+            this.Load += new System.EventHandler(this.fDangNhap_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -174,5 +215,8 @@
         private System.Windows.Forms.CheckBox cbShowPassword;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.RadioButton rdoAutCitizen;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RadioButton rdoAutControler;
     }
 }

@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fCCCD));
             this.pnCaNhan = new System.Windows.Forms.TableLayoutPanel();
             this.btnTaiHinh = new System.Windows.Forms.Button();
@@ -101,7 +103,6 @@
             this.pnCaNhan.Controls.Add(this.btnTaiHinh, 0, 0);
             this.pnCaNhan.Controls.Add(this.btnHuyBo, 1, 0);
             this.pnCaNhan.Controls.Add(this.btnDangKy, 2, 0);
-            this.pnCaNhan.Enabled = false;
             this.pnCaNhan.Location = new System.Drawing.Point(15, 500);
             this.pnCaNhan.Name = "pnCaNhan";
             this.pnCaNhan.RowCount = 1;
@@ -118,6 +119,7 @@
             this.btnTaiHinh.TabIndex = 0;
             this.btnTaiHinh.Text = "Tải hình";
             this.btnTaiHinh.UseVisualStyleBackColor = true;
+            this.btnTaiHinh.Click += new System.EventHandler(this.btnTaiHinh_Click);
             // 
             // btnHuyBo
             // 
@@ -128,6 +130,7 @@
             this.btnHuyBo.TabIndex = 0;
             this.btnHuyBo.Text = "Hủy bỏ";
             this.btnHuyBo.UseVisualStyleBackColor = true;
+            this.btnHuyBo.Click += new System.EventHandler(this.btnHuyBo_Click);
             // 
             // btnDangKy
             // 
@@ -138,6 +141,7 @@
             this.btnDangKy.TabIndex = 0;
             this.btnDangKy.Text = "Đăng ký";
             this.btnDangKy.UseVisualStyleBackColor = true;
+            this.btnDangKy.Click += new System.EventHandler(this.btnDangKy_Click);
             // 
             // panel2
             // 
@@ -180,8 +184,23 @@
             // 
             // dtgvDanhSachCCCD
             // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgvDanhSachCCCD.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dtgvDanhSachCCCD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgvDanhSachCCCD.Enabled = false;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgvDanhSachCCCD.DefaultCellStyle = dataGridViewCellStyle8;
             this.dtgvDanhSachCCCD.Location = new System.Drawing.Point(3, 65);
             this.dtgvDanhSachCCCD.Name = "dtgvDanhSachCCCD";
             this.dtgvDanhSachCCCD.RowHeadersWidth = 51;
@@ -196,7 +215,6 @@
             this.pnQuanLy.Controls.Add(this.txtTimKiem);
             this.pnQuanLy.Controls.Add(this.brnXem);
             this.pnQuanLy.Controls.Add(this.btnTimKiem);
-            this.pnQuanLy.Enabled = false;
             this.pnQuanLy.Location = new System.Drawing.Point(3, 309);
             this.pnQuanLy.Name = "pnQuanLy";
             this.pnQuanLy.Size = new System.Drawing.Size(408, 173);
@@ -238,6 +256,7 @@
             this.brnXem.TabIndex = 0;
             this.brnXem.Text = "Xem";
             this.brnXem.UseVisualStyleBackColor = true;
+            this.brnXem.Click += new System.EventHandler(this.brnXem_Click);
             // 
             // btnTimKiem
             // 
@@ -248,6 +267,7 @@
             this.btnTimKiem.TabIndex = 0;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = true;
+            this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
             // 
             // pnThongTin
             // 
@@ -546,6 +566,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "fCCCD";
             this.Text = "fCCCD";
+            this.Load += new System.EventHandler(this.fCCCD_Load);
             this.pnCaNhan.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.pnThongTin_3.ResumeLayout(false);

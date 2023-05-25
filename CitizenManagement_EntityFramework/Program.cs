@@ -16,7 +16,7 @@ namespace CitizenManagement_EntityFramework
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new fNguoiDung());
+            Application.Run(new fDangNhap());
         }
     }
 }

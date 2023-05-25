@@ -1190,6 +1190,7 @@
             this.Controls.Add(this.panel1);
             this.Name = "fHonNhan";
             this.Text = "fHonNhan";
+            this.Load += new System.EventHandler(this.fHonNhan_Load);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvHonNhan)).EndInit();

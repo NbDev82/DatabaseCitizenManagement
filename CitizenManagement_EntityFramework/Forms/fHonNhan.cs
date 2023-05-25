@@ -16,5 +16,10 @@ namespace CitizenManagement_EntityFramework
         {
             InitializeComponent();
         }
+
+        private void fHonNhan_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -216,7 +216,6 @@
             // 
             this.pnChiTietHoKhau.Controls.Add(this.pnThanhVienHoKhau);
             this.pnChiTietHoKhau.Controls.Add(this.pnThongTinThanhVien);
-            this.pnChiTietHoKhau.Enabled = false;
             this.pnChiTietHoKhau.Location = new System.Drawing.Point(780, 20);
             this.pnChiTietHoKhau.Name = "pnChiTietHoKhau";
             this.pnChiTietHoKhau.Size = new System.Drawing.Size(727, 613);
@@ -248,7 +247,6 @@
             this.pnChinhSuaThongTinThanhVien.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pnChinhSuaThongTinThanhVien.Controls.Add(this.btnChinhSua, 0, 0);
             this.pnChinhSuaThongTinThanhVien.Controls.Add(this.btnLoadLaiCongDan, 0, 1);
-            this.pnChinhSuaThongTinThanhVien.Enabled = false;
             this.pnChinhSuaThongTinThanhVien.Location = new System.Drawing.Point(520, 6);
             this.pnChinhSuaThongTinThanhVien.Name = "pnChinhSuaThongTinThanhVien";
             this.pnChinhSuaThongTinThanhVien.RowCount = 2;
