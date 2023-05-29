@@ -805,7 +805,7 @@ RETURN(
 	SELECT * FROM V_GetCertificates v WHERE v.MaCD = @macd
 )
 -- SELECT * FROM FN_GetCertificates('CD0030')
-
+go
 CREATE VIEW V_GetDataUser --(Certificate) của hoàng
 AS
 	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar, ac.phanquyen
@@ -813,6 +813,7 @@ AS
 	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD AND c.MaCD = ac.MaCD
 GO
 --SELECT * FROM V_GetDataUser
+
 CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
 RETURNS TABLE
 AS
