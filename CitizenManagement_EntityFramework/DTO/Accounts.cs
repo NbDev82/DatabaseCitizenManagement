@@ -11,13 +11,17 @@ namespace CitizenManagement_EntityFramework
     {
         public string Macd { get; set; }
         public string Matkhau { get; set; }
-        public int Phanquyen { get; set; }
+        public bool Phanquyen { get; set; }
         public Accounts() { }
+        public Accounts(bool Phanquyen)
+        {
+            this.Phanquyen = Phanquyen;
+        }
         public Accounts(DataRow dt)
         {
             this.Macd = (string)dt["MaCD"];
             this.Matkhau = (string)dt["matkhau"];
-            this.Phanquyen = (int)dt["phanquyen"];
+            this.Phanquyen = (bool)dt["phanquyen"];
         }
     }
 }

@@ -14,25 +14,79 @@ namespace CitizenManagement_EntityFramework
 {
     public partial class fCCCD : Form
     {
-        private DataTable currentDataUser;
+        private Accounts tk;
+        private DataRow currentDataUser;
 
         public fCCCD()
         {
             InitializeComponent();
         }
-        public void LoadData(DataTable user)
+        public void LoadListCertificate(DataTable user)
         {
             dtgvDanhSachCCCD.DataSource = user;
         }
+        public bool LoadDataCurrentUser(DataRow currentDataUser)
+        {
+            try
+            {
+                txtSoCCCD.Text = currentDataUser["MaCCCD"].ToString();
+                txtHoVaTen.Text = currentDataUser["HoTen"].ToString();
+                txtDacDiemNhanDang.Text = currentDataUser["DacDiemNhanDang"].ToString();
+                txtNoiThuongTru.Text = currentDataUser["NoiThuongTru"].ToString();
+                txtQueQuan.Text = currentDataUser["QueQuan"].ToString();
+                txtQuocTich.Text = currentDataUser["QuocTich"].ToString();
+                dtpkNgaySinh.Text = currentDataUser["NgaySinh"].ToString();
+                dtpkThoiHan.Text = currentDataUser["HanSuDung"].ToString();
+                txtGioiTinh.Text = currentDataUser["GioiTinh"].ToString();
+                if (currentDataUser["Avatar"] != DBNull.Value)
+                {
+                    byte[] imageBytes = (byte[])currentDataUser["Avatar"];
+                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                    {
+                        picFace.Image = Image.FromStream(ms);
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private void fCCCD_Load(object sender, EventArgs e)
         {
-            
+            try
+            {
+                currentDataUser = CertificatesDAO.Instance.GetCurrentDataUser("CD0030");
+                //if (tk.Phanquyen)
+                //{
+                //    pnQuanLy.Enabled = true;
+                //    dtgvDanhSachCCCD.Enabled = true;
+                //}
+                //else
+                //{
+                //    pnQuanLy.Enabled = false;
+                //    dtgvDanhSachCCCD.Enabled = false;
+                //}
+                if (!LoadDataCurrentUser(currentDataUser))
+                    throw new Exception();
+                pnThongTin.Enabled = false;
+                pnThongTin_3.Enabled = false;
+            }
+            catch
+            {
+                MessageBox.Show("Tải thông tin CCCD thất bại");
+                pnCaNhan.Enabled = true;
+                pnThongTin.Enabled = true;
+                pnThongTin_3.Enabled = true;
+            }
         }
         private void btnDangKy_Click(object sender, EventArgs e)
         {
             try
             {
-                int MaCD = (int)currentDataUser.Rows[0]["MaCD"];
+                string MaCD = "CD0030";
+                //string MaCD = (string)currentDataUser.Rows[0]["MaCD"];
                 string HoVaTen = txtHoVaTen.Text;
                 string NgaySinh = dtpkNgaySinh.Value.ToString();
                 string GioiTinh = txtGioiTinh.Text;
@@ -111,13 +165,25 @@ namespace CitizenManagement_EntityFramework
 
         private void brnXem_Click(object sender, EventArgs e)
         {
-            currentDataUser = CertificatesDAO.Instance.GetDataTable();
-            LoadData(currentDataUser);
+            DataTable ListDataUser = CertificatesDAO.Instance.GetDataTable();
+            LoadListCertificate(ListDataUser);
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.GetCertificateByID("");
+            string MaCD = txtTimKiem.Text;
+            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.GetCertificateByID(MaCD);
+        }
+
+        private void btnCitizenWithoutCertificate_Click(object sender, EventArgs e)
+        {
+            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.CitizenWithoutCertificate();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string province = txtTimKiem.Text;
+            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.CitizenBelongProvince(province);
         }
     }
 }

@@ -26,39 +26,10 @@ namespace CitizenManagement_EntityFramework
                 return instance;
             }
         }
-        public Cityzen GetAut(string username, string password, int Role)
+        public DBConnection() { }
+        public void ChangeMode(string cnnManager)
         {
-            try
-            {
-                if (Role == (int)Roles.Manager)
-                {
-                    string connstr = string.Format(Properties.Settings.Default.cnnManager, username, password);
-                    using (SqlConnection connection = new SqlConnection(connstr))
-                    {
-                        connection.Open();
-                        bool isAccount = false;
-                        if (connection.State == System.Data.ConnectionState.Open)
-                        {
-                            conn = connection;
-                            isAccount = true;
-                        }
-                        conn.Close();
-                        return new Cityzen();
-                    }
-                }
-                else if (Role == (int)Roles.Cityzen)
-                {
-                    string SQL = string.Format($"SELECT dbo.FN_CheckAuthentication({username},{password});");
-                    DataTable dt = GetDataTable(SQL);
-                    Cityzen ctz = new Cityzen(dt.Rows[0]);
-                    return ctz;
-                }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+            conn = new SqlConnection(cnnManager);
         }
         public DataTable GetDataTable(string sqlStr)
         {
@@ -79,7 +50,7 @@ namespace CitizenManagement_EntityFramework
                 conn.Close();
             }
         }
-        public bool ExecuteWithParameter(string SQL, string variable, object parameter)
+        public bool ExecuteWithParameter(string SQL, string variable,object parameter)
         {
             try
             {

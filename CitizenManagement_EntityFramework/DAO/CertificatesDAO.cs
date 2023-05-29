@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,15 +20,39 @@ namespace CitizenManagement_EntityFramework
                 return instance;
             }
         }
-        public bool Add(Certificate cccd, byte[] img)
+        public DataRow GetCurrentDataUser(string macd)
+        {
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM FN_GetDataUser('{macd}') ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt.Rows[0];
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public DataTable CitizenBelongProvince(string province)
+        {
+            string SQL = string.Format($"SELECT * FROM dbo.GetCitizensByProvince (N'{province}') ");
+            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+            return dt;
+        }
+        public DataTable CitizenWithoutCertificate()
+        {
+            string SQL = string.Format("SELECT * FROM Citizens_Without_Certificates ");
+            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+            return dt;
+        }
+        public bool Add(Certificate cccd, byte[] Img)
         {
             try
             {
                 if (cccd == null)
                     return false;
-                string strSQL = string.Format($"INSERT INTO Certificates (MaCD, QuocTich, QueQuan, NoiThuongTru, DacDiemNhanDang, Avatar) " +
-                                              $"VALUES ('{cccd.MaCD}',N'{cccd.QuocTich}',N'{cccd.QueQuan}',N'{cccd.NoiThuongTru}',N'{cccd.DacDiemNhanDang}',{img})");
-                return DBConnection.Instance.Execute(strSQL);
+                string strSQL = string.Format($"EXEC FN_RegisterCertificate '{cccd.MaCD}',N'{cccd.QuocTich}',N'{cccd.QueQuan}',N'{cccd.NoiThuongTru}',N'{cccd.DacDiemNhanDang}',@image");
+                return DBConnection.Instance.ExecuteWithParameter(strSQL,"image", Img);
             }
             catch
             {
@@ -43,9 +68,7 @@ namespace CitizenManagement_EntityFramework
         }
         public DataTable GetCertificateByID(string macd)
         {
-            string SQL = string.Format("SELECT * " +
-                                       "FROM V_GetCertificates " +
-                                       $"WHERE MaCD = '{macd}'");
+            string SQL = string.Format($"SELECT * FROM FN_GetCertificates('{macd}') ");
             DataTable dt = DBConnection.Instance.GetDataTable(SQL);
             return dt;
         }

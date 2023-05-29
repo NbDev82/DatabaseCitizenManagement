@@ -3,7 +3,7 @@ CREATE DATABASE CityzenManagement
 GO
 */
 
-USE CityzenManagement1
+USE CityzenManagement
 GO
 
 CREATE table [Citizens](
@@ -144,13 +144,15 @@ CREATE TABLE Temporarily_Staying (
 /*
 drop table [Temporarily_Staying]
 */
+
 CREATE table [Certificates](
+	ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY CLUSTERED,
+	MaCCCD AS 'CCCD' + RIGHT('00000000' + CAST(ID AS VARCHAR(8)), 8) PERSISTED,
 	MaCD varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
-	MaCCCD VARCHAR(max) NOT NULL,
 	QuocTich NVARCHAR(max) NOT NULL,
 	QueQuan NVARCHAR(max) NOT NULL,
 	NoiThuongTru NVARCHAR(max) NOT NULL,
-	HanSuDung Date NOT NULL,
+	HanSuDung Date NULL,
 	DacDiemNhanDang NVARCHAR(max) NOT NULL DEFAULT N'Không',
 	Avatar image NOT NULL
 )
@@ -616,7 +618,14 @@ ADD CONSTRAINT CK_Temporarily_Absent_ThoiGian CHECK (thoi_gian_ket_thuc > thoi_g
 ALTER TABLE [Users_Deleted]
 ADD CONSTRAINT CK_Users_Deleted_NgayKhai CHECK (NgayKhai > NgayTu);
 GO
-
+--PROCEDURE
+CREATE OR ALTER PROCEDURE FN_RegisterCertificate (@macd varchar(10), @quoctich nvarchar(max), @quequan nvarchar(max), @noithuongtru nvarchar(max), @dacdiemnhandang nvarchar(max), @img image)
+AS
+BEGIN
+	INSERT INTO Certificates (MaCD, QuocTich, QueQuan, NoiThuongTru, DacDiemNhanDang, Avatar)
+    VALUES (@macd,@quoctich,@quequan,@noithuongtru,@dacdiemnhandang,@img)
+END
+--EXEC FN_RegisterCertificate 'CD0001',N'Việt Nam', N'Kon Tum', N'TP. HCM', N'Không', 'D:\198289325_275721070910950_5711389170938825569_n.jpg'
 -- chuyển
 
 ALTER TABLE [Users_Deleted]
@@ -742,16 +751,29 @@ END;
 
 --FUNCTION
 GO
+-- Kiểm tra đăng nhập
+CREATE OR ALTER FUNCTION FN_CheckAuthentication(@username varchar(10), @password nvarchar(max))
+RETURNS TABLE
+AS
+RETURN(
+	SELECT * FROM Accounts ac WHERE ac.MaCD = @username AND ac.matkhau = @password
+)
+/*
+SELECT *
+FROM dbo.FN_CheckAuthentication('CD0001', '12345');*/
+
+GO
+--DROP FUNCTION  GetCitizensByProvince
 --Liệt kê các công dân có quên quán ở 1 tỉnh (truyền vào tên tỉnh ), ( truyền ra danh sách công dân )(Hoàng)(Certificates)
 CREATE FUNCTION dbo.GetCitizensByProvince( @Province NVARCHAR(MAX))
 RETURNS TABLE
 AS
 RETURN
 (
-    SELECT C.MaCD, C.HoTen, C.GioiTinh, C.NgheNghiep, C.DanToc, C.TonGiao, C.TinhTrang, C.MaHN
+    SELECT C.MaCD, C.HoTen, C.GioiTinh, Certi.QueQuan, C.NgheNghiep, C.DanToc, C.TonGiao, C.TinhTrang, C.MaHN
     FROM [Citizens] AS C
     INNER JOIN [Certificates] AS Certi ON C.MaCD = Certi.MaCD
-    WHERE Certi.QueQuan LIKE '%' + @Province + '%'
+    WHERE Certi.QueQuan LIKE '%' + LOWER(@Province) + '%'
 );
 GO
 --Hàm tìm danh sách các hộ trong 1 khu vực ( truyền vào: tỉnh thành, huyện, phường), truyền ra (danh sách các hộ) (Hoàng)(Households)
@@ -771,11 +793,33 @@ GO
 -----CCCD---------------------------Hoàng
 CREATE VIEW V_GetCertificates
 AS
-SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar
-FROM Citizens c, Certificates ce, Births b
-WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD
+	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar
+	FROM Citizens c, Certificates ce, Births b
+	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD
 GO
 
+CREATE FUNCTION FN_GetCertificates(@macd varchar(10)) --(Certificate) của hoàng
+RETURNS TABLE
+AS
+RETURN(
+	SELECT * FROM V_GetCertificates v WHERE v.MaCD = @macd
+)
+-- SELECT * FROM FN_GetCertificates('CD0030')
+
+CREATE VIEW V_GetDataUser --(Certificate) của hoàng
+AS
+	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar, ac.phanquyen
+	FROM Citizens c, Certificates ce, Births b, Accounts ac
+	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD AND c.MaCD = ac.MaCD
+GO
+--SELECT * FROM V_GetDataUser
+CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
+RETURNS TABLE
+AS
+RETURN(
+	SELECT * FROM V_GetDataUser v WHERE v.MaCD = @macd
+)
+--SELECT * FROM FN_GetDataUser('CD0030')
 -- drop view V_GetCertificates
 
 /*  DECLARE @macd int = 1
