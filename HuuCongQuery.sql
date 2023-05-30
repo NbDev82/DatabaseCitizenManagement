@@ -1,18 +1,18 @@
-﻿-- Contraint
+﻿﻿-- Contraint
 
 --  Ngày sinh không được lớn hơn ngày hiện tại(Công)(Births)
-USE Backup_CityzenManagement
+
 ALTER TABLE Births 
 ADD CONSTRAINT check_ngaysinhhople CHECK(NgaySinh<GETDATE())
 
 -- Trạng thái chỉ có 2 trạng thái “duyet” và “chua duyet” (Công)(Households)
-USE Backup_CityzenManagement
+--USE Backup_CityzenManagement
 GO
 ALTER TABLE Households 
 ADD CONSTRAINT check_trangthai_Households CHECK(TrangThai IN('duyet', 'chua duyet'))
 
 --Trigger
-
+go
 -- Công dân phải trên 16 tuổi(insert,update)(Công)(Certificates)
 CREATE OR ALTER TRIGGER [dbo].[trg_CheckTuoiCongDan]
 ON Certificates
@@ -65,7 +65,7 @@ END
 
 -- Kiểm tra xem công dân đã chết hay chưa khi thêm(Công)(Users_Deleted)
 
-USE Backup_CityzenManagement
+
 GO
 CREATE TRIGGER [dbo].[trg_CheckAlive]
 ON Users_Deleted
@@ -85,7 +85,7 @@ END;
 
 --Đưa ra thông tin chi tiết của công dân ở bảng Citizens, Houserholds, Births(Công)(citizens)
 
-USE Backup_CityzenManagement 
+
 GO
 CREATE OR ALTER PROC [dbo].[spud_thongtinCongDan]
 AS
@@ -112,7 +112,6 @@ END;
 
 -- Function
 
-use Backup_CityzenManagement
 --  Hàm tính số lượng công dân hiện có(Công)(citizens)
 go
 CREATE OR ALTER FUNCTION [dbo].[Fn_TinhTongDanCu]()
@@ -129,20 +128,16 @@ END
 -- hoặc năm sau đi thay thế cccd.(Công)(Certificates)
 GO
 CREATE OR ALTER FUNCTION [dbo].[Fn_CongDanSapHetHanSuDung]()
-RETURNS @SapHetHan TABLE (MaCD int,MaCCCD nvarchar(max),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max))
+RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max),Anh image)
 AS
 BEGIN
-	INSERT INTO @SapHetHan(MaCD,MaCCCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang )
+	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang,Anh)
 	SELECT *
 	FROM Certificates
 	WHERE YEAR(HanSuDung)=YEAR(GETDATE())AND YEAR(HanSuDung)=( YEAR(GETDATE()) + 1 );
 	return 
 END
 
-go
-select *
-from Fn_CongDanSapHetHanSuDung();
-
-
-
-
+--go
+--select *
+--from Fn_CongDanSapHetHanSuDung();
