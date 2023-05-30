@@ -217,6 +217,7 @@ GO
 -- Trigger cho việc thêm công dân đã chết vào [Users_Deleted]
 CREATE or ALTER TRIGGER [trg_Citizen_Delete] ON [Users_Deleted] 
 AFTER INSERT
+
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -285,29 +286,26 @@ GO
 
 
 -- Trigger cho việc thêm công dân đã chết vào [Users_Deleted]
-CREATE or ALTER TRIGGER [trg_Citizen_Delete] ON [Users_Deleted] 
-AFTER INSERT
+CREATE or ALTER TRIGGER [trg_Citizen_Delete] ON [Users_Deleted]
+FOR INSERT
 AS
 BEGIN
-  SET NOCOUNT ON;
-
-  DECLARE @MaCD varchar(10);
-  DECLARE @CheckMaCD INT;
-
-  SELECT @MaCD = MaCD FROM inserted;
-
-  -- Kiểm tra xem công dân đã chết hay chưa
-  SELECT @CheckMaCD = COUNT(*) FROM [Users_Deleted] WHERE MaCD = @MaCD;
-
-  IF @CheckMaCD > 0
-  BEGIN
-    RAISERROR('Không thể thêm công dân đã chết vào bảng Users_Deleted!', 16, 1);
-    ROLLBACK TRANSACTION;
-  END
-
-  UPDATE [Citizens]
-  SET TinhTrang = N'Đã chết'
-  WHERE MaCD = @MaCD
+	DECLARE @MaCD varchar(10);
+	DECLARE @CheckMaCD INT;
+	SELECT @MaCD = MaCD FROM inserted;
+	-- Kiểm tra xem công dân đã chết hay chưa
+	SELECT @CheckMaCD = COUNT(*) FROM Citizens WHERE Citizens.MaCD = @MaCD AND Citizens.TinhTrang = N'Đã chết'
+	IF @CheckMaCD > 0
+	BEGIN
+		RAISERROR('Không thể thêm công dân đã chết vào bảng Users_Deleted!', 16, 1);
+		ROLLBACK TRANSACTION;
+	END
+	ELSE
+	BEGIN
+		UPDATE [Citizens]
+		SET TinhTrang = N'Đã chết'
+		WHERE MaCD = @MaCD
+	END
 END
 go
 -- Trigger cho việc kiểm tra xem người khai có phải chủ hộ không trong [Users_Deleted] 
@@ -1008,8 +1006,24 @@ VALUES
 ('CD0057', N'Le Van G', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Không tôn giáo', N'Còn sống'),
 ('CD0058', N'Pham Thi H', N'Nữ', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống'),
 ('CD0059', N'Hoang Van I', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống'),
-('CD0060', N'Vo Thi K', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống')
+('CD0060', N'Vo Thi K', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống');
 
+--INSERT INTO Citizens (MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang)
+--VALUES
+--	('households_manager', N'', N'Nam', N'', N'', N'', N''),
+--	('births_manager', N'', N'Nam', N'', N'', N'', N''),
+--	('mails_manager', N'', N'Nam', N'', N'', N'', N''),
+--	('people_marriage_manager', N'', N'Nam', N'', N'', N'', N''),
+--	('temporarily_manager', N'', N'Nam', N'', N'', N'', N''),
+--	('personal_data_manager', N'', N'Nam', N'', N'', N'', N'');
+--INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
+--VALUES 
+--	('households_manager', 'manager', 1),
+--	('births_manager', 'manager', 1),
+--	('mails_manager', 'manager', 1),
+--	('people_marriage_manager', 'manager', 1),
+--	('temporarily_manager', 'manager', 1),
+--	('personal_data_manager', 'manager', 1);
 INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
 VALUES 
 ('CD0001', '12345', 0),

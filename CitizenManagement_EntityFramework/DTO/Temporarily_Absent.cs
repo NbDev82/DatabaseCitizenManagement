@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Temporarily_Absent:Temporarily_Staying
+    public class Temporarily_Absent:Temporarily_Staying
     {
         public DateTime thoi_gian_ket_thuc { get; set; }
         public Temporarily_Absent() { }

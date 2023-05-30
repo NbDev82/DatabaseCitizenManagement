@@ -22,7 +22,7 @@ GRANT SELECT, DELETE, UPDATE, INSERT ON Certificates to certificates_manager
 CREATE LOGIN births_manager WITH PASSWORD = 'manager';
 CREATE USER births_manager FOR LOGIN births_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Births to births_manager
-GRANT SELECT, DELETE, UPDATE, INSERT ON People_Marriage to births_manager
+GRANT SELECT, DELETE, UPDATE, INSERT ON Users_Deleted to births_manager
 
 CREATE LOGIN mails_manager WITH PASSWORD = 'manager';
 CREATE USER mails_manager FOR LOGIN mails_manager;

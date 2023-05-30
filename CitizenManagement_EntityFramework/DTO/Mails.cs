@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Mails
+    public class Mails
     {
         private string mamail;
         private string tieude;

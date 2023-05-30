@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CurrentUser.cs" />
+    <Compile Include="DAO\CitizenDAO.cs" />
     <Compile Include="DTO\Accounts.cs" />
     <Compile Include="DTO\Births.cs" />
     <Compile Include="DAO\AccountDAO.cs" />

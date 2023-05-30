@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework.DTO
 {
-    internal class People_Marriage
+    public class People_Marriage
     {
         private string mahn;
         private string macdchong;

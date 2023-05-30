@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Temporarily_Staying
+    public class Temporarily_Staying
     {
         public string ID { get; set; }
         public string MaCD { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Certificate
+    public class Certificate
     {
         public string MaCD { get; set; }
         public string MaCCCD { get; set; }

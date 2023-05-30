@@ -53,7 +53,7 @@ namespace CitizenManagement_EntityFramework
                     CurrentUser.Instance.CurrentAccount = new Accounts(dt.Rows[0]);
                     return true;
                 }
-                return false 
+                return false;
             }
             catch
             {

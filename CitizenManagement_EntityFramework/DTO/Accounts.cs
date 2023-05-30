@@ -17,6 +17,7 @@ namespace CitizenManagement_EntityFramework
         {
             this.Phanquyen = Phanquyen;
         }
+        
         public Accounts(DataRow dt)
         {
             this.Macd = (string)dt["MaCD"];
