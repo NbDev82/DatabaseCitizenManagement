@@ -1008,22 +1008,22 @@ VALUES
 ('CD0059', N'Hoang Van I', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống'),
 ('CD0060', N'Vo Thi K', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống');
 
---INSERT INTO Citizens (MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang)
---VALUES
---	('households_manager', N'', N'Nam', N'', N'', N'', N''),
---	('births_manager', N'', N'Nam', N'', N'', N'', N''),
---	('mails_manager', N'', N'Nam', N'', N'', N'', N''),
---	('people_marriage_manager', N'', N'Nam', N'', N'', N'', N''),
---	('temporarily_manager', N'', N'Nam', N'', N'', N'', N''),
---	('personal_data_manager', N'', N'Nam', N'', N'', N'', N'');
---INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
---VALUES 
---	('households_manager', 'manager', 1),
---	('births_manager', 'manager', 1),
---	('mails_manager', 'manager', 1),
---	('people_marriage_manager', 'manager', 1),
---	('temporarily_manager', 'manager', 1),
---	('personal_data_manager', 'manager', 1);
+INSERT INTO Citizens (MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang)
+VALUES
+	('QLHH', N'', N'Nam', N'', N'', N'', N''),
+	('QLB', N'', N'Nam', N'', N'', N'', N''),
+	('QLM', N'', N'Nam', N'', N'', N'', N''),
+	('QLPM', N'', N'Nam', N'', N'', N'', N''),
+	('QLTM', N'', N'Nam', N'', N'', N'', N''),
+	('QLP', N'', N'Nam', N'', N'', N'', N'');
+INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
+VALUES 
+	('QLHH', 'manager', 1),
+	('QLB', 'manager', 1),
+	('QLM', 'manager', 1),
+	('QLPM', 'manager', 1),
+	('QLTM', 'manager', 1),
+	('QLP', 'manager', 1);
 INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
 VALUES 
 ('CD0001', '12345', 0),
