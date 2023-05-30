@@ -653,31 +653,31 @@ BEGIN
 END
 GO
 --Quản lý phải là người gửi hoặc người nhận(Hoàng)(Mails)
-CREATE or ALTER TRIGGER TR_Mails_CheckQuanLy
-ON [Mails]
-AFTER INSERT
-AS
-BEGIN
+--CREATE or ALTER TRIGGER TR_Mails_CheckQuanLy
+--ON [Mails]
+--AFTER INSERT
+--AS
+--BEGIN
     
-    -- Check if the sender or recipient is a manager
-    IF EXISTS (
-        SELECT 1
-        FROM [Mails] AS M
-        INNER JOIN [Accounts] AS A ON M.NguoiGui = A.MaCD OR M.NguoiNhan = A.MaCD
-        WHERE M.MaMail IN (SELECT MaMail FROM inserted)
-        AND A.phanquyen = 1
-    )
-    BEGIN
-        -- Allow the insert operation
-        PRINT 'Insert operation allowed.';
-    END
-    ELSE
-    BEGIN
-        -- Rollback the insert operation
-        PRINT 'Insert operation denied. Manager must be the sender or recipient.';
-        ROLLBACK TRANSACTION;
-    END
-END;
+--    -- Check if the sender or recipient is a manager
+--    IF EXISTS (
+--        SELECT 1
+--        FROM [Mails] AS M
+--        INNER JOIN [Accounts] AS A ON M.NguoiGui = A.MaCD OR M.NguoiNhan = A.MaCD
+--        WHERE M.MaMail IN (SELECT MaMail FROM inserted)
+--        AND A.phanquyen = 1
+--    )
+--    BEGIN
+--        -- Allow the insert operation
+--        PRINT 'Insert operation allowed.';
+--    END
+--    ELSE
+--    BEGIN
+--        -- Rollback the insert operation
+--        PRINT 'Insert operation denied. Manager must be the sender or recipient.';
+--        ROLLBACK TRANSACTION;
+--    END
+--END;
 GO
 
 --Cập nhật trạng thái hộ khẩu của công dân khi thêm, xóa công dân ra khỏi [Detail_Households](Hoàng)(Detail_Households)
@@ -1296,7 +1296,37 @@ VALUES
 
 
 
-INSERT INTO Mails (MaMail,TieuDe, Ngay, NguoiGui, NguoiNhan, NoiDung)
+
+
+
+INSERT INTO Temporarily_Absent (ID,MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau, thoi_gian_ket_thuc)
+VALUES
+  ('TA0001','CD0001', 'CCCD001', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01', '2023-05-07'),
+  ('TA0002','CD0002', 'CCCD002', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02', '2023-05-08'),
+  ('TA0003','CD0003', 'CCCD003', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03', '2023-05-09'),
+  ('TA0004','CD0004', 'CCCD004', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04', '2023-05-10'),
+  ('TA0005','CD0005', 'CCCD005', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05', '2023-05-11'),
+  ('TA0006','CD0006', 'CCCD006', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06', '2023-05-12'),
+  ('TA0007','CD0007', 'CCCD007', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07', '2023-05-13'),
+  ('TA0008','CD0008', 'CCCD008', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08', '2023-05-14'),
+  ('TA0009','CD0009', 'CCCD009', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09', '2023-05-15'),
+  ('TA0010','CD0010', 'CCCD010', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10', '2023-05-16');
+
+
+INSERT INTO Temporarily_Staying (ID,MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau)
+VALUES
+  ('TS0001', 'CD0011', 'CCCD011', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01'),
+  ('TS0002','CD0012', 'CCCD012', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02'),
+  ('TS0003','CD0013', 'CCCD013', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03'),
+  ('TS0004','CD0014', 'CCCD014', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04'),
+  ('TS0005','CD0015', 'CCCD015', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05'),
+  ('TS0006','CD0016', 'CCCD016', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06'),
+  ('TS0007','CD0017', 'CCCD017', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07'),
+  ('TS0008','CD0018', 'CCCD018', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08'),
+  ('TS0009','CD0019', 'CCCD019', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09'),
+  ('TS0010','CD0020', 'CCCD020', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10');
+
+  INSERT INTO Mails (MaMail,TieuDe, Ngay, NguoiGui, NguoiNhan, NoiDung)
 VALUES
     ('Mail0001',N'Mail 1', '2022-01-01', 'CD0001', 'CD0002', N'Nội dung mail 1'),
     ('Mail0002',N'Mail 2', '2022-02-05', 'CD0001', 'CD0004', N'Nội dung mail 2'),
@@ -1338,35 +1368,6 @@ VALUES
     ('Mail0038',N'Mail 38', '2022-06-05', 'CD0036', 'CD0001', N'Nội dung mail 38'),
     ('Mail0039',N'Mail 39', '2022-05-09', 'CD0038', 'CD0001', N'Nội dung mail 39'),
     ('Mail0040',N'Mail 40', '2022-04-13', 'CD0040', 'CD0001', N'Nội dung mail 40');
-
-
-INSERT INTO Temporarily_Absent (ID,MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau, thoi_gian_ket_thuc)
-VALUES
-  ('TA0001','CD0001', 'CCCD001', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01', '2023-05-07'),
-  ('TA0002','CD0002', 'CCCD002', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02', '2023-05-08'),
-  ('TA0003','CD0003', 'CCCD003', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03', '2023-05-09'),
-  ('TA0004','CD0004', 'CCCD004', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04', '2023-05-10'),
-  ('TA0005','CD0005', 'CCCD005', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05', '2023-05-11'),
-  ('TA0006','CD0006', 'CCCD006', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06', '2023-05-12'),
-  ('TA0007','CD0007', 'CCCD007', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07', '2023-05-13'),
-  ('TA0008','CD0008', 'CCCD008', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08', '2023-05-14'),
-  ('TA0009','CD0009', 'CCCD009', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09', '2023-05-15'),
-  ('TA0010','CD0010', 'CCCD010', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10', '2023-05-16');
-
-
-INSERT INTO Temporarily_Staying (ID,MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau)
-VALUES
-  ('TS0001', 'CD0011', 'CCCD011', N'Kon Tum', N'Đắk Hà', N'Hà Mòn', N'Học', '2023-05-01'),
-  ('TS0002','CD0012', 'CCCD012', N'Bình Thuận', N'Hàm Thuận Bắc', N'Phước Bình', N'Công tác', '2023-05-02'),
-  ('TS0003','CD0013', 'CCCD013', N'Tiền Giang', N'Cái Bè', N'Mỹ Thanh', N'Đi công việc', '2023-05-03'),
-  ('TS0004','CD0014', 'CCCD014', N'Quảng Bình', N'Đồng Hới', N'Đức Ninh', N'Du lịch', '2023-05-04'),
-  ('TS0005','CD0015', 'CCCD015', N'Hải Phòng', N'Hồng Bàng', N'Hà Khẩu', N'Công tác', '2023-05-05'),
-  ('TS0006','CD0016', 'CCCD016', N'Đồng Nai', N'Tân Phú', N'Tân Hòa', N'Học', '2023-05-06'),
-  ('TS0007','CD0017', 'CCCD017', N'Lâm Đồng', N'Đà Lạt', N'Liên Nghĩa', N'Du lịch', '2023-05-07'),
-  ('TS0008','CD0018', 'CCCD018', N'Ninh Bình', N'Tam Điệp', N'Yên Mạc', N'Đi công việc', '2023-05-08'),
-  ('TS0009','CD0019', 'CCCD019', N'Hà Tĩnh', N'Kỳ Anh', N'Kỳ Long', N'Du lịch', '2023-05-09'),
-  ('TS0010','CD0020', 'CCCD020', N'Đắk Lắk', N'Buôn Ma Thuột', N'Ea Kao', N'Công tác', '2023-05-10');
-
   /*
 
 DROP TABLE Accounts
