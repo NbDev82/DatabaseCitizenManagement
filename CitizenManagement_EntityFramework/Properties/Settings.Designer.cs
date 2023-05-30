@@ -34,7 +34,8 @@ namespace CitizenManagement_EntityFramework.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;Initial Catalog=CityzenManagement;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;User ID=sa;Password=sa;Connect Timeout=30;Encrypt=False;Trus" +
+            "tServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")]
         public string cnnCityzen {
             get {
                 return ((string)(this["cnnCityzen"]));

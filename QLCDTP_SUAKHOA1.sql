@@ -1,4 +1,5 @@
 ﻿/*
+DROP DATABASE CityzenManagement
 CREATE DATABASE CityzenManagement
 GO
 */
@@ -14,7 +15,7 @@ CREATE table [Citizens](
 	DanToc NVARCHAR(max) NOT NULL,
 	TonGiao NVARCHAR(max) NOT NULL DEFAULT N'NONE',
 	TinhTrang NVARCHAR(max) DEFAULT N'Còn sống' NOT NULL, -- Đã chết | Còn sống
-	MaHN int NOT NULL DEFAULT -1, -- -1: Độc thân
+	TinhTrangHonNhan bit NOT NULL DEFAULT 0, -- 0: Độc thân
 )
 /*
 drop table [Citizens]
@@ -91,7 +92,7 @@ drop table [Detail_Households]
 CREATE TABLE [People_Marriage](
 	MaHN varchar(10) PRIMARY KEY,
 	MaCDChong varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
-	MaCDVo varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD) NOT NULL,
+	MaCDVo varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
 	Loai NVARCHAR(255) NOT NULL DEFAULT N'Kết hôn', -- 1: Kết hôn | 0: Ly hôn
 	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
 	XacNhanLan1 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
@@ -296,7 +297,7 @@ BEGIN
   SELECT @MaCD = MaCD FROM inserted;
 
   -- Kiểm tra xem công dân đã chết hay chưa
-  SELECT @CheckMaCD = COUNT(*) FROM [Citizens] WHERE MaCD = @MaCD AND TinhTrang = N'Đã chết';
+  SELECT @CheckMaCD = COUNT(*) FROM [Users_Deleted] WHERE MaCD = @MaCD;
 
   IF @CheckMaCD > 0
   BEGIN
@@ -420,7 +421,7 @@ CREATE or ALTER FUNCTION fn_DSCDTamVangTheoHuyen(@Huyen nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
-	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
+	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti, Temporarily_Absent ta
 	WHERE cti.MaCD = ta.MaCD
 	AND ta.Huyen = @Huyen )
@@ -431,7 +432,7 @@ CREATE or ALTER FUNCTION fn_DSCDTamVangTheoXa(@Xa nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
-	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
+	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti, Temporarily_Absent ta
 	WHERE cti.MaCD = ta.MaCD
 	AND ta.Xa = @Xa )
@@ -441,7 +442,7 @@ CREATE or ALTER FUNCTION fn_DSCDTamVangTheoTinh(@Tinh nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
-	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
+	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti, Temporarily_Absent ta
 	WHERE cti.MaCD = ta.MaCD
 	AND ta.Tinh = @Tinh )
@@ -452,7 +453,7 @@ CREATE or ALTER FUNCTION fn_DSCDTamVangTheoTinh(@ChuHo nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
-	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
+	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti
 	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @ChuHo))
 --Khoa----------------------------------------------------------------------------------------------------------------------
@@ -556,7 +557,7 @@ GO
 -- Liệt kê các công dân hiện chưa có cccd (citizens)
 CREATE VIEW [Citizens_Without_Certificates]
 AS
-SELECT MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN
+SELECT MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 FROM Citizens
 WHERE MaCD NOT IN (SELECT MaCD FROM Certificates);
 GO
@@ -770,7 +771,7 @@ RETURNS TABLE
 AS
 RETURN
 (
-    SELECT C.MaCD, C.HoTen, C.GioiTinh, Certi.QueQuan, C.NgheNghiep, C.DanToc, C.TonGiao, C.TinhTrang, C.MaHN
+    SELECT C.MaCD, C.HoTen, C.GioiTinh, Certi.QueQuan, C.NgheNghiep, C.DanToc, C.TonGiao, C.TinhTrang
     FROM [Citizens] AS C
     INNER JOIN [Certificates] AS Certi ON C.MaCD = Certi.MaCD
     WHERE Certi.QueQuan LIKE '%' + LOWER(@Province) + '%'
@@ -805,7 +806,7 @@ RETURN(
 	SELECT * FROM V_GetCertificates v WHERE v.MaCD = @macd
 )
 -- SELECT * FROM FN_GetCertificates('CD0030')
-
+GO
 CREATE VIEW V_GetDataUser --(Certificate) của hoàng
 AS
 	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar, ac.phanquyen
@@ -828,7 +829,116 @@ from V_GetCertificates v1
 where v1.MaCD = @macd   */
 
 
+---Công------------------
+﻿-- Contraint
 
+--  Ngày sinh không được lớn hơn ngày hiện tại(Công)(Births)
+GO
+ALTER TABLE Births 
+ADD CONSTRAINT check_ngaysinhhople CHECK(NgaySinh<GETDATE())
+
+-- Trạng thái chỉ có 2 trạng thái “duyet” và “chua duyet” (Công)(Households)
+--USE Backup_CityzenManagement
+GO
+ALTER TABLE Households 
+ADD CONSTRAINT check_trangthai_Households CHECK(TrangThai IN(N'Duyệt', N'Chưa duyệt'))
+
+--Trigger
+go
+-- Công dân phải trên 16 tuổi(insert,update)(Công)(Certificates)
+CREATE OR ALTER TRIGGER [dbo].[trg_CheckTuoiCongDan]
+ON Certificates
+for INSERT,UPDATE 
+AS
+BEGIN
+	DECLARE @TUOI INT
+	SELECT @TUOI=YEAR(GETDATE())-YEAR(NgaySinh)
+	FROM Certificates ce,Births bi
+	Where ce.MaCD=bi.MaCD
+	if(@TUOI<16)
+	begin 
+		rollback tran 
+		print 'Tuổi của công dân phải đủ 16'
+	end
+END
+
+GO
+
+-- Khi delete, chạy qua Detail_Households xóa hết thành viên trong hộ khẩu có MaHo này.(Công)(Households)
+
+GO
+CREATE TRIGGER [dbo].[trg_DELETE_DetailHouseHolds]
+ON Households
+FOR DELETE 
+AS
+BEGIN
+	DELETE FROM Detail_Households WHERE MaHo IN (SELECT MaHo from deleted);
+END
+
+-- Kiểm tra xem công dân đã chết hay chưa khi thêm(Công)(Users_Deleted)
+
+
+-- Procedure 
+
+--Đưa ra thông tin chi tiết của công dân ở bảng Citizens, Houserholds, Births(Công)(citizens)
+
+
+GO
+CREATE OR ALTER PROC [dbo].[spud_thongtinCongDan]
+AS
+BEGIN
+	SELECT ci.MaCD,ci.HoTen,ci.GioiTinh,ci.NgheNghiep,ci.DanToc,ci.TonGiao,ci.TinhTrang,ci.TinhTrang,ci.MaHoKhau,
+	bi.NgaySinh,bi.NgaySinh,bi.NoiSinh,bi.MaCD_Cha,bi.MaCD_Me,bi.MaCD_Cha,bi.MaCD_Me,bi.NgayKhai,bi.NgayDuyet,
+	ho.ChuHo,ho.TinhThanh,ho.QuanHuyen,ho.PhuongXa,ho.NgayDangKy,ho.TrangThai
+	FROM Citizens ci,Households ho,Births bi
+	WHERE ci.MaCD=bi.MaCD AND ho.MaHo=ci.MaHoKhau
+END
+
+-- Thủ tục xuất ra danh sách công dân tạm trú ở khu vực (tham số:thành phố, huyện, xã )
+-- mà chưa được duyệt(Công)(Temporarily_Staying)
+GO
+CREATE OR ALTER PROC [dbo].[spud_CongDanTamTru_ChuaDuyet](@Tinh nvarchar(max),@huyen nvarchar(max),@xa nvarchar(max))
+AS
+BEGIN
+	SELECT *
+	FROM Temporarily_Staying
+	WHERE TrangThai='Chưa duyệt'
+END;
+
+
+
+-- Function
+
+--  Hàm tính số lượng công dân hiện có(Công)(citizens)
+go
+CREATE OR ALTER FUNCTION [dbo].[Fn_TinhTongDanCu]()
+RETURNS	INT 
+AS
+BEGIN
+	DECLARE @COUNT INT
+	SELECT @COUNT=COUNT(*) 
+	FROM Citizens;
+	RETURN @COUNT;
+END
+
+-- Liệt kê những công dân có hạn sử dụng năm nay, 
+-- hoặc năm sau đi thay thế cccd.(Công)(Certificates)
+GO
+CREATE OR ALTER FUNCTION [dbo].[Fn_CongDanSapHetHanSuDung]()
+RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max),Anh image)
+AS
+BEGIN
+	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang,Anh)
+	SELECT *
+	FROM Certificates
+	WHERE YEAR(HanSuDung)=YEAR(GETDATE())AND YEAR(HanSuDung)=( YEAR(GETDATE()) + 1 );
+	return 
+END
+
+--go
+--select *
+--from Fn_CongDanSapHetHanSuDung();
+----Công------------------------------------------------------------
 
 
 
@@ -836,73 +946,73 @@ where v1.MaCD = @macd   */
 --DATA
 /*USE CityzenManagement
 GO*/
-
-INSERT INTO Citizens (MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang, MaHN)
+GO
+INSERT INTO Citizens (MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang)
 VALUES
-('CD0001', N'Nguyen Van A', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0002', N'Tran Thi B', N'Nữ', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0003', N'Le Van C', N'Nam', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0004', N'Hoang Thi D', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0005', N'Pham Van E', N'Nam', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống', -1),
-('CD0006', N'Doan Thi F', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0007', N'Nguyen Van G', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0008', N'Tran Thi H', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0009', N'Le Van I', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0010', N'Hoang Thi K', N'Nữ', N'Du hoc sinh', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0011', N'Nguyen Van D', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0012', N'Tran Thi E', N'Nữ', N'Kỹ sư', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0013', N'Le Van F', N'Nam', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0014', N'Pham Thi G', N'Nữ', N'Y tá', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0015', N'Hoang Van H', N'Nam', N'Giáo viên', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0016', N'Vo Thi I', N'Nữ', N'Bác sĩ', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0017', N'Truong Van K', N'Nam', N'Du học sinh', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0018', N'Nguyen Thi L', N'Nữ', N'Nhân viên văn phòng', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0019', N'Tran Van M', N'Nam', N'Kỹ sư', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0020', N'Le Thi N', N'Nữ', N'Công nhân', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0021', N'Pham Van O', N'Nam', N'Y tá', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0022', N'Hoang Thi P', N'Nữ', N'Sinh viên', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0023', N'Doan Van Q', N'Nam', N'Bác sĩ', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0024', N'Nguyen Thi R', N'Nữ', N'Giáo viên', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0025', N'Tran Van S', N'Nam', N'Giao viên', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0026', N'Le Thi T', N'Nữ', N'Nhân viên văn phòng', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0027', N'Pham Van U', N'Nam', N'Kỹ sư', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0028', N'Hoang Thi V', N'Nữ', N'Công nhân', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0029', N'Nguyen Van X', N'Nam', N'Sinh viên', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0030', N'Tran Thi Y', N'Nữ', N'Nữ', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0031', N'Le Van Z', N'Nam', N'Nhan vien van phong', N'Kinh', N'Hoi giao', N'Còn sống', -1),
-('CD0032', N'Pham Thi A', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0033', N'Hoang Van B', N'Nam', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống', -1),
-('CD0034', N'Doan Thi C', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0035', N'Nguyen Van D', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0036', N'Tran Thi E', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0037', N'Le Van F', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0038', N'Pham Thi G', N'Nữ', N'Du hoc sinh', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0039', N'Hoang Van H', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0040', N'Doan Thi I', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0041', N'Nguyen Van J', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0042', N'Tran Thi K', N'Nữ', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0043', N'Le Van L', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0044', N'Pham Thi M', N'Nữ', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống', -1),
-('CD0045', N'Hoang Van N', N'Nam', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0046', N'Doan Thi O', N'Nữ', N'Cong nhan', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0047', N'Nguyen Van P', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0048', N'Tran Thi Q', N'Nữ', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống', -1),
-('CD0049', N'Le Van R', N'Nam', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0050', N'Pham Thi S', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống', -1),
-('CD0051', N'Truong Van A', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0052', N'Doan Thi B', N'Nữ', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0053', N'Bui Van C', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0054', N'Ho Thi D', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0055', N'Nguyen Van E', N'Nam', N'Giáo viên', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0056', N'Tran Thi F', N'Nữ', N'Y tá', N'Kinh', N'Công giáo', N'Còn sống', -1),
-('CD0057', N'Le Van G', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Không tôn giáo', N'Còn sống', -1),
-('CD0058', N'Pham Thi H', N'Nữ', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống', -1),
-('CD0059', N'Hoang Van I', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống', -1),
-('CD0060', N'Vo Thi K', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống', -1)
+('CD0001', N'Nguyen Van A', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0002', N'Tran Thi B', N'Nữ', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0003', N'Le Van C', N'Nam', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống'),
+('CD0004', N'Hoang Thi D', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0005', N'Pham Van E', N'Nam', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống'),
+('CD0006', N'Doan Thi F', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống'),
+('CD0007', N'Nguyen Van G', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0008', N'Tran Thi H', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0009', N'Le Van I', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống'),
+('CD0010', N'Hoang Thi K', N'Nữ', N'Du hoc sinh', N'Kinh', N'Khong', N'Còn sống'),
+('CD0011', N'Nguyen Van D', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0012', N'Tran Thi E', N'Nữ', N'Kỹ sư', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0013', N'Le Van F', N'Nam', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0014', N'Pham Thi G', N'Nữ', N'Y tá', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0015', N'Hoang Van H', N'Nam', N'Giáo viên', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0016', N'Vo Thi I', N'Nữ', N'Bác sĩ', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0017', N'Truong Van K', N'Nam', N'Du học sinh', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0018', N'Nguyen Thi L', N'Nữ', N'Nhân viên văn phòng', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0019', N'Tran Van M', N'Nam', N'Kỹ sư', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0020', N'Le Thi N', N'Nữ', N'Công nhân', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0021', N'Pham Van O', N'Nam', N'Y tá', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0022', N'Hoang Thi P', N'Nữ', N'Sinh viên', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0023', N'Doan Van Q', N'Nam', N'Bác sĩ', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0024', N'Nguyen Thi R', N'Nữ', N'Giáo viên', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0025', N'Tran Van S', N'Nam', N'Giao viên', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0026', N'Le Thi T', N'Nữ', N'Nhân viên văn phòng', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0027', N'Pham Van U', N'Nam', N'Kỹ sư', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0028', N'Hoang Thi V', N'Nữ', N'Công nhân', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0029', N'Nguyen Van X', N'Nam', N'Sinh viên', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0030', N'Tran Thi Y', N'Nữ', N'Nữ', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0031', N'Le Van Z', N'Nam', N'Nhan vien van phong', N'Kinh', N'Hoi giao', N'Còn sống'),
+('CD0032', N'Pham Thi A', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0033', N'Hoang Van B', N'Nam', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống'),
+('CD0034', N'Doan Thi C', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống'),
+('CD0035', N'Nguyen Van D', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0036', N'Tran Thi E', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0037', N'Le Van F', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống'),
+('CD0038', N'Pham Thi G', N'Nữ', N'Du hoc sinh', N'Kinh', N'Khong', N'Còn sống'),
+('CD0039', N'Hoang Van H', N'Nam', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0040', N'Doan Thi I', N'Nữ', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống'),
+('CD0041', N'Nguyen Van J', N'Nam', N'Bac si', N'Kinh', N'Khong', N'Còn sống'),
+('CD0042', N'Tran Thi K', N'Nữ', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống'),
+('CD0043', N'Le Van L', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0044', N'Pham Thi M', N'Nữ', N'Ky su', N'Kinh', N'Cong giao', N'Còn sống'),
+('CD0045', N'Hoang Van N', N'Nam', N'Nhan vien van phong', N'Kinh', N'Khong', N'Còn sống'),
+('CD0046', N'Doan Thi O', N'Nữ', N'Cong nhan', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0047', N'Nguyen Van P', N'Nam', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0048', N'Tran Thi Q', N'Nữ', N'Giao vien', N'Kinh', N'Phat giao', N'Còn sống'),
+('CD0049', N'Le Van R', N'Nam', N'Cong nhan', N'Kinh', N'Khong', N'Còn sống'),
+('CD0050', N'Pham Thi S', N'Nữ', N'Sinh vien', N'Kinh', N'Khong', N'Còn sống'),
+('CD0051', N'Truong Van A', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0052', N'Doan Thi B', N'Nữ', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0053', N'Bui Van C', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0054', N'Ho Thi D', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0055', N'Nguyen Van E', N'Nam', N'Giáo viên', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0056', N'Tran Thi F', N'Nữ', N'Y tá', N'Kinh', N'Công giáo', N'Còn sống'),
+('CD0057', N'Le Van G', N'Nam', N'Nhân viên văn phòng', N'Kinh', N'Không tôn giáo', N'Còn sống'),
+('CD0058', N'Pham Thi H', N'Nữ', N'Công nhân', N'Kinh', N'Phật giáo', N'Còn sống'),
+('CD0059', N'Hoang Van I', N'Nam', N'Kỹ sư', N'Kinh', N'Hồi giáo', N'Còn sống'),
+('CD0060', N'Vo Thi K', N'Nữ', N'Bác sĩ', N'Kinh', N'Công giáo', N'Còn sống')
 
 INSERT INTO Accounts (MaCD, MatKhau, PhanQuyen)
 VALUES 
-('CD0001', '12345', 1),
+('CD0001', '12345', 0),
 ('CD0002', '12345', 0),
 ('CD0003', '12345', 0),
 ('CD0004', '12345', 0),
@@ -912,7 +1022,7 @@ VALUES
 ('CD0008', '12345', 0),
 ('CD0009', '12345', 0),
 ('CD0010', '12345', 0),
-('CD0011', '12345', 1),
+('CD0011', '12345', 0),
 ('CD0012', '12345', 0),
 ('CD0013', '12345', 0),
 ('CD0014', '12345', 0),
@@ -922,7 +1032,7 @@ VALUES
 ('CD0018', '12345', 0),
 ('CD0019', '12345', 0),
 ('CD0020', '12345', 0),
-('CD0021', '12345', 1),
+('CD0021', '12345', 0),
 ('CD0022', '12345', 0),
 ('CD0023', '12345', 0),
 ('CD0024', '12345', 0),
@@ -932,7 +1042,7 @@ VALUES
 ('CD0028', '12345', 0),
 ('CD0029', '12345', 0),
 ('CD0030', '12345', 0),
-('CD0031', '12345', 1),
+('CD0031', '12345', 0),
 ('CD0032', '12345', 0),
 ('CD0033', '12345', 0),
 ('CD0034', '12345', 0),
@@ -942,7 +1052,7 @@ VALUES
 ('CD0038', '12345', 0),
 ('CD0039', '12345', 0),
 ('CD0040', '12345', 0),
-('CD0041', '12345', 1),
+('CD0041', '12345', 0),
 ('CD0042', '12345', 0),
 ('CD0043', '12345', 0),
 ('CD0044', '12345', 0),
@@ -952,7 +1062,7 @@ VALUES
 ('CD0048', '12345', 0),
 ('CD0049', '12345', 0),
 ('CD0050', '12345', 0),
-('CD0051', '12345', 1),
+('CD0051', '12345', 0),
 ('CD0052', '12345', 0),
 ('CD0053', '12345', 0),
 ('CD0054', '12345', 0),
@@ -1140,35 +1250,35 @@ VALUES
 
 --certificates mails temporary-absent temporary-staying
 
-INSERT INTO Certificates (MaCD, MaCCCD, QuocTich, QueQuan, NoiThuongTru, HanSuDung, DacDiemNhanDang, Avatar)
+INSERT INTO Certificates (MaCD, QuocTich, QueQuan, NoiThuongTru, HanSuDung, DacDiemNhanDang, Avatar)
 VALUES
-    ('CD0001', 'CCCD001', N'Việt Nam', N'Kon Tum', N'Đắk Hà', N'2033-01-01', N'Không', 'image1.jpg'),
-    ('CD0002', 'CCCD002', N'Việt Nam', N'Đà Nẵng', N'Hải Châu', N'2034-01-01', N'Không', 'image2.jpg'),
-    ('CD0003', 'CCCD003', N'Việt Nam', N'Hà Nội', N'Cầu Giấy', N'2035-01-01', N'Không', 'image3.jpg'),
-    ('CD0004', 'CCCD004', N'Việt Nam', N'Hồ Chí Minh', N'Quận 1', N'2036-01-01', N'Không', 'image4.jpg'),
-    ('CD0005', 'CCCD005', N'Việt Nam', N'Đồng Nai', N'Biên Hòa', N'2037-01-01', N'Không', 'image5.jpg'),
-    ('CD0006', 'CCCD006', N'Việt Nam', N'Bình Dương', N'Thủ Dầu Một', N'2038-01-01', N'Không', 'image6.jpg'),
-    ('CD0007', 'CCCD007', N'Việt Nam', N'Nghệ An', N'Vinh', N'2039-01-01', N'Không', 'image7.jpg'),
-    ('CD0008', 'CCCD008', N'Việt Nam', N'Hải Phòng', N'Hồng Bàng', N'2040-01-01', N'Không', 'image8.jpg'),
-    ('CD0009', 'CCCD009', N'Việt Nam', N'Khánh Hòa', N'Nha Trang', N'2041-01-01', N'Không', 'image9.jpg'),
-    ('CD0010', 'CCCD010', N'Việt Nam', N'Bà Rịa - Vũng Tàu', N'Vũng Tàu', N'2042-01-01', N'Không', 'image10.jpg'),
-    ('CD0011', 'CCCD011', N'Việt Nam', N'Quảng Ngãi', N'Quảng Ngãi', N'2043-01-01', N'Không', 'image11.jpg'),
-    ('CD0012', 'CCCD012', N'Việt Nam', N'Đắk Lắk', N'Buôn Ma Thuột', N'2044-01-01', N'Không', 'image12.jpg'),
-    ('CD0013', 'CCCD013', N'Việt Nam', N'Lâm Đồng', N'Đà Lạt', N'2045-01-01', N'Không', 'image13.jpg'),
-    ('CD0014', 'CCCD014', N'Việt Nam', N'Thừa Thiên Huế', N'Huế', N'2046-01-01', N'Không', 'image14.jpg'),
-    ('CD0015', 'CCCD015', N'Việt Nam', N'Hà Tĩnh', N'Hà Tĩnh', N'2047-01-01', N'Không', 'image15.jpg'),
-    ('CD0016', 'CCCD016', N'Việt Nam', N'Thanh Hóa', N'Thanh Hóa', N'2048-01-01', N'Không', 'image16.jpg'),
-    ('CD0017', 'CCCD017', N'Việt Nam', N'Nam Định', N'Nam Định', N'2049-01-01', N'Không', 'image17.jpg'),
-    ('CD0018', 'CCCD018', N'Việt Nam', N'Bắc Ninh', N'Bắc Ninh', N'2050-01-01', N'Không', 'image18.jpg'),
-    ('CD0019', 'CCCD019', N'Việt Nam', N'Phú Thọ', N'Việt Trì', N'2051-01-01', N'Không', 'image19.jpg'),
-    ('CD0020', 'CCCD020', N'Việt Nam', N'Bắc Giang', N'Bắc Giang', N'2052-01-01', N'Không', 'image20.jpg'),
-    ('CD0021', 'CCCD021', N'Việt Nam', N'Hòa Bình', N'Hòa Bình', N'2053-01-01', N'Không', 'image21.jpg'),
-    ('CD0022', 'CCCD022', N'Việt Nam', N'Hưng Yên', N'Hưng Yên', N'2054-01-01', N'Không', 'image22.jpg'),
-    ('CD0023', 'CCCD023', N'Việt Nam', N'Hà Nam', N'Phủ Lý', N'2055-01-01', N'Không', 'image23.jpg'),
-    ('CD0024', 'CCCD024', N'Việt Nam', N'Thái Bình', N'Thái Bình', N'2056-01-01', N'Không', 'image24.jpg'),
-    ('CD0025', 'CCCD025', N'Việt Nam', N'Hải Dương', N'Hải Dương', N'2057-01-01', N'Không', 'image25.jpg'),
-    ('CD0026', 'CCCD026', N'Việt Nam', N'Hải Dương', N'Chí Linh', N'2058-01-01', N'Không', 'image26.jpg'),
-    ('CD0027', 'CCCD027', N'Việt Nam', N'Quảng Ninh', N'Hạ Long', N'2059-01-01', N'Không', 'image27.jpg');
+    ('CD0001', N'Việt Nam', N'Kon Tum', N'Đắk Hà', N'2033-01-01', N'Không', 'image1.jpg'),
+    ('CD0002', N'Việt Nam', N'Đà Nẵng', N'Hải Châu', N'2034-01-01', N'Không', 'image2.jpg'),
+    ('CD0003', N'Việt Nam', N'Hà Nội', N'Cầu Giấy', N'2035-01-01', N'Không', 'image3.jpg'),
+    ('CD0004', N'Việt Nam', N'Hồ Chí Minh', N'Quận 1', N'2036-01-01', N'Không', 'image4.jpg'),
+    ('CD0005', N'Việt Nam', N'Đồng Nai', N'Biên Hòa', N'2037-01-01', N'Không', 'image5.jpg'),
+    ('CD0006', N'Việt Nam', N'Bình Dương', N'Thủ Dầu Một', N'2038-01-01', N'Không', 'image6.jpg'),
+    ('CD0007', N'Việt Nam', N'Nghệ An', N'Vinh', N'2039-01-01', N'Không', 'image7.jpg'),
+    ('CD0008', N'Việt Nam', N'Hải Phòng', N'Hồng Bàng', N'2040-01-01', N'Không', 'image8.jpg'),
+    ('CD0009', N'Việt Nam', N'Khánh Hòa', N'Nha Trang', N'2041-01-01', N'Không', 'image9.jpg'),
+    ('CD0010', N'Việt Nam', N'Bà Rịa - Vũng Tàu', N'Vũng Tàu', N'2042-01-01', N'Không', 'image10.jpg'),
+    ('CD0011', N'Việt Nam', N'Quảng Ngãi', N'Quảng Ngãi', N'2043-01-01', N'Không', 'image11.jpg'),
+    ('CD0012', N'Việt Nam', N'Đắk Lắk', N'Buôn Ma Thuột', N'2044-01-01', N'Không', 'image12.jpg'),
+    ('CD0013', N'Việt Nam', N'Lâm Đồng', N'Đà Lạt', N'2045-01-01', N'Không', 'image13.jpg'),
+    ('CD0014', N'Việt Nam', N'Thừa Thiên Huế', N'Huế', N'2046-01-01', N'Không', 'image14.jpg'),
+    ('CD0015', N'Việt Nam', N'Hà Tĩnh', N'Hà Tĩnh', N'2047-01-01', N'Không', 'image15.jpg'),
+    ('CD0016', N'Việt Nam', N'Thanh Hóa', N'Thanh Hóa', N'2048-01-01', N'Không', 'image16.jpg'),
+    ('CD0017', N'Việt Nam', N'Nam Định', N'Nam Định', N'2049-01-01', N'Không', 'image17.jpg'),
+    ('CD0018', N'Việt Nam', N'Bắc Ninh', N'Bắc Ninh', N'2050-01-01', N'Không', 'image18.jpg'),
+    ('CD0019', N'Việt Nam', N'Phú Thọ', N'Việt Trì', N'2051-01-01', N'Không', 'image19.jpg'),
+    ('CD0020', N'Việt Nam', N'Bắc Giang', N'Bắc Giang', N'2052-01-01', N'Không', 'image20.jpg'),
+    ('CD0021', N'Việt Nam', N'Hòa Bình', N'Hòa Bình', N'2053-01-01', N'Không', 'image21.jpg'),
+    ('CD0022', N'Việt Nam', N'Hưng Yên', N'Hưng Yên', N'2054-01-01', N'Không', 'image22.jpg'),
+    ('CD0023', N'Việt Nam', N'Hà Nam', N'Phủ Lý', N'2055-01-01', N'Không', 'image23.jpg'),
+    ('CD0024', N'Việt Nam', N'Thái Bình', N'Thái Bình', N'2056-01-01', N'Không', 'image24.jpg'),
+    ('CD0025', N'Việt Nam', N'Hải Dương', N'Hải Dương', N'2057-01-01', N'Không', 'image25.jpg'),
+    ('CD0026', N'Việt Nam', N'Hải Dương', N'Chí Linh', N'2058-01-01', N'Không', 'image26.jpg'),
+    ('CD0027', N'Việt Nam', N'Quảng Ninh', N'Hạ Long', N'2059-01-01', N'Không', 'image27.jpg');
 
 
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Births
+    public class Births
     {
         public string MaCD { get; set; }
         public DateTime NgaySinh { get; set; }

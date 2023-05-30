@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Cityzen
+    public class Cityzen
     {
         private string macd;
         private string hoten;

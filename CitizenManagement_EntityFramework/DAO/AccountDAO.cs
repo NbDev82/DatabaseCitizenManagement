@@ -25,7 +25,7 @@ namespace CitizenManagement_EntityFramework
             Cityzen = 0,
             Manager = 1,
         }
-        public Accounts GetAut(string username, string password, int Role)
+        public bool GetAut(string username, string password, int Role)
         {
             try
             {
@@ -41,21 +41,23 @@ namespace CitizenManagement_EntityFramework
                         }
                         connection.Close();
                         bool role = Role == 1 ? true : false;
-                        return new Accounts(role);
+                        CurrentUser.Instance.CurrentAccount = new Accounts { Macd = username, Matkhau = password, Phanquyen = role }  ;
+                        CurrentUser.Instance.CurrentCitizen = new Cityzen { Macd = username };
+                        return true;
                     }
                 }
                 else if (Role == (int)Roles.Cityzen)
                 {
                     string SQL = string.Format($"SELECT * FROM dbo.FN_CheckAuthentication('{username}','{password}');");
                     DataTable dt = DBConnection.Instance.GetDataTable(SQL);
-                    Accounts acc = new Accounts(dt.Rows[0]);
-                    return acc;
+                    CurrentUser.Instance.CurrentAccount = new Accounts(dt.Rows[0]);
+                    return true;
                 }
-                return null;
+                return false 
             }
             catch
             {
-                return null;
+                return false ;
             }
         }
     }
