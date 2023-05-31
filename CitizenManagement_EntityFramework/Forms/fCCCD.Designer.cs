@@ -41,7 +41,9 @@
             this.label9 = new System.Windows.Forms.Label();
             this.dtgvDanhSachCCCD = new System.Windows.Forms.DataGridView();
             this.pnQuanLy = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnCCCDExpired = new System.Windows.Forms.Button();
+            this.btnCCCDNearlyExpired = new System.Windows.Forms.Button();
+            this.btnShowCDProvince = new System.Windows.Forms.Button();
             this.btnCitizenWithoutCertificate = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -152,7 +154,7 @@
             this.panel2.Controls.Add(this.pnQuanLy);
             this.panel2.Location = new System.Drawing.Point(446, 11);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(414, 484);
+            this.panel2.Size = new System.Drawing.Size(542, 484);
             this.panel2.TabIndex = 4;
             // 
             // pnThongTin_3
@@ -213,7 +215,9 @@
             // 
             // pnQuanLy
             // 
-            this.pnQuanLy.Controls.Add(this.button1);
+            this.pnQuanLy.Controls.Add(this.btnCCCDExpired);
+            this.pnQuanLy.Controls.Add(this.btnCCCDNearlyExpired);
+            this.pnQuanLy.Controls.Add(this.btnShowCDProvince);
             this.pnQuanLy.Controls.Add(this.btnCitizenWithoutCertificate);
             this.pnQuanLy.Controls.Add(this.panel1);
             this.pnQuanLy.Controls.Add(this.pictureBox2);
@@ -222,19 +226,41 @@
             this.pnQuanLy.Controls.Add(this.btnTimKiem);
             this.pnQuanLy.Location = new System.Drawing.Point(3, 309);
             this.pnQuanLy.Name = "pnQuanLy";
-            this.pnQuanLy.Size = new System.Drawing.Size(408, 173);
+            this.pnQuanLy.Size = new System.Drawing.Size(536, 173);
             this.pnQuanLy.TabIndex = 0;
             // 
-            // button1
+            // btnCCCDExpired
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(215, 116);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 49);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Liệt kê công dân thuộc tỉnh";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnCCCDExpired.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCCCDExpired.Location = new System.Drawing.Point(373, 121);
+            this.btnCCCDExpired.Name = "btnCCCDExpired";
+            this.btnCCCDExpired.Size = new System.Drawing.Size(160, 41);
+            this.btnCCCDExpired.TabIndex = 6;
+            this.btnCCCDExpired.Text = "CCCD hết hạn";
+            this.btnCCCDExpired.UseVisualStyleBackColor = true;
+            this.btnCCCDExpired.Click += new System.EventHandler(this.btnCCCDExpired_Click);
+            // 
+            // btnCCCDNearlyExpired
+            // 
+            this.btnCCCDNearlyExpired.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCCCDNearlyExpired.Location = new System.Drawing.Point(373, 54);
+            this.btnCCCDNearlyExpired.Name = "btnCCCDNearlyExpired";
+            this.btnCCCDNearlyExpired.Size = new System.Drawing.Size(160, 55);
+            this.btnCCCDNearlyExpired.TabIndex = 6;
+            this.btnCCCDNearlyExpired.Text = "CCCD sắp hết hạn";
+            this.btnCCCDNearlyExpired.UseVisualStyleBackColor = true;
+            this.btnCCCDNearlyExpired.Click += new System.EventHandler(this.btnCCCDNearlyExpired_Click);
+            // 
+            // btnShowCDProvince
+            // 
+            this.btnShowCDProvince.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowCDProvince.Location = new System.Drawing.Point(195, 116);
+            this.btnShowCDProvince.Name = "btnShowCDProvince";
+            this.btnShowCDProvince.Size = new System.Drawing.Size(172, 49);
+            this.btnShowCDProvince.TabIndex = 5;
+            this.btnShowCDProvince.Text = "Liệt kê công dân thuộc tỉnh";
+            this.btnShowCDProvince.UseVisualStyleBackColor = true;
+            this.btnShowCDProvince.Click += new System.EventHandler(this.btnShowCDProvince_Click);
             // 
             // btnCitizenWithoutCertificate
             // 
@@ -277,7 +303,7 @@
             // brnXem
             // 
             this.brnXem.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.brnXem.Location = new System.Drawing.Point(215, 68);
+            this.brnXem.Location = new System.Drawing.Point(195, 69);
             this.brnXem.Name = "brnXem";
             this.brnXem.Size = new System.Drawing.Size(172, 41);
             this.brnXem.TabIndex = 0;
@@ -677,6 +703,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox picFace;
         private System.Windows.Forms.Button btnCitizenWithoutCertificate;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnShowCDProvince;
+        private System.Windows.Forms.Button btnCCCDNearlyExpired;
+        private System.Windows.Forms.Button btnCCCDExpired;
     }
 }

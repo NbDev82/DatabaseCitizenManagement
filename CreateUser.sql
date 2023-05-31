@@ -11,13 +11,28 @@ CREATE USER households_manager FOR LOGIN households_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Households to households_manager
 GRANT SELECT, DELETE, UPDATE, INSERT ON Detail_Households to households_manager
 
-CREATE LOGIN households_manager WITH PASSWORD = 'user';
-CREATE USER households_manager FOR LOGIN households_manager;
+CREATE LOGIN users WITH PASSWORD = 'user';
+CREATE USER users FOR LOGIN users;
+
+
+
 
 
 CREATE LOGIN certificates_manager WITH PASSWORD = 'manager';
 CREATE USER certificates_manager FOR LOGIN certificates_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Certificates to certificates_manager
+GRANT SELECT ON V_GetCertificates to certificates_manager
+GRANT SELECT ON FN_GetCertificates to certificates_manager
+GRANT SELECT ON FN_GetDataUser to certificates_manager
+GRANT SELECT ON dbo.GetCitizensByProvince to certificates_manager
+GRANT SELECT ON Citizens_Without_Certificates to certificates_manager
+GRANT EXECUTE ON PROC_RegisterCertificate to certificates_manager
+GRANT SELECT ON [Fn_CongDanHetHanSuDung] to certificates_manager
+GRANT SELECT ON [Fn_CongDanSapHetHanSuDung] to certificates_manager
+
+
+
+
 
 CREATE LOGIN births_manager WITH PASSWORD = 'manager';
 CREATE USER births_manager FOR LOGIN births_manager;

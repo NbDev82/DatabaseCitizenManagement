@@ -63,7 +63,7 @@
             this.txtAccount.Name = "txtAccount";
             this.txtAccount.Size = new System.Drawing.Size(464, 34);
             this.txtAccount.TabIndex = 0;
-            this.txtAccount.Text = "households_manager";
+            this.txtAccount.Text = "certificates_manager";
             // 
             // label1
             // 

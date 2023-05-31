@@ -20,31 +20,14 @@ namespace CitizenManagement_EntityFramework
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-
-            //string username = txtAccount.Text;
-            //string password = txtPassword.Text;
-            //int Role = rdoAutControler.Checked? 1 : 0;
-            //Accounts citizen = AccountDAO.Instance.GetAut(username,password, Role);
-            //if (citizen != null)
-            //{
-            //    MessageBox.Show("Đăng nhập thành công");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Đăng nhập thất bại");
-            
-            //}
-
             try
             {
                 string username = txtAccount.Text;
                 string password = txtPassword.Text;
                 int Role = rdoAutControler.Checked ? 1 : 0;
-                Accounts citizen = AccountDAO.Instance.GetAut(username, password, Role);
-                if (citizen != null)
+                bool isValid = AccountDAO.Instance.GetAut(username, password, Role);
+                if (isValid)
                 {
-                    //Cityzen cd = CitizenDAO.Instance.GetAccount(account, password);
-                    //KhaiSinh ks = KhaiSinhDAO.Instance.GetKhaiSinhByID(account);
                     fNguoiDung nd = new fNguoiDung();
                     this.Hide();
                     nd.ShowDialog();

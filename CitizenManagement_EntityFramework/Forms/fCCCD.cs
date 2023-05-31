@@ -57,17 +57,8 @@ namespace CitizenManagement_EntityFramework
         {
             try
             {
-                currentDataUser = CertificatesDAO.Instance.GetCurrentDataUser("CD0030");
-                //if (tk.Phanquyen)
-                //{
-                //    pnQuanLy.Enabled = true;
-                //    dtgvDanhSachCCCD.Enabled = true;
-                //}
-                //else
-                //{
-                //    pnQuanLy.Enabled = false;
-                //    dtgvDanhSachCCCD.Enabled = false;
-                //}
+                currentDataUser = CertificatesDAO.Instance.GetCurrentDataUser(CurrentUser.Instance.CurrentCitizen.Macd);
+
                 if (!LoadDataCurrentUser(currentDataUser))
                     throw new Exception();
                 pnThongTin.Enabled = false;
@@ -85,8 +76,7 @@ namespace CitizenManagement_EntityFramework
         {
             try
             {
-                string MaCD = "CD0030";
-                //string MaCD = (string)currentDataUser.Rows[0]["MaCD"];
+                string MaCD = CurrentUser.Instance.CurrentCitizen.Macd;
                 string HoVaTen = txtHoVaTen.Text;
                 string NgaySinh = dtpkNgaySinh.Value.ToString();
                 string GioiTinh = txtGioiTinh.Text;
@@ -179,11 +169,20 @@ namespace CitizenManagement_EntityFramework
         {
             dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.CitizenWithoutCertificate();
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void btnShowCDProvince_Click(object sender, EventArgs e)
         {
             string province = txtTimKiem.Text;
             dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.CitizenBelongProvince(province);
+        }
+
+        private void btnCCCDExpired_Click(object sender, EventArgs e)
+        {
+            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.GetCertificateExpired();
+        }
+
+        private void btnCCCDNearlyExpired_Click(object sender, EventArgs e)
+        {
+            dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.GetCertificateNearlyExpired();
         }
     }
 }

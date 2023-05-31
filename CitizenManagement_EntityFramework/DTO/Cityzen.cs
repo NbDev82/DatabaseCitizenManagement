@@ -16,7 +16,7 @@ namespace CitizenManagement_EntityFramework
         private string dantoc;
         private string tongiao;
         private string tinhtrang;
-        private int mahonnhan;
+        private bool tinhTrangHonNhan;
         public string Macd { get => macd; set => macd = value; }
         public string Hoten { get => hoten; set => hoten = value; }
         public string Nghenghiep { get => nghenghiep; set => nghenghiep = value; }
@@ -24,7 +24,7 @@ namespace CitizenManagement_EntityFramework
         public string Tongiao { get => tongiao; set => tongiao = value; }
         public string Tinhtrang { get => tinhtrang; set => tinhtrang = value; }
         public string Gioitinh { get => gioitinh; set => gioitinh = value; }
-        public int Mahonnhan { get => mahonnhan; set => mahonnhan = value; }
+        public bool TinhTrangHonNhan { get => tinhTrangHonNhan; set => tinhTrangHonNhan = value; }
         public Cityzen() { }
         public Cityzen(string HoTen, string GioiTinh, string DanToc)
         {
@@ -32,7 +32,7 @@ namespace CitizenManagement_EntityFramework
             this.gioitinh = GioiTinh;
             this.dantoc = DanToc;
         }
-        public Cityzen(string macd, string hoten, string gioitinh, string nghenghiep, string dantoc, string tongiao, string tinhtrang, int mahonnhan)
+        public Cityzen(string macd, string hoten, string gioitinh, string nghenghiep, string dantoc, string tongiao, string tinhtrang, bool TinhTrangHonNhan)
         {
             this.macd = macd;
             this.hoten = hoten;
@@ -41,7 +41,7 @@ namespace CitizenManagement_EntityFramework
             this.dantoc = dantoc;
             this.tongiao = tongiao;
             this.tinhtrang = tinhtrang;
-            this.mahonnhan = mahonnhan;
+            this.tinhTrangHonNhan = TinhTrangHonNhan;
         }
         public Cityzen(DataRow row)
         {
@@ -54,7 +54,7 @@ namespace CitizenManagement_EntityFramework
                 this.dantoc = (string)row["DanToc"];
                 this.tongiao = (string)row["TonGiao"];
                 this.tinhtrang = (string)row["TinhTrang"];
-                this.mahonnhan = (int)row["MaHN"];
+                this.tinhTrangHonNhan = (bool)row["TinhTrangHonNhan"];
             }
             catch { }
         }

@@ -20,7 +20,15 @@ namespace CitizenManagement_EntityFramework
 
         private void fNguoiDung_Load(object sender, EventArgs e)
         {
+            try
+            {
+                tbTenNguoiDung.Text = CurrentUser.Instance.CurrentCitizen.Hoten;
+                tbLoaiTK.Text = CurrentUser.Instance.CurrentAccount.Phanquyen ? "Quản lý" : "Công dân";
+            }
+            catch
+            {
 
+            }
         }
         public void OpenChildForm(Form FormChild)
         {
