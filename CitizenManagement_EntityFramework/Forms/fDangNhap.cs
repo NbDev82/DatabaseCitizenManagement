@@ -38,7 +38,7 @@ namespace CitizenManagement_EntityFramework
             try
             {
                 string username = txtAccount.Text;
-                string password = txtPassword.Text;
+                string password = txtPassword.Text; 
                 int Role = rdoAutControler.Checked ? 1 : 0;
                 Accounts citizen = AccountDAO.Instance.GetAut(username, password, Role);
                 if (citizen != null)

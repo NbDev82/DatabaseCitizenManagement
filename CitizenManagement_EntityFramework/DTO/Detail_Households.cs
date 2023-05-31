@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Detail_Households
+    public class Detail_Households
     {
         private string maho;
         private string macd;

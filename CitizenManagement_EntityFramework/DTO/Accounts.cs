@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Accounts
+    public class Accounts
     {
         public string Macd { get; set; }
         public string Matkhau { get; set; }

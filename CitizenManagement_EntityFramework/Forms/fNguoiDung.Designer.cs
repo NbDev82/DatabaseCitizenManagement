@@ -321,7 +321,7 @@
             this.pnTitle.Location = new System.Drawing.Point(239, 165);
             this.pnTitle.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnTitle.Name = "pnTitle";
-            this.pnTitle.Size = new System.Drawing.Size(1361, 76);
+            this.pnTitle.Size = new System.Drawing.Size(1148, 76);
             this.pnTitle.TabIndex = 9;
             // 
             // lbBody
@@ -338,10 +338,10 @@
             // pnBody
             // 
             this.pnBody.BackColor = System.Drawing.Color.Transparent;
-            this.pnBody.Location = new System.Drawing.Point(239, 248);
+            this.pnBody.Location = new System.Drawing.Point(239, 249);
             this.pnBody.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pnBody.Name = "pnBody";
-            this.pnBody.Size = new System.Drawing.Size(1361, 793);
+            this.pnBody.Size = new System.Drawing.Size(1148, 582);
             this.pnBody.TabIndex = 8;
             // 
             // menuStrip1
@@ -352,14 +352,14 @@
             this.đăngXuấtToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1399, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(1399, 30);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // đăngXuấtToolStripMenuItem
             // 
             this.đăngXuấtToolStripMenuItem.Name = "đăngXuấtToolStripMenuItem";
-            this.đăngXuấtToolStripMenuItem.Size = new System.Drawing.Size(97, 24);
+            this.đăngXuấtToolStripMenuItem.Size = new System.Drawing.Size(97, 26);
             this.đăngXuấtToolStripMenuItem.Text = "Đăng xuất";
             this.đăngXuấtToolStripMenuItem.Click += new System.EventHandler(this.đăngXuấtToolStripMenuItem_Click);
             // 
@@ -369,11 +369,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1399, 844);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.pnBody);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.pnTitle);
-            this.Controls.Add(this.pnBody);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "fNguoiDung";

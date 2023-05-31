@@ -20,7 +20,9 @@ namespace CitizenManagement_EntityFramework
 
         private void fNguoiDung_Load(object sender, EventArgs e)
         {
-
+            lbBody.Text = "          " + btnHomThu.Text.ToUpper();
+            pnTitle.BackColor = btnHomThu.BackColor;
+            OpenChildForm(new fHomThu());
         }
         public void OpenChildForm(Form FormChild)
         {

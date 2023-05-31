@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CitizenManagement_EntityFramework
 {
@@ -43,6 +44,7 @@ namespace CitizenManagement_EntityFramework
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 return null;
             }
             finally

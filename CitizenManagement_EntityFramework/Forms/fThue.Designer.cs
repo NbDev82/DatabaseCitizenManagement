@@ -524,7 +524,7 @@
             this.tabPage1.Controls.Add(this.panel17);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(534, 467);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kê khai và nộp hồ sơ";
@@ -1029,7 +1029,7 @@
             this.tabPage2.Controls.Add(this.tableLayoutPanel3);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(534, 467);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Tra cứu hồ sơ";
@@ -1265,7 +1265,7 @@
             // tkBPhanTramTienNop
             // 
             this.tkBPhanTramTienNop.Location = new System.Drawing.Point(591, 386);
-            this.tkBPhanTramTienNop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tkBPhanTramTienNop.Margin = new System.Windows.Forms.Padding(4);
             this.tkBPhanTramTienNop.Name = "tkBPhanTramTienNop";
             this.tkBPhanTramTienNop.Size = new System.Drawing.Size(394, 56);
             this.tkBPhanTramTienNop.TabIndex = 8;

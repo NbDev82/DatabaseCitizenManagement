@@ -12,7 +12,7 @@ namespace CitizenManagement_EntityFramework.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,8 @@ namespace CitizenManagement_EntityFramework.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=vanhoang;Initial Catalog=CityzenManagement;User ID={0};Password={1}")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-AT4EIPLT;Initial Catalog=CityzenManagement;User ID={0};Passwor" +
+            "d={1}")]
         public string cnnManager {
             get {
                 return ((string)(this["cnnManager"]));
@@ -34,7 +35,8 @@ namespace CitizenManagement_EntityFramework.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;Initial Catalog=CityzenManagement;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-AT4EIPLT;Initial Catalog=CityzenManagement;Integrated Security" +
+            "=True")]
         public string cnnCityzen {
             get {
                 return ((string)(this["cnnCityzen"]));

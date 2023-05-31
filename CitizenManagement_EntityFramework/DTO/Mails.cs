@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class Mails
+    public class Mails
     {
         private string mamail;
         private string tieude;
@@ -30,6 +30,7 @@ namespace CitizenManagement_EntityFramework
             this.nguoinhan = nguoinhan;
             this.noidung = noidung;
         }
+
         public Mails(string tieude, DateTime ngay, string nguoigui, string nguoinhan, string noidung)
         {
             this.tieude = tieude;
