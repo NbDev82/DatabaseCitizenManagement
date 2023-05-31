@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class DBConnection
+    public class DBConnection
     {
         SqlConnection conn = new SqlConnection(Properties.Settings.Default.cnnCityzen);
         private static DBConnection instance;

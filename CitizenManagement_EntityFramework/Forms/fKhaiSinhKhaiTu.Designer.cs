@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnShowKhaiSinh = new System.Windows.Forms.TableLayoutPanel();
             this.panel12 = new System.Windows.Forms.Panel();
             this.txtMaCCCDCha = new System.Windows.Forms.TextBox();
@@ -124,7 +126,7 @@
             this.pnShowKhaiSinh.Controls.Add(this.panel16, 0, 2);
             this.pnShowKhaiSinh.Controls.Add(this.panel17, 0, 1);
             this.pnShowKhaiSinh.Controls.Add(this.panel18, 0, 3);
-            this.pnShowKhaiSinh.Location = new System.Drawing.Point(6, 304);
+            this.pnShowKhaiSinh.Location = new System.Drawing.Point(6, 280);
             this.pnShowKhaiSinh.Name = "pnShowKhaiSinh";
             this.pnShowKhaiSinh.RowCount = 4;
             this.pnShowKhaiSinh.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -275,7 +277,7 @@
             this.pnShowKhaiTu.Controls.Add(this.panel14, 0, 0);
             this.pnShowKhaiTu.Controls.Add(this.panel11, 0, 2);
             this.pnShowKhaiTu.Controls.Add(this.panel8, 0, 1);
-            this.pnShowKhaiTu.Location = new System.Drawing.Point(6, 303);
+            this.pnShowKhaiTu.Location = new System.Drawing.Point(6, 279);
             this.pnShowKhaiTu.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnShowKhaiTu.Name = "pnShowKhaiTu";
             this.pnShowKhaiTu.RowCount = 3;
@@ -440,7 +442,7 @@
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.panel6.Controls.Add(this.txtMaCD);
             this.panel6.Controls.Add(this.label5);
-            this.panel6.Location = new System.Drawing.Point(13, 38);
+            this.panel6.Location = new System.Drawing.Point(13, 14);
             this.panel6.Margin = new System.Windows.Forms.Padding(4);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(503, 37);
@@ -481,7 +483,23 @@
             // 
             // dtgvKhaiSinhKhaiTu
             // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgvKhaiSinhKhaiTu.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dtgvKhaiSinhKhaiTu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgvKhaiSinhKhaiTu.DefaultCellStyle = dataGridViewCellStyle6;
             this.dtgvKhaiSinhKhaiTu.Location = new System.Drawing.Point(5, 52);
             this.dtgvKhaiSinhKhaiTu.Margin = new System.Windows.Forms.Padding(4);
             this.dtgvKhaiSinhKhaiTu.Name = "dtgvKhaiSinhKhaiTu";
@@ -541,7 +559,7 @@
             this.pnThongTin.Controls.Add(this.panel3, 0, 2);
             this.pnThongTin.Controls.Add(this.panel4, 0, 3);
             this.pnThongTin.Controls.Add(this.panel7, 0, 4);
-            this.pnThongTin.Location = new System.Drawing.Point(9, 79);
+            this.pnThongTin.Location = new System.Drawing.Point(9, 55);
             this.pnThongTin.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnThongTin.Name = "pnThongTin";
             this.pnThongTin.RowCount = 5;
@@ -744,7 +762,7 @@
             this.panel28.Location = new System.Drawing.Point(528, 376);
             this.panel28.Margin = new System.Windows.Forms.Padding(4);
             this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(572, 213);
+            this.panel28.Size = new System.Drawing.Size(572, 168);
             this.panel28.TabIndex = 94;
             // 
             // panel10
@@ -772,7 +790,7 @@
             this.pnCongDan.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.pnCongDan.Controls.Add(this.btnDatLai, 0, 0);
             this.pnCongDan.Controls.Add(this.btnKhai, 1, 0);
-            this.pnCongDan.Location = new System.Drawing.Point(4, 147);
+            this.pnCongDan.Location = new System.Drawing.Point(13, 111);
             this.pnCongDan.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnCongDan.Name = "pnCongDan";
             this.pnCongDan.RowCount = 1;
@@ -812,13 +830,13 @@
             this.pnQuanLy.Controls.Add(this.btnTuChoi, 0, 0);
             this.pnQuanLy.Controls.Add(this.btnDuyet, 1, 0);
             this.pnQuanLy.Enabled = false;
-            this.pnQuanLy.Location = new System.Drawing.Point(281, 98);
+            this.pnQuanLy.Location = new System.Drawing.Point(285, 78);
             this.pnQuanLy.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnQuanLy.Name = "pnQuanLy";
             this.pnQuanLy.RowCount = 1;
             this.pnQuanLy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pnQuanLy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 112F));
-            this.pnQuanLy.Size = new System.Drawing.Size(290, 112);
+            this.pnQuanLy.Size = new System.Drawing.Size(290, 83);
             this.pnQuanLy.TabIndex = 89;
             // 
             // btnTuChoi
@@ -829,7 +847,7 @@
             this.btnTuChoi.Location = new System.Drawing.Point(4, 4);
             this.btnTuChoi.Margin = new System.Windows.Forms.Padding(4);
             this.btnTuChoi.Name = "btnTuChoi";
-            this.btnTuChoi.Size = new System.Drawing.Size(137, 104);
+            this.btnTuChoi.Size = new System.Drawing.Size(137, 75);
             this.btnTuChoi.TabIndex = 43;
             this.btnTuChoi.Text = "Từ chối";
             this.btnTuChoi.UseVisualStyleBackColor = false;
@@ -842,7 +860,7 @@
             this.btnDuyet.Location = new System.Drawing.Point(149, 4);
             this.btnDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.btnDuyet.Name = "btnDuyet";
-            this.btnDuyet.Size = new System.Drawing.Size(137, 104);
+            this.btnDuyet.Size = new System.Drawing.Size(137, 75);
             this.btnDuyet.TabIndex = 44;
             this.btnDuyet.Text = "Duyệt";
             this.btnDuyet.UseVisualStyleBackColor = false;

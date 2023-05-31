@@ -33,5 +33,23 @@ namespace CitizenManagement_EntityFramework.DAO
                 return null;
             }
         }
+
+        public List<Cityzen> getListAllCityzen()
+        {
+            List<Cityzen> cityzens = new List<Cityzen>();
+            DataTable dt = getCitizen();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Cityzen ctz = new Cityzen(dr);
+                cityzens.Add(ctz);
+            }
+            return cityzens;
+        }
+
+        public DataTable getCitizen()
+        {
+            string sqlStr = string.Format("SELECT MaCD, HoTen FROM PERSONAL_INFORMATION");
+            return DBConnection.Instance.GetDataTable(sqlStr);
+        }
     }
 }

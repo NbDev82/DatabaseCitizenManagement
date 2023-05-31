@@ -359,15 +359,46 @@ RETURN(
 	WHERE cti.MaCD = ta.MaCD
 	AND ta.Tinh = @Tinh )
 
---Function lấy danh sách CD có cùng chủ hộ
+--Function lấy danh sách CD có cùng hộ khẩu
 GO
-CREATE or ALTER FUNCTION fn_DSCDTamVangTheoTinh(@ChuHo nvarchar(max))
+CREATE or ALTER FUNCTION fn_DSCDCungMaHo(@MaHo nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
 	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti
-	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @ChuHo))
+	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @MaHo))
+
+CREATE or ALTER FUNCTION fn_MailNhanTheoMaCongDan(@MaCD nvarchar(10))
+RETURNS TABLE 
+AS
+RETURN(
+	WITH CTE_Mailbox AS
+    (
+        SELECT *,
+            ROW_NUMBER() OVER (ORDER BY Ngay DESC) AS RowNum
+        FROM MAILBOX
+        WHERE MaNguoiNhan = @MaCD
+    )
+	SELECT MaMail, TieuDe, Ngay, TenNguoiGui, MaNguoiGui, TenNguoiNhan, MaNguoiNhan, NoiDung
+	FROM CTE_Mailbox
+	WHERE MaNguoiNhan = @MaCD)
+GO
+
+CREATE or ALTER FUNCTION fn_MailGuiTheoMaCongDan(@MaCD nvarchar(10))
+RETURNS TABLE 
+AS
+RETURN(
+	WITH CTE_Mailbox AS
+    (
+        SELECT *,
+            ROW_NUMBER() OVER (ORDER BY Ngay DESC) AS RowNum
+        FROM MAILBOX
+        WHERE MaNguoiGui = @MaCD
+    )
+	SELECT MaMail, TieuDe, Ngay, TenNguoiGui, MaNguoiGui, TenNguoiNhan, MaNguoiNhan, NoiDung, RowNum
+	FROM CTE_Mailbox
+	WHERE MaNguoiGui = @MaCD)
 --Khoa----------------------------------------------------------------------------------------------------------------------
 
 

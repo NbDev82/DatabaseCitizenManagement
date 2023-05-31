@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class AccountDAO
+    public class AccountDAO
     {
         private static AccountDAO instance;
         public static AccountDAO Instance

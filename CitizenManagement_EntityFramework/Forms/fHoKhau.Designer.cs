@@ -1056,6 +1056,7 @@
             this.Controls.Add(this.pnThongTinHoKhau);
             this.Name = "fHoKhau";
             this.Text = "fHoKhau";
+            this.Load += new System.EventHandler(this.fHoKhau_Load);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.pnChiTietHoKhau.ResumeLayout(false);
             this.pnThanhVienHoKhau.ResumeLayout(false);

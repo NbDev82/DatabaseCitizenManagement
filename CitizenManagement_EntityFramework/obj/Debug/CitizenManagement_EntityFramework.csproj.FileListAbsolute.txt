@@ -40,3 +40,4 @@ D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\P
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.CoreCompileInputs.cache
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.exe
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.pdb
+D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.Forms.fNewMail.resources

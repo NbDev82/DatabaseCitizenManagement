@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class CertificatesDAO
+    public class CertificatesDAO
     {
         private static CertificatesDAO instance;
         public static CertificatesDAO Instance

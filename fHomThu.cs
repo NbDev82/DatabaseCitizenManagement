@@ -39,7 +39,7 @@ namespace CitizenManagement_EntityFramework
                 if (rbTheoNgay.Checked)
                     dtgvHomThu.DataSource = mailDAO.getMailsByDayOfCitizen(tbTimKiem.Text, function);
                 else if (rbTheoMaNguoi.Checked)
-                    dtgvHomThu.DataSource = mailDAO.getMailsByIDOfCitizen(tbTimKiem.Text, function, searchingIDPerson);
+                    dtgvHomThu.DataSource = mailDAO.getMailsByIDOfCitizen(tbTimKiem.Text,function, searchingIDPerson);
                 else if (rbTheoTenNguoi.Checked)
                     dtgvHomThu.DataSource = mailDAO.getMailsByNameOfCitizen(tbTimKiem.Text, function, searchingNamePerson);
                 else
@@ -54,7 +54,7 @@ namespace CitizenManagement_EntityFramework
 
         private void fHomThu_Load(object sender, EventArgs e)
         {
-            dtgvHomThu.DataSource = mailDAO.getInboxMailsOfCitizen(CurrentUser.Instance.CurrentCitizen);
+            dtgvHomThu.DataSource = mailDAO.getInboxMailsOfCitizen(new Cityzen { Macd = "CD0001"}); 
             function = "fn_MailNhanTheoMaCongDan";
             searchingNamePerson = "TenNguoiGui";
             searchingIDPerson = "MaNguoiGui";
@@ -85,7 +85,7 @@ namespace CitizenManagement_EntityFramework
 
         private void rbThuGui_CheckedChanged(object sender, EventArgs e)
         {
-            dtgvHomThu.DataSource = mailDAO.getSentMailsOfCitizen(new Cityzen { Macd = CurrentUser.Instance.CurrentCitizen.Macd });
+            dtgvHomThu.DataSource = mailDAO.getSentMailsOfCitizen(new Cityzen { Macd = "CD0001" });
             function = "fn_MailGuiTheoMaCongDan";
             searchingNamePerson = "TenNguoiNhan";
             searchingIDPerson = "MaNguoiNhan";
@@ -116,7 +116,7 @@ namespace CitizenManagement_EntityFramework
                 else
                     throw new Exception("Vui lòng trọn mail cần xóa!!!");
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
