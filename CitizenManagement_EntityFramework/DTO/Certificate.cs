@@ -37,19 +37,16 @@ namespace CitizenManagement_EntityFramework
         }
         public Certificate(DataRow dt)
         {
-            this.MaCD = (string)dt["Mã CD"];
-            this.MaCCCD = dt["Số CCCD"].ToString();
-            this.HoVaTen = dt["Họ và tên"].ToString();
-            this.NgaySinh = dt["Ngày sinh"].ToString();
-            this.GioiTinh = dt["Giới tính"].ToString();
-            this.QuocTich = dt["Quốc tịch"].ToString();
-            this.QueQuan = dt["Quê quán"].ToString();
-            this.NoiThuongTru = dt["Nơi thường trú"].ToString();
-            this.HanSuDung = dt["Hạn"].ToString();
-            this.DacDiemNhanDang = dt["Đặc điểm nhận dạng"].ToString();
-            if (dt["Hình"] != DBNull.Value)
+            this.MaCD = (string)dt["MaCD"];
+            this.MaCCCD = dt["MaCCCD"].ToString();
+            this.QuocTich = dt["QuocTich"].ToString();
+            this.QueQuan = dt["QueQuan"].ToString();
+            this.NoiThuongTru = dt["NoiThuongTru"].ToString();
+            this.HanSuDung = dt["HanSuDung"].ToString();
+            this.DacDiemNhanDang = dt["DacDiemNhanDang"].ToString();
+            if (dt["Avatar"] != DBNull.Value)
             {
-                byte[] imageBytes = (byte[])dt["Hình"];
+                byte[] imageBytes = (byte[])dt["Avatar"];
                 using (MemoryStream ms = new MemoryStream(imageBytes))
                 {
                     this.Avatar = Image.FromStream(ms);
