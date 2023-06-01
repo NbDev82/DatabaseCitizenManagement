@@ -408,6 +408,124 @@ RETURN(
 
 GO
 --MẠNH----------------------------------------------------------------------------------------------------------------------
+-- View danh sách thành viên trong một hộ gia đình
+CREATE OR ALTER VIEW view_HouseholdMembersInfo AS
+
+SELECT
+	h.MaHo,
+    c.MaCD,
+    c.HoTen,
+    b.NgaySinh,
+    b.NoiSinh,
+    c.GioiTinh,
+    c.NgheNghiep,
+    c.DanToc,
+    c.TonGiao,
+	c.TinhTrangHonNhan,
+    c.TinhTrang,
+	d.QuanHeVoiChuHo
+FROM 
+    Citizens c
+    INNER JOIN Births b ON c.MaCD = b.MaCD
+    INNER JOIN Detail_Households d ON c.MaCD = d.MaCD
+    INNER JOIN Households h ON d.MaHo = h.MaHo
+GO
+--select * from view_HouseholdMembersInfo
+ -- View danh sách các hộ gia đình
+CREATE VIEW View_HouseholdsByMaHo
+AS
+SELECT *
+FROM Households
+GO
+-- View danh sách công dân
+CREATE VIEW View_Citizens
+AS
+SELECT *
+FROM Citizens
+GO
+
+-- View danh sách ngày sinh của công dân
+CREATE VIEW View_Births
+AS
+SELECT *
+FROM Births
+GO
+-- Proc Insert DetailHousehold
+CREATE OR ALTER PROCEDURE proc_InsertDetailHousehold
+(
+    @MaHo varchar(10),
+    @MaCD varchar(10),
+    @TinhTrangCuTru nvarchar(max),
+    @QuanHeVoiChuHo nvarchar(max),
+    @NgayDangKy date,
+    @TrangThai nvarchar(max)
+)
+AS
+BEGIN
+    INSERT INTO Detail_Households (MaHo, MaCD, TinhTrangCuTru, QuanHeVoiChuHo, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @MaCD, @TinhTrangCuTru, @QuanHeVoiChuHo, @NgayDangKy, @TrangThai)
+END
+GO
+-- Function tự động tạo MaHo (Households)
+CREATE OR ALTER FUNCTION func_GenerateMaHo()
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @NewMaHo VARCHAR(10);
+
+    SET @NewMaHo = 'HO000';
+
+    WHILE EXISTS (SELECT 1 FROM Households WHERE MaHo = @NewMaHo)
+    BEGIN
+        SET @NewMaHo = 'HO' + RIGHT('000' + CAST(CAST(RIGHT(@NewMaHo, 3) AS INT) + 1 AS VARCHAR(3)), 3);
+    END
+
+    RETURN @NewMaHo;
+END
+GO
+
+-- Proc Delete thành viên trong một hộ gia đình
+CREATE OR ALTER PROCEDURE proc_DeleteDetailHousehold
+    @MaCD varchar(10)
+AS
+BEGIN
+    DELETE FROM Detail_Households
+    WHERE MaCD = @MaCD;
+END
+GO
+-- PROCEDURE thêm dữ liệu vào bảng Households
+CREATE OR ALTER PROCEDURE proc_InsertHousehold
+(
+    @MaHo varchar(10),
+    @ChuHo varchar(10),
+    @TinhThanh NVARCHAR(255),
+    @QuanHuyen NVARCHAR(255),
+    @PhuongXa NVARCHAR(255),
+    @NgayDangKy DATE,
+    @TrangThai NVARCHAR(255)
+)
+AS
+BEGIN
+    INSERT INTO Households (MaHo, ChuHo, TinhThanh, QuanHuyen, PhuongXa, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @ChuHo, @TinhThanh, @QuanHuyen, @PhuongXa, @NgayDangKy, @TrangThai)
+END
+GO
+-- Proc Insert chia tiết hộ khẩu
+CREATE OR ALTER PROCEDURE proc_InsertDetailHousehold
+(
+    @MaHo varchar(10),
+    @MaCD varchar(10),
+    @TinhTrangCuTru nvarchar(max),
+    @QuanHeVoiChuHo nvarchar(max),
+    @NgayDangKy date,
+    @TrangThai nvarchar(max)
+)
+AS
+BEGIN
+    INSERT INTO Detail_Households (MaHo, MaCD, TinhTrangCuTru, QuanHeVoiChuHo, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @MaCD, @TinhTrangCuTru, @QuanHeVoiChuHo, @NgayDangKy, @TrangThai)
+END
+GO
 -- Ngày duyệt phải lớn hơn ngày khai
 ALTER TABLE [Births]
 ADD CONSTRAINT [CK_Births_Validation] CHECK (NgayDuyet > NgayKhai);
