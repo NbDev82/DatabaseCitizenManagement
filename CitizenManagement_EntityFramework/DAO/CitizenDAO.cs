@@ -19,6 +19,16 @@ namespace CitizenManagement_EntityFramework.DAO
                 return instance;
             }
         }
+
+        public bool Update(Cityzen cd)
+        {
+            string strSQL = string.Format(
+                $"UPDATE Citizens " +
+                $"SET HoTen = N'{cd.Hoten}', GioiTinh = N'{cd.Gioitinh}', NgheNghiep = N'{cd.Nghenghiep}', DanToc = N'{cd.Dantoc}', TonGiao = N'{cd.Tongiao}' " +
+                $"WHERE MaCD = '{cd.Macd}'");
+            return DBConnection.Instance.Execute(strSQL);
+        }
+
         public Cityzen GetCitizenByMaCD(string id)
         {
             try
@@ -51,6 +61,34 @@ namespace CitizenManagement_EntityFramework.DAO
             return DBConnection.Instance.GetDataTable(sqlStr);
         }
 
+        public DataTable getAllCitizen()
+        {
+            string sqlStr = string.Format("SELECT * FROM PERSONAL_INFORMATION");
+            return DBConnection.Instance.GetDataTable(sqlStr);
+        }
+
+        public DataTable getCitizenTheoId(string id)
+        {
+            string sqlStr = string.Format("SELECT * FROM fn_TimCongDanTheoMaCd('{0}')", id);
+            return DBConnection.Instance.GetDataTable(sqlStr) ;
+        }
+
+        public DataTable getCitizenTheoDanToc(string danToc)
+        {
+            string sqlStr = string.Format("SELECT * FROM fn_TimTheoDanToc('{0}')", danToc);
+            return DBConnection.Instance.GetDataTable(sqlStr);
+        }
+
+        public DataTable getCitizenTheoTen(string ten)
+        {
+            string sqlStr = string.Format("SELECT * FROM fn_TimTheoTen('{0}')", ten);
+            return DBConnection.Instance.GetDataTable(sqlStr);
+        }
+
+        public DataTable getCitizenTheoNgheNghiep(string ngheNghiep)
+        {
+            string sqlStr = string.Format("SELECT * FROM fn_TimTheoNgheNghiep('{0}')", ngheNghiep);
+            return DBConnection.Instance.GetDataTable(sqlStr);
         public List<Cityzen> MaleNotFamily()
         {
             DataTable dt = new DataTable();

@@ -21,22 +21,6 @@ namespace CitizenManagement_EntityFramework
         public string Nguoinhan { get => nguoinhan; set => nguoinhan = value; }
         public string Noidung { get => noidung; set => noidung = value; }
         public Mails() { }
-        public Mails(string mamail, string tieude, DateTime ngay, string nguoigui, string nguoinhan, string noidung)
-        {
-            this.mamail = mamail;
-            this.tieude = tieude;
-            this.ngay = ngay;
-            this.nguoigui = nguoigui;
-            this.nguoinhan = nguoinhan;
-            this.noidung = noidung;
-        }
-        public Mails(string tieude, DateTime ngay, string nguoigui, string nguoinhan, string noidung)
-        {
-            this.tieude = tieude;
-            this.ngay = ngay;
-            this.nguoigui = nguoigui;
-            this.nguoinhan = nguoinhan;
-            this.noidung = noidung;
-        }
+       
     }
 }

@@ -32,6 +32,7 @@ namespace CitizenManagement_EntityFramework
             this.gioitinh = GioiTinh;
             this.dantoc = DanToc;
         }
+
         public Cityzen(string macd, string hoten, string gioitinh, string nghenghiep, string dantoc, string tongiao, string tinhtrang, bool TinhTrangHonNhan)
         {
             this.macd = macd;
@@ -43,6 +44,7 @@ namespace CitizenManagement_EntityFramework
             this.tinhtrang = tinhtrang;
             this.tinhTrangHonNhan = TinhTrangHonNhan;
         }
+
         public Cityzen(DataRow row)
         {
             try
@@ -57,6 +59,103 @@ namespace CitizenManagement_EntityFramework
                 this.tinhTrangHonNhan = (bool)row["TinhTrangHonNhan"];
             }
             catch { }
+        }
+
+        public static List<string> getListDanToc()
+        {
+            return new List<string>
+            {
+                "Kinh",
+                "Chăm",
+                "Tày",
+                "Tày Thanh",
+                "Tày Trung",
+                "Tày Bình",
+                "Thái",
+                "Thái Đen",
+                "Thái Trắng",
+                "Thái Hàng Tổng",
+                "Mường",
+                "Khơ Mú",
+                "Mảng",
+                "Mạ",
+                "Cơ Ho",
+                "Giáy",
+                "La Hủ",
+                "Lào",
+                "Lự",
+                "Lự Tán",
+                "Lự Lở",
+                "Phù Lá",
+                "La Chí",
+                "Xinh Mun",
+                "Hà Nhì",
+                "Chứt",
+                "Cờ Lao",
+                "La Ha",
+                "Pà Thẻn",
+                "Vàng Đỏ",
+                "La Hu",
+                "Lô Lô",
+                "Chứt",
+                "Pháp",
+                "Ngái",
+                "Sán Dìu",
+                "Dao",
+                "Sán Chay",
+                "Gié-Triêng",
+                "Cống",
+                "Bố Y",
+                "Brâu",
+                "Rơ-măm",
+                "Ơ Đu",
+                "Bán Rồng",
+                "Si La",
+                "Pu Péo",
+                "Rục",
+                "Cống",
+                "Ngải",
+                "Ê-đê",
+                "Xơ-đăng",
+                "Hrê",
+                "Cơ Tu",
+                "Giẻ-Triêng",
+                "Gia Rai",
+                "Chơ-ro",
+                "Mạ",
+                "Xinh-mun",
+                "Lào",
+                "Lự",
+                "Mương",
+                "Tà Ôi"
+            };
+        }
+
+        public static List<string> getListGioiTinh()
+        {
+            return new List<string>
+            {
+                "Nam",
+                "Nữ"
+            };
+        }
+
+        public static List<string> getListTinhTrangHonNhan()
+        {
+            return new List<string>
+            {
+                "Độc thân",
+                "Đã kết hôn"
+            };
+        }
+
+        public static List<string> getListTinhTrang()
+        {
+            return new List<string>
+            {
+                "Còn sống",
+                "Đã chết"
+            };
         }
     }
 }
