@@ -124,6 +124,7 @@
             this.tCMode.SelectedIndex = 0;
             this.tCMode.Size = new System.Drawing.Size(585, 353);
             this.tCMode.TabIndex = 25;
+            this.tCMode.SelectedIndexChanged += new System.EventHandler(this.tCMode_SelectedIndexChanged);
             // 
             // tPTamVang
             // 

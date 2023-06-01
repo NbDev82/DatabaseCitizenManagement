@@ -446,5 +446,25 @@ namespace CitizenManagement_EntityFramework
                 btnKiemTraQuaHan.Visible = false;
             }
         }
+
+        private void tCMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int mode = tCMode.SelectedIndex;
+                if (mode == Convert.ToInt32(Mode.QuanLy))
+                {
+                    if (!CurrentUser.Instance.CurrentAccount.Phanquyen)
+                    {
+                        tCMode.SelectedIndex = 0;
+                        throw new Exception("Bạn không có quyền này");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
