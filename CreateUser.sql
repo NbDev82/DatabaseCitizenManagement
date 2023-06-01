@@ -55,6 +55,23 @@ CREATE LOGIN births_manager WITH PASSWORD = 'manager';
 CREATE USER births_manager FOR LOGIN births_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Births to births_manager
 GRANT SELECT, DELETE, UPDATE, INSERT ON Users_Deleted to births_manager
+GRANT SELECT ON [V_GetUserDeletedTrue] to births_manager
+GRANT SELECT ON [Citizens_Without_Births] to births_manager
+GRANT SELECT ON [V_GetBirths] to births_manager
+GRANT SELECT ON [V_UserDeleted] to births_manager
+GRANT SELECT ON [V_GetBirthNotComfirm] to births_manager
+GRANT SELECT ON [V_GetUserDeletedNotComfirm] to births_manager
+GRANT SELECT ON FN_UserDeletedByID to births_manager
+GRANT SELECT ON Fn_CountBirthsInYear to births_manager
+GRANT EXEC ON [PROC_DuyetNgaySinh] to births_manager
+GRANT EXEC ON [PROC_DuyetNgayChet] to births_manager
+GRANT SELECT ON PERSONAL_INFORMATION to births_manager
+GRANT SELECT ON Fn_CountDeathInYear to births_manager 
+GRANT SELECT ON Fn_CountBirthsInYear to births_manager
+GRANT SELECT ON FN_DataBirthByID to births_manager
+GRANT SELECT ON V_GetBriths to births_manager 
+GRANT EXEC ON PROC_DuyetNgaySinh to births_manager
+
 
 
 CREATE LOGIN people_marriage_manager WITH PASSWORD = 'manager';

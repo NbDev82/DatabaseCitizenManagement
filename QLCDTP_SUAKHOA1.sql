@@ -803,18 +803,14 @@ END;
 -- SELECT dbo.Fn_CountTemporarilyStaying('', '', '')
 GO
 -- Tính số người chết trong năm(truyền vào năm cần xem)
-CREATE FUNCTION dbo.Fn_CountDeathInYear(@year int)
-RETURNS int
+CREATE OR ALTER FUNCTION dbo.Fn_CountDeathInYear(@year int)
+RETURNS TABLE
 AS
-BEGIN
-    DECLARE @count int;
-
-    SELECT @count = COUNT(*)
+    return (SELECT *
     FROM Users_Deleted
-    WHERE YEAR(NgayTu) = @year;
-
-    RETURN @count;
-END;
+    WHERE YEAR(NgayTu) = @year);
+-- SELECT * from dbo.Fn_CountDeathInYear(2022)
+GO
 -- SELECT dbo.Fn_CountDeathInYear(2022)
 GO
 -- Liệt kê các công dân hiện chưa có cccd (citizens)
@@ -1172,6 +1168,95 @@ BEGIN
 	return 
 END
 
+
+CREATE VIEW [dbo].[V_GetUserDeletedTrue]
+AS
+SELECT *
+FROM Citizens ci
+WHERE ci.MaCD NOT IN (select MaCD
+					  FROM Users_Deleted)
+--Select * from V_GetUserDeletedTrue
+-- nhung citizen chua birth
+GO
+CREATE VIEW [Citizens_Without_Births]
+AS
+SELECT *
+FROM Citizens
+WHERE MaCD NOT IN (SELECT MaCD FROM Births);
+
+--
+go
+CREATE VIEW [dbo].[V_GetBirths]
+AS 
+SELECT *
+FROM Births
+--Select * from V_GetBirths
+-- 
+go
+CREATE VIEW [dbo].[V_UserDeleted]
+AS 
+SELECT *
+FROM Users_Deleted
+--select * from V_UserDeleted
+GO
+-- Nhung nguoi chua xac duyet giay khai sinh
+create or alter VIEW [dbo].[V_GetBirthNotComfirm]
+AS 
+SELECT *
+FROM Births
+WHERE NgayDuyet IS NULL
+--DROP VIEW V_GetBirthNotComfirm
+--select * from V_GetBirthNotComfirm
+-- Nhung nguoi chua xac nhan giay bao tu
+GO
+create or alter VIEW [dbo].[V_GetUserDeletedNotComfirm]
+AS 
+SELECT *
+FROM Users_Deleted
+WHERE NgayDuyet IS NULL
+--DROP VIEW V_GetUserDeletedNotComfirm
+--select * from V_GetUserDeletedNotComfirm
+
+
+
+
+-- Function
+-- Tim nguoi bang ID
+go
+CREATE FUNCTION dbo.FN_UserDeletedByID(@macd varchar(10))
+RETURNS TABLE
+AS return(select *
+from Users_Deleted
+where MaCD=@macd);
+--select * from dbo.FN_UserDeletedByID('CD0023')
+GO
+-- DS Birth theo nam
+CREATE or alter FUNCTION dbo.Fn_CountBirthsInYear(@year int)
+RETURNS TABLE
+AS
+    return (SELECT *
+    FROM Births
+    WHERE YEAR(NgaySinh) = @year);
+
+-- Procedure
+-- Duyet ngay sinh
+go
+CREATE OR ALTER  PROCEDURE [dbo].[PROC_DuyetNgaySinh](@maCD varchar(10),@ngayduyet varchar(255))
+AS
+BEGIN
+	UPDATE Births SET NgayDuyet=cast(@ngayduyet AS DATE) WHERE MaCD=@maCD
+END
+
+--EXEC PROC_DuyetNgaySinh 'CD0001', '11-5-2023'
+--select * from V_GetBirths
+
+go
+-- Duyet ngay chet
+CREATE OR ALTER  PROCEDURE [dbo].[PROC_DuyetNgayChet](@maCD varchar(10),@ngayduyet varchar(255))
+AS
+BEGIN
+	UPDATE Users_Deleted SET NgayDuyet=cast(@ngayduyet AS DATE) WHERE MaCD=@maCD
+END
 --go
 --select *
 --from Fn_CongDanSapHetHanSuDung();
