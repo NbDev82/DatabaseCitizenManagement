@@ -32,7 +32,8 @@ namespace CitizenManagement_EntityFramework
             this.Nguyennhan = (string)dt["NguyenNhan"];
             this.Ngaytu = (DateTime)dt["NgayTu"];
             this.Ngaykhai = (DateTime)dt["NgayKhai"];
-            this.NgayDuyet = (DateTime)dt["NgayDuyet"];
+            if (dt["NgayDuyet"] is DBNull) this.NgayDuyet = DateTime.Now;
+            else this.NgayDuyet = (DateTime)dt["NgayDuyet"];
         }
     }
 }

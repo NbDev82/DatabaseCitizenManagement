@@ -30,10 +30,8 @@
         {
             this.pnShowKhaiSinh = new System.Windows.Forms.TableLayoutPanel();
             this.panel12 = new System.Windows.Forms.Panel();
-            this.txtMaCCCDCha = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.panel16 = new System.Windows.Forms.Panel();
-            this.txtMaCCCDMe = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.panel17 = new System.Windows.Forms.Panel();
             this.txtHoTenCha = new System.Windows.Forms.TextBox();
@@ -55,7 +53,7 @@
             this.rdoKhaiSinh = new System.Windows.Forms.RadioButton();
             this.rdoKhaiTu = new System.Windows.Forms.RadioButton();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.txtMaCD = new System.Windows.Forms.TextBox();
+            this.cbMaCD = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.pnThongTin = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -65,13 +63,10 @@
             this.dtpkNgaySinh = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.cbxNoiSinh = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.cbxGioiTinh = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
-            this.cbxDanToc = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel28 = new System.Windows.Forms.Panel();
             this.panel10 = new System.Windows.Forms.Panel();
@@ -89,6 +84,19 @@
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.lbYear = new System.Windows.Forms.Label();
             this.cbYear = new System.Windows.Forms.ComboBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.dtpkNgayDuyet = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnDuyetNgaySinh = new System.Windows.Forms.Button();
+            this.btnChuaDuyet = new System.Windows.Forms.Button();
+            this.btnDien = new System.Windows.Forms.Button();
+            this.btnThem = new System.Windows.Forms.Button();
+            this.txtNoiSinh = new System.Windows.Forms.TextBox();
+            this.cbxGioiTinh = new System.Windows.Forms.ComboBox();
+            this.txtDanToc = new System.Windows.Forms.TextBox();
+            this.cbMaCCCDCha = new System.Windows.Forms.ComboBox();
+            this.cbMaCCCDMe = new System.Windows.Forms.ComboBox();
+            this.btnXoa = new System.Windows.Forms.Button();
             this.pnShowKhaiSinh.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel16.SuspendLayout();
@@ -120,7 +128,7 @@
             this.pnShowKhaiSinh.Controls.Add(this.panel16, 0, 2);
             this.pnShowKhaiSinh.Controls.Add(this.panel17, 0, 1);
             this.pnShowKhaiSinh.Controls.Add(this.panel18, 0, 3);
-            this.pnShowKhaiSinh.Location = new System.Drawing.Point(6, 304);
+            this.pnShowKhaiSinh.Location = new System.Drawing.Point(10, 303);
             this.pnShowKhaiSinh.Name = "pnShowKhaiSinh";
             this.pnShowKhaiSinh.RowCount = 4;
             this.pnShowKhaiSinh.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -133,7 +141,7 @@
             // panel12
             // 
             this.panel12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.panel12.Controls.Add(this.txtMaCCCDCha);
+            this.panel12.Controls.Add(this.cbMaCCCDCha);
             this.panel12.Controls.Add(this.label10);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(4, 4);
@@ -142,31 +150,22 @@
             this.panel12.Size = new System.Drawing.Size(510, 34);
             this.panel12.TabIndex = 87;
             // 
-            // txtMaCCCDCha
-            // 
-            this.txtMaCCCDCha.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaCCCDCha.Location = new System.Drawing.Point(265, 4);
-            this.txtMaCCCDCha.Margin = new System.Windows.Forms.Padding(4);
-            this.txtMaCCCDCha.Name = "txtMaCCCDCha";
-            this.txtMaCCCDCha.Size = new System.Drawing.Size(234, 24);
-            this.txtMaCCCDCha.TabIndex = 1;
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(4, 7);
+            this.label10.Location = new System.Drawing.Point(4, 10);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(124, 18);
+            this.label10.Size = new System.Drawing.Size(100, 18);
             this.label10.TabIndex = 2;
-            this.label10.Text = "Mã CCCD Cha:";
+            this.label10.Text = "Mã CD Cha:";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel16
             // 
             this.panel16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.panel16.Controls.Add(this.txtMaCCCDMe);
+            this.panel16.Controls.Add(this.cbMaCCCDMe);
             this.panel16.Controls.Add(this.label11);
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(4, 88);
@@ -175,15 +174,6 @@
             this.panel16.Size = new System.Drawing.Size(510, 34);
             this.panel16.TabIndex = 88;
             // 
-            // txtMaCCCDMe
-            // 
-            this.txtMaCCCDMe.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaCCCDMe.Location = new System.Drawing.Point(265, 5);
-            this.txtMaCCCDMe.Margin = new System.Windows.Forms.Padding(4);
-            this.txtMaCCCDMe.Name = "txtMaCCCDMe";
-            this.txtMaCCCDMe.Size = new System.Drawing.Size(234, 24);
-            this.txtMaCCCDMe.TabIndex = 1;
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -191,9 +181,9 @@
             this.label11.Location = new System.Drawing.Point(4, 10);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(117, 18);
+            this.label11.Size = new System.Drawing.Size(93, 18);
             this.label11.TabIndex = 2;
-            this.label11.Text = "Mã CCCD Mẹ:";
+            this.label11.Text = "Mã CD Mẹ:";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel17
@@ -288,7 +278,6 @@
             this.panel14.Controls.Add(this.cbxTinhTrang);
             this.panel14.Controls.Add(this.label13);
             this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel14.Enabled = false;
             this.panel14.Location = new System.Drawing.Point(4, 4);
             this.panel14.Margin = new System.Windows.Forms.Padding(4);
             this.panel14.Name = "panel14";
@@ -336,7 +325,7 @@
             // 
             // txtLyDo
             // 
-            this.txtLyDo.Location = new System.Drawing.Point(86, 3);
+            this.txtLyDo.Location = new System.Drawing.Point(90, 3);
             this.txtLyDo.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtLyDo.Name = "txtLyDo";
             this.txtLyDo.Size = new System.Drawing.Size(413, 94);
@@ -436,29 +425,27 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.panel6.Controls.Add(this.txtMaCD);
+            this.panel6.Controls.Add(this.cbMaCD);
             this.panel6.Controls.Add(this.label5);
             this.panel6.Location = new System.Drawing.Point(10, 35);
             this.panel6.Margin = new System.Windows.Forms.Padding(4);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(503, 37);
+            this.panel6.Size = new System.Drawing.Size(510, 37);
             this.panel6.TabIndex = 95;
             // 
-            // txtMaCD
+            // cbMaCD
             // 
-            this.txtMaCD.Enabled = false;
-            this.txtMaCD.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaCD.Location = new System.Drawing.Point(265, 4);
-            this.txtMaCD.Margin = new System.Windows.Forms.Padding(4);
-            this.txtMaCD.Name = "txtMaCD";
-            this.txtMaCD.Size = new System.Drawing.Size(234, 24);
-            this.txtMaCD.TabIndex = 1;
+            this.cbMaCD.FormattingEnabled = true;
+            this.cbMaCD.Location = new System.Drawing.Point(269, 7);
+            this.cbMaCD.Name = "cbMaCD";
+            this.cbMaCD.Size = new System.Drawing.Size(230, 21);
+            this.cbMaCD.TabIndex = 3;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(4, 7);
+            this.label5.Location = new System.Drawing.Point(4, 10);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(110, 18);
@@ -556,7 +543,7 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.panel3.Controls.Add(this.cbxNoiSinh);
+            this.panel3.Controls.Add(this.txtNoiSinh);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(4, 92);
@@ -564,18 +551,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(504, 36);
             this.panel3.TabIndex = 79;
-            // 
-            // cbxNoiSinh
-            // 
-            this.cbxNoiSinh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cbxNoiSinh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbxNoiSinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxNoiSinh.FormattingEnabled = true;
-            this.cbxNoiSinh.Location = new System.Drawing.Point(265, 4);
-            this.cbxNoiSinh.Margin = new System.Windows.Forms.Padding(4);
-            this.cbxNoiSinh.Name = "cbxNoiSinh";
-            this.cbxNoiSinh.Size = new System.Drawing.Size(234, 25);
-            this.cbxNoiSinh.TabIndex = 63;
             // 
             // label3
             // 
@@ -601,22 +576,6 @@
             this.panel4.Size = new System.Drawing.Size(504, 36);
             this.panel4.TabIndex = 78;
             // 
-            // cbxGioiTinh
-            // 
-            this.cbxGioiTinh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cbxGioiTinh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbxGioiTinh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxGioiTinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxGioiTinh.FormattingEnabled = true;
-            this.cbxGioiTinh.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ"});
-            this.cbxGioiTinh.Location = new System.Drawing.Point(265, 4);
-            this.cbxGioiTinh.Margin = new System.Windows.Forms.Padding(4);
-            this.cbxGioiTinh.Name = "cbxGioiTinh";
-            this.cbxGioiTinh.Size = new System.Drawing.Size(234, 25);
-            this.cbxGioiTinh.TabIndex = 63;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -632,7 +591,7 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.panel7.Controls.Add(this.cbxDanToc);
+            this.panel7.Controls.Add(this.txtDanToc);
             this.panel7.Controls.Add(this.label7);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel7.Location = new System.Drawing.Point(4, 180);
@@ -640,18 +599,6 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(504, 37);
             this.panel7.TabIndex = 76;
-            // 
-            // cbxDanToc
-            // 
-            this.cbxDanToc.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cbxDanToc.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbxDanToc.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxDanToc.FormattingEnabled = true;
-            this.cbxDanToc.Location = new System.Drawing.Point(265, 4);
-            this.cbxDanToc.Margin = new System.Windows.Forms.Padding(4);
-            this.cbxDanToc.Name = "cbxDanToc";
-            this.cbxDanToc.Size = new System.Drawing.Size(234, 25);
-            this.cbxDanToc.TabIndex = 64;
             // 
             // label7
             // 
@@ -678,7 +625,7 @@
             this.panel28.Location = new System.Drawing.Point(531, 414);
             this.panel28.Margin = new System.Windows.Forms.Padding(4);
             this.panel28.Name = "panel28";
-            this.panel28.Size = new System.Drawing.Size(572, 212);
+            this.panel28.Size = new System.Drawing.Size(619, 212);
             this.panel28.TabIndex = 94;
             // 
             // panel10
@@ -706,7 +653,7 @@
             this.pnCongDan.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.pnCongDan.Controls.Add(this.btnDatLai, 0, 0);
             this.pnCongDan.Controls.Add(this.btnKhai, 1, 0);
-            this.pnCongDan.Location = new System.Drawing.Point(4, 147);
+            this.pnCongDan.Location = new System.Drawing.Point(14, 53);
             this.pnCongDan.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnCongDan.Name = "pnCongDan";
             this.pnCongDan.RowCount = 1;
@@ -737,6 +684,7 @@
             this.btnKhai.TabIndex = 64;
             this.btnKhai.Text = "Khai";
             this.btnKhai.UseVisualStyleBackColor = true;
+            this.btnKhai.Click += new System.EventHandler(this.btnKhai_Click);
             // 
             // pnQuanLy
             // 
@@ -746,13 +694,13 @@
             this.pnQuanLy.Controls.Add(this.btnTuChoi, 0, 0);
             this.pnQuanLy.Controls.Add(this.btnDuyet, 1, 0);
             this.pnQuanLy.Enabled = false;
-            this.pnQuanLy.Location = new System.Drawing.Point(281, 98);
+            this.pnQuanLy.Location = new System.Drawing.Point(281, 86);
             this.pnQuanLy.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pnQuanLy.Name = "pnQuanLy";
             this.pnQuanLy.RowCount = 1;
             this.pnQuanLy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pnQuanLy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 112F));
-            this.pnQuanLy.Size = new System.Drawing.Size(290, 112);
+            this.pnQuanLy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+            this.pnQuanLy.Size = new System.Drawing.Size(290, 57);
             this.pnQuanLy.TabIndex = 89;
             // 
             // btnTuChoi
@@ -763,7 +711,7 @@
             this.btnTuChoi.Location = new System.Drawing.Point(4, 4);
             this.btnTuChoi.Margin = new System.Windows.Forms.Padding(4);
             this.btnTuChoi.Name = "btnTuChoi";
-            this.btnTuChoi.Size = new System.Drawing.Size(137, 104);
+            this.btnTuChoi.Size = new System.Drawing.Size(137, 49);
             this.btnTuChoi.TabIndex = 43;
             this.btnTuChoi.Text = "Từ chối";
             this.btnTuChoi.UseVisualStyleBackColor = false;
@@ -776,7 +724,7 @@
             this.btnDuyet.Location = new System.Drawing.Point(149, 4);
             this.btnDuyet.Margin = new System.Windows.Forms.Padding(4);
             this.btnDuyet.Name = "btnDuyet";
-            this.btnDuyet.Size = new System.Drawing.Size(137, 104);
+            this.btnDuyet.Size = new System.Drawing.Size(137, 49);
             this.btnDuyet.TabIndex = 44;
             this.btnDuyet.Text = "Duyệt";
             this.btnDuyet.UseVisualStyleBackColor = false;
@@ -824,7 +772,7 @@
             this.dtgvKhaiSinhKhaiTu.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgvKhaiSinhKhaiTu.Location = new System.Drawing.Point(528, 105);
             this.dtgvKhaiSinhKhaiTu.Name = "dtgvKhaiSinhKhaiTu";
-            this.dtgvKhaiSinhKhaiTu.Size = new System.Drawing.Size(573, 259);
+            this.dtgvKhaiSinhKhaiTu.Size = new System.Drawing.Size(702, 259);
             this.dtgvKhaiSinhKhaiTu.TabIndex = 68;
             this.dtgvKhaiSinhKhaiTu.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvKhaiSinhKhaiTu_CellContentClick);
             // 
@@ -860,16 +808,170 @@
             this.cbYear.Size = new System.Drawing.Size(115, 21);
             this.cbYear.TabIndex = 18;
             // 
+            // dtpkNgayDuyet
+            // 
+            this.dtpkNgayDuyet.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtpkNgayDuyet.Location = new System.Drawing.Point(106, 533);
+            this.dtpkNgayDuyet.Margin = new System.Windows.Forms.Padding(4);
+            this.dtpkNgayDuyet.Name = "dtpkNgayDuyet";
+            this.dtpkNgayDuyet.Size = new System.Drawing.Size(234, 24);
+            this.dtpkNgayDuyet.TabIndex = 101;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(10, 535);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(91, 18);
+            this.label6.TabIndex = 102;
+            this.label6.Text = "Ngày duyệt";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnDuyetNgaySinh
+            // 
+            this.btnDuyetNgaySinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDuyetNgaySinh.Location = new System.Drawing.Point(348, 526);
+            this.btnDuyetNgaySinh.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDuyetNgaySinh.Name = "btnDuyetNgaySinh";
+            this.btnDuyetNgaySinh.Size = new System.Drawing.Size(81, 37);
+            this.btnDuyetNgaySinh.TabIndex = 103;
+            this.btnDuyetNgaySinh.Text = "Duyệt";
+            this.btnDuyetNgaySinh.UseVisualStyleBackColor = true;
+            this.btnDuyetNgaySinh.Click += new System.EventHandler(this.btnDuyetNgaySinh_Click);
+            // 
+            // btnChuaDuyet
+            // 
+            this.btnChuaDuyet.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChuaDuyet.Location = new System.Drawing.Point(528, 371);
+            this.btnChuaDuyet.Margin = new System.Windows.Forms.Padding(4);
+            this.btnChuaDuyet.Name = "btnChuaDuyet";
+            this.btnChuaDuyet.Size = new System.Drawing.Size(701, 35);
+            this.btnChuaDuyet.TabIndex = 104;
+            this.btnChuaDuyet.Text = "Chưa Duyệt";
+            this.btnChuaDuyet.UseVisualStyleBackColor = true;
+            this.btnChuaDuyet.Click += new System.EventHandler(this.btnChuaDuyet_Click);
+            // 
+            // btnDien
+            // 
+            this.btnDien.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDien.Location = new System.Drawing.Point(13, 568);
+            this.btnDien.Margin = new System.Windows.Forms.Padding(4);
+            this.btnDien.Name = "btnDien";
+            this.btnDien.Size = new System.Drawing.Size(79, 37);
+            this.btnDien.TabIndex = 105;
+            this.btnDien.Text = "Điền";
+            this.btnDien.UseVisualStyleBackColor = true;
+            this.btnDien.Click += new System.EventHandler(this.btnDien_Click);
+            // 
+            // btnThem
+            // 
+            this.btnThem.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThem.Location = new System.Drawing.Point(106, 568);
+            this.btnThem.Margin = new System.Windows.Forms.Padding(4);
+            this.btnThem.Name = "btnThem";
+            this.btnThem.Size = new System.Drawing.Size(81, 37);
+            this.btnThem.TabIndex = 106;
+            this.btnThem.Text = "Thêm";
+            this.btnThem.UseVisualStyleBackColor = true;
+            this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
+            // 
+            // txtNoiSinh
+            // 
+            this.txtNoiSinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtNoiSinh.Location = new System.Drawing.Point(265, 8);
+            this.txtNoiSinh.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNoiSinh.Name = "txtNoiSinh";
+            this.txtNoiSinh.Size = new System.Drawing.Size(234, 24);
+            this.txtNoiSinh.TabIndex = 64;
+            // 
+            // cbxGioiTinh
+            // 
+            this.cbxGioiTinh.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbxGioiTinh.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbxGioiTinh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxGioiTinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxGioiTinh.FormattingEnabled = true;
+            this.cbxGioiTinh.Items.AddRange(new object[] {
+            "Nam",
+            "Nữ"});
+            this.cbxGioiTinh.Location = new System.Drawing.Point(265, 4);
+            this.cbxGioiTinh.Margin = new System.Windows.Forms.Padding(4);
+            this.cbxGioiTinh.Name = "cbxGioiTinh";
+            this.cbxGioiTinh.Size = new System.Drawing.Size(234, 25);
+            this.cbxGioiTinh.TabIndex = 63;
+            // 
+            // txtDanToc
+            // 
+            this.txtDanToc.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDanToc.Location = new System.Drawing.Point(265, 7);
+            this.txtDanToc.Margin = new System.Windows.Forms.Padding(4);
+            this.txtDanToc.Name = "txtDanToc";
+            this.txtDanToc.Size = new System.Drawing.Size(234, 24);
+            this.txtDanToc.TabIndex = 65;
+            // 
+            // cbMaCCCDCha
+            // 
+            this.cbMaCCCDCha.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbMaCCCDCha.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbMaCCCDCha.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMaCCCDCha.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbMaCCCDCha.FormattingEnabled = true;
+            this.cbMaCCCDCha.Items.AddRange(new object[] {
+            "Nam",
+            "Nữ"});
+            this.cbMaCCCDCha.Location = new System.Drawing.Point(265, 5);
+            this.cbMaCCCDCha.Margin = new System.Windows.Forms.Padding(4);
+            this.cbMaCCCDCha.Name = "cbMaCCCDCha";
+            this.cbMaCCCDCha.Size = new System.Drawing.Size(234, 25);
+            this.cbMaCCCDCha.TabIndex = 64;
+            // 
+            // cbMaCCCDMe
+            // 
+            this.cbMaCCCDMe.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbMaCCCDMe.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbMaCCCDMe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMaCCCDMe.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbMaCCCDMe.FormattingEnabled = true;
+            this.cbMaCCCDMe.Items.AddRange(new object[] {
+            "Nam",
+            "Nữ"});
+            this.cbMaCCCDMe.Location = new System.Drawing.Point(266, 3);
+            this.cbMaCCCDMe.Margin = new System.Windows.Forms.Padding(4);
+            this.cbMaCCCDMe.Name = "cbMaCCCDMe";
+            this.cbMaCCCDMe.Size = new System.Drawing.Size(234, 25);
+            this.cbMaCCCDMe.TabIndex = 64;
+            // 
+            // btnXoa
+            // 
+            this.btnXoa.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXoa.Location = new System.Drawing.Point(195, 568);
+            this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXoa.Name = "btnXoa";
+            this.btnXoa.Size = new System.Drawing.Size(81, 37);
+            this.btnXoa.TabIndex = 107;
+            this.btnXoa.Text = "Xóa";
+            this.btnXoa.UseVisualStyleBackColor = true;
+            this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
+            // 
             // fKhaiSinhKhaiTu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1242, 618);
+            this.Controls.Add(this.btnXoa);
+            this.Controls.Add(this.btnThem);
+            this.Controls.Add(this.btnDien);
+            this.Controls.Add(this.btnChuaDuyet);
+            this.Controls.Add(this.btnDuyetNgaySinh);
+            this.Controls.Add(this.pnShowKhaiSinh);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.dtpkNgayDuyet);
             this.Controls.Add(this.btnTimKiem);
             this.Controls.Add(this.lbYear);
             this.Controls.Add(this.cbYear);
             this.Controls.Add(this.dtgvKhaiSinhKhaiTu);
-            this.Controls.Add(this.pnShowKhaiSinh);
             this.Controls.Add(this.pnShowKhaiTu);
             this.Controls.Add(this.pnKhaiSinhKhaiTu);
             this.Controls.Add(this.panel6);
@@ -924,10 +1026,8 @@
 
         private System.Windows.Forms.TableLayoutPanel pnShowKhaiSinh;
         private System.Windows.Forms.Panel panel12;
-        private System.Windows.Forms.TextBox txtMaCCCDCha;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel panel16;
-        private System.Windows.Forms.TextBox txtMaCCCDMe;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel17;
         private System.Windows.Forms.TextBox txtHoTenCha;
@@ -949,7 +1049,6 @@
         private System.Windows.Forms.RadioButton rdoKhaiSinh;
         private System.Windows.Forms.RadioButton rdoKhaiTu;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.TextBox txtMaCD;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TableLayoutPanel pnThongTin;
         private System.Windows.Forms.Panel panel1;
@@ -959,14 +1058,10 @@
         private System.Windows.Forms.DateTimePicker dtpkNgaySinh;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.ComboBox cbxNoiSinh;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.ComboBox cbxGioiTinh;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.ComboBox cbxDanToc;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel panel28;
         private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.Panel panel9;
@@ -983,5 +1078,20 @@
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.Label lbYear;
         private System.Windows.Forms.ComboBox cbYear;
+        private System.Windows.Forms.Label label7;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.DateTimePicker dtpkNgayDuyet;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnDuyetNgaySinh;
+        private System.Windows.Forms.Button btnChuaDuyet;
+        private System.Windows.Forms.ComboBox cbMaCD;
+        private System.Windows.Forms.Button btnDien;
+        private System.Windows.Forms.Button btnThem;
+        private System.Windows.Forms.TextBox txtNoiSinh;
+        private System.Windows.Forms.ComboBox cbxGioiTinh;
+        private System.Windows.Forms.TextBox txtDanToc;
+        private System.Windows.Forms.ComboBox cbMaCCCDCha;
+        private System.Windows.Forms.ComboBox cbMaCCCDMe;
+        private System.Windows.Forms.Button btnXoa;
     }
 }
