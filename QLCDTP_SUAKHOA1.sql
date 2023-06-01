@@ -95,8 +95,8 @@ CREATE TABLE [People_Marriage](
 	MaCDVo varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
 	Loai NVARCHAR(255) NOT NULL DEFAULT N'Kết hôn', -- 1: Kết hôn | 0: Ly hôn
 	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	XacNhanLan1 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
-	XacNhanLan2 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
+	XacNhanLan1 varchar(10) DEFAULT NULL,
+	XacNhanLan2 varchar(10) DEFAULT NULL,
 	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'Chưa duyệt'-- 1: Đã duyệt | 0: Chưa duyệt
 )
 GO
@@ -680,7 +680,7 @@ FROM dbo.FN_CheckAuthentication('CD0001', '12345');*/
 GO
 --DROP FUNCTION  GetCitizensByProvince
 --Liệt kê các công dân có quê quán ở 1 tỉnh (truyền vào tên tỉnh ), ( truyền ra danh sách công dân )(Hoàng)(Certificates)
-CREATE FUNCTION dbo.GetCitizensByProvince( @Province NVARCHAR(MAX))
+CREATE OR ALTER FUNCTION dbo.GetCitizensByProvince( @Province NVARCHAR(MAX))
 RETURNS TABLE
 AS
 RETURN
@@ -724,15 +724,15 @@ RETURN(
 --drop FUNCTION FN_GetCertificates
 -- SELECT * FROM FN_GetCertificates('CD0030')
 GO
-CREATE VIEW V_GetDataUser --(Certificate) của hoàng
+CREATE OR ALTER VIEW V_GetDataUser --(Certificate) của hoàng
 AS
-	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar, ac.phanquyen
+	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ac.phanquyen
 	FROM Citizens c, Certificates ce, Births b, Accounts ac
 	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD AND c.MaCD = ac.MaCD
 GO
 --SELECT * FROM V_GetDataUser
 -- hàm trả về dữ liệu của công dân có MaCD là tham số truyền vào, trả ra bảng
-CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
+CREATE OR ALTER FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
 RETURNS TABLE
 AS
 RETURN(
@@ -842,11 +842,11 @@ END
 -- Liệt kê những công dân có hạn sử dụng năm nay, hoặc năm sau đi thay thế cccd.(Công)(Certificates)
 GO
 CREATE OR ALTER FUNCTION [dbo].[Fn_CongDanSapHetHanSuDung]()
-RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max),Anh image)
+RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max))
 AS
 BEGIN
-	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang,Anh)
-	SELECT *
+	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang)
+	SELECT ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang
 	FROM Certificates
 	WHERE YEAR(HanSuDung)=YEAR(GETDATE())AND YEAR(HanSuDung)=( YEAR(GETDATE()) + 1 );
 	return 
