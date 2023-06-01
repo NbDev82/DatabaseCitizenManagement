@@ -89,6 +89,7 @@ namespace CitizenManagement_EntityFramework.DAO
         {
             string sqlStr = string.Format("SELECT * FROM fn_TimTheoNgheNghiep('{0}')", ngheNghiep);
             return DBConnection.Instance.GetDataTable(sqlStr);
+        }
         public List<Cityzen> MaleNotFamily()
         {
             DataTable dt = new DataTable();

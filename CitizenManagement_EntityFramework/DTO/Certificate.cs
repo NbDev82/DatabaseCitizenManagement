@@ -42,7 +42,7 @@ namespace CitizenManagement_EntityFramework
             this.QuocTich = dt["QuocTich"].ToString();
             this.QueQuan = dt["QueQuan"].ToString();
             this.NoiThuongTru = dt["NoiThuongTru"].ToString();
-            this.HanSuDung = dt["HanSuDung"].ToString();
+            this.HanSuDung = (DateTime)dt["HanSuDung"];
             this.DacDiemNhanDang = dt["DacDiemNhanDang"].ToString();
             if (dt["Avatar"] != DBNull.Value)
             {
