@@ -38,11 +38,12 @@ namespace CitizenManagement_EntityFramework
         {
             this.MaCD = (string)dt["MaCD"];
             this.NgaySinh = (DateTime)dt["NgaySinh"];
+            this.NoiSinh = dt["NoiSinh"].ToString();
             this.MaCD_Cha = (string)dt["MaCD_Cha"];
             this.MaCD_Me = (string)dt["MaCD_Me"];
             this.NgayKhai = (DateTime)dt["NgayKhai"];
-            this.NgayDuyet = (DateTime)dt["NgayDuyet"];
-            this.NoiSinh = dt["NoiSinh"].ToString();
+            if (dt["NgayDuyet"] is DBNull) this.NgayDuyet = new DateTime();
+            else this.NgayDuyet = (DateTime)dt["NgayDuyet"];
         }
     }
 }

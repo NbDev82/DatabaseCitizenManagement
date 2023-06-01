@@ -166,7 +166,7 @@ namespace CitizenManagement_EntityFramework
             {
                 string Macd = txtMaCD.Text;
                 Cityzen cdChild = CitizenDAO.Instance.GetCitizenByMaCD(Macd);
-                Births khaiSinh = BirthDAO.Instance.GetKhaiSinhByID(Macd);
+                Births khaiSinh = BirthDAO.Instance.BirthByID(Macd);
                 txtHoTen.Text = cdChild.Hoten;
                 txtNgaySinh.Text = khaiSinh.NgaySinh.ToString();
                 txtNoiSinh.Text = khaiSinh.NoiSinh;

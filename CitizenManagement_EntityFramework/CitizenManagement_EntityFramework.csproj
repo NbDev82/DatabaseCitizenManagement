@@ -64,6 +64,7 @@
     <Compile Include="DAO\BirthDAO.cs" />
     <Compile Include="DAO\HouseholdDAO.cs" />
     <Compile Include="DAO\MailDAO.cs" />
+    <Compile Include="DAO\PeopleMarriageDAO.cs" />
     <Compile Include="DTO\CurrentUser.cs" />
     <Compile Include="DAO\CitizenDAO.cs" />
     <Compile Include="DTO\Accounts.cs" />

@@ -60,6 +60,22 @@ GRANT SELECT, DELETE, UPDATE, INSERT ON Users_Deleted to births_manager
 CREATE LOGIN people_marriage_manager WITH PASSWORD = 'manager';
 CREATE USER people_marriage_manager FOR LOGIN people_marriage_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON People_Marriage to people_marriage_manager
+GRANT SELECT ON [V_GetPeopleMarriage] to people_marriage_manager
+GRANT SELECT ON [V_MaleNotFamily] to people_marriage_manager
+GRANT SELECT ON [V_FemaleNotFamily] to people_marriage_manager
+GRANT SELECT ON [V_DataFmailyNotBrowse] to people_marriage_manager
+GRANT SELECT ON [V_DataFmailyNotConfirm] to people_marriage_manager
+GRANT SELECT ON [FN_DataBirthByID] to people_marriage_manager
+GRANT SELECT ON [FN_DataFindFamily] to people_marriage_manager
+GRANT SELECT ON [FN_DataFmailyInTime] to people_marriage_manager
+GRANT EXECUTE ON [PROC_RegisterMarriage] to people_marriage_manager
+GRANT EXECUTE ON [PROC_DivorceMarriage] to people_marriage_manager
+GRANT EXECUTE ON [PROC_UPDATEMarriage] to people_marriage_manager
+GRANT EXECUTE ON [PROC_BROWSEMarriage] to people_marriage_manager
+GRANT SELECT ON [V_GetBriths] to people_marriage_manager
+GRANT SELECT ON [V_UserDeleted] to people_marriage_manager
+GRANT SELECT ON Fn_CountBirthsInYear to people_marriage_manager
+GRANT SELECT ON PERSONAL_INFORMATION to people_marriage_manager
 
 CREATE LOGIN temporarily_manager WITH PASSWORD = 'manager';
 CREATE USER temporarily_manager FOR LOGIN temporarily_manager;
