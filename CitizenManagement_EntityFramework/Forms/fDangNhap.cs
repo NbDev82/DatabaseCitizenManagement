@@ -31,6 +31,7 @@ namespace CitizenManagement_EntityFramework
                     fNguoiDung nd = new fNguoiDung();
                     this.Hide();
                     nd.ShowDialog();
+                    DBConnection.Instance.ChangeMode(Properties.Settings.Default.cnnCityzen);
                     this.Show();
                 }
                 else
@@ -41,6 +42,27 @@ namespace CitizenManagement_EntityFramework
             catch
             {
                 MessageBox.Show("Sai tên đăng nhập hoặc mật khẩu!\n");
+            }
+        }
+
+        private void cbShowPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbShowPassword.Checked == true)
+            {
+                txtPassword.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                txtPassword.UseSystemPasswordChar = true;
+            }
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Bạn có thật sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Application.Exit();
             }
         }
     }

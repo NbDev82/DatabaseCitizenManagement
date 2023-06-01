@@ -14,16 +14,16 @@ namespace CitizenManagement_EntityFramework
         public string MaCD { get; set; }
         public string MaCCCD { get; set; }
         public string HoVaTen { get; set; }
-        public string NgaySinh { get; set; }
+        public DateTime NgaySinh { get; set; }
         public string GioiTinh { get; set; }
         public string QuocTich { get; set; }
         public string QueQuan { get; set; }
         public string NoiThuongTru { get; set; }
-        public string HanSuDung { get; set; }
+        public DateTime HanSuDung { get; set; }
         public string DacDiemNhanDang { get; set; }
         public Image Avatar { get; set; }
         public Certificate() { }
-        public Certificate(string MaCD, string HoVaTen, string NgaySinh, string GioiTinh, string QuocTich, string QueQuan, string NoiThuongTru, string DacDiemNhanDang, Image Avatar)
+        public Certificate(string MaCD, string HoVaTen, DateTime NgaySinh, string GioiTinh, string QuocTich, string QueQuan, string NoiThuongTru, string DacDiemNhanDang, Image Avatar)
         {
             this.MaCD = MaCD;
             this.HoVaTen = HoVaTen;

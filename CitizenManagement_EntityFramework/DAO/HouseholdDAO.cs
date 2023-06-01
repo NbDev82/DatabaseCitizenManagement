@@ -39,7 +39,7 @@ namespace CitizenManagement_EntityFramework.DAO
             string strSQL = string.Format($"" +
                 $"SELECT * " +
                 $"FROM {CONGDAN}, {CHITIETHOKHAU}, {KHAISINH} " +
-                $"WHERE {CONGDAN}.{MACD} = {CHITIETHOKHAU}.{MACD} AND {CONGDAN}.{MACD} = {KHAISINH}.{MACD} AND {CONGDAN}.{MACD} = {macd}");
+                $"WHERE {CONGDAN}.{MACD} = {CHITIETHOKHAU}.{MACD} AND {CONGDAN}.{MACD} = {KHAISINH}.{MACD} AND {CONGDAN}.{MACD} = '{macd}'");
             DataTable dt = DBConnection.Instance.GetDataTable(strSQL);
             return dt;
         }
@@ -81,15 +81,15 @@ namespace CitizenManagement_EntityFramework.DAO
         {
             try
             {
-                string strSQL = string.Format($"SELECT * FROM {HOKHAU} WHERE {MAHO} = '{maHo}'");
+                string strSQL = string.Format($"SELECT * FROM View_HouseholdsByMaHo WHERE MaHo = '{maHo}'");
                 DataTable HoKhau = DBConnection.Instance.GetDataTable(strSQL);
                 if (HoKhau.Rows.Count <= 0)
-                    throw new Exception();
+                    throw new Exception("Không tồn tại hộ khẩu");
                 return HoKhau;
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Không tồn tại hộ khẩu");
+                MessageBox.Show(ex.Message);
             }
             return null;
         }
@@ -97,7 +97,7 @@ namespace CitizenManagement_EntityFramework.DAO
         {
             try
             {
-                string strSQL = string.Format($"SELECT * FROM {HOKHAU}");
+                string strSQL = string.Format("SELECT * FROM View_HouseholdsByMaHo");
                 DataTable HoKhau = DBConnection.Instance.GetDataTable(strSQL);
                 if (HoKhau.Rows.Count <= 0)
                     throw new Exception();
@@ -113,8 +113,7 @@ namespace CitizenManagement_EntityFramework.DAO
         {
             try
             {
-                string strSQL = string.Format($"INSERT INTO {CHITIETHOKHAU}({MAHO},{MACD},{TINHTRANGCUTRU},{QUANHEVOICHUHO},{NGAYDANGKY},{TRANGTHAI}) " +
-                                              $"VALUES('{MaHo}','{macd}',N'Thường trú',N'{quanhe}',N'{DateTime.Now}',N'Chưa Duyệt')");
+                string strSQL = string.Format($"EXEC proc_InsertDetailHousehold \r\n    @MaHo = '{MaHo}',\r\n    @MaCD = '{macd}',\r\n    @TinhTrangCuTru = N'Thường trú',\r\n    @QuanHeVoiChuHo = '{quanhe}',\r\n    @NgayDangKy = '{DateTime.Now}',\r\n    @TrangThai = N'Chưa duyệt'");
                 if (DBConnection.Instance.Execute(strSQL))
                     return true;
                 return false;
@@ -124,34 +123,32 @@ namespace CitizenManagement_EntityFramework.DAO
                 return false;
             }
         }
-        public int LayMaHoTuHoKhau(string Machuho)
+        public string LayMaHoTuHoKhau(string Machuho)
         {
             try
             {
-                string strSQL = string.Format($"SELECT * FROM {HOKHAU} WHERE ChuHo = {Machuho} ");
+                string strSQL = string.Format($"SELECT * FROM {HOKHAU} WHERE ChuHo = '{Machuho}' ");
                 DataTable dt = DBConnection.Instance.GetDataTable(strSQL);
-                int maho = (int)dt.Rows[0]["MaHo"];
+                string maho = (string)dt.Rows[0]["MaHo"];
                 return maho;
             }
             catch
             {
-                return -1;
+                return null;
             }
         }
         public bool AddToHoKhau(Households hk)
         {
             try
             {
-                string trangThai = hk.Trangthai;
-                string strSQL = string.Format($"INSERT INTO {HOKHAU}({CHUHO},{TINHTHANH},{QUANHUYEN},{PHUONGXA},{NGAYDANGKY},{TRANGTHAI}) " +
-                                              $"VALUES({hk.Chuho},N'{hk.Tinhthanh}',N'{hk.Quanhuyen}',N'{hk.Phuongxa}',N'{hk.Ngaydangky}',N'{trangThai}')");
+                string trangThai = hk.Trangthai == "1" ? "Đã Duyệt" : "Chưa Duyệt";
+                string strSQL = string.Format($"EXEC proc_InsertHousehold \r\n    @MaHo = '{hk.Maho}',\r\n    @ChuHo = '{hk.Chuho}',\r\n    @TinhThanh = N'{hk.Tinhthanh}',\r\n    @QuanHuyen = N'{hk.Quanhuyen}',\r\n    @PhuongXa = N'{hk.Phuongxa}',\r\n    @NgayDangKy = '{hk.Ngaydangky}',\r\n    @TrangThai = N'{trangThai}'");
                 if (DBConnection.Instance.Execute(strSQL))
                 {
-                    int MaHo = LayMaHoTuHoKhau(hk.Chuho);
-                    if (MaHo < 0)
+                    string MaHo = LayMaHoTuHoKhau(hk.Chuho);
+                    if (MaHo == null)
                         return false;
-                    string addToDetailHouseholds = string.Format($"INSERT INTO {CHITIETHOKHAU}(MaHo,MaCD,{TINHTRANGCUTRU},{QUANHEVOICHUHO},{NGAYDANGKY},{TRANGTHAI}) " +
-                                                                 $"VALUES({MaHo},N'{hk.Chuho}',N'Thường trú',N'Chủ hộ',N'{hk.Ngaydangky}',N'{trangThai}')");
+                    string addToDetailHouseholds = string.Format($"EXEC proc_InsertDetailHousehold\r\n    @MaHo = '{MaHo}',\r\n    @MaCD = '{hk.Chuho}',\r\n    @TinhTrangCuTru = N'Thường trú',\r\n    @QuanHeVoiChuHo = N'Chủ hộ',\r\n    @NgayDangKy = '{hk.Ngaydangky}',\r\n    @TrangThai = N'{trangThai}'");
                     DBConnection.Instance.Execute(addToDetailHouseholds);
                     return true;
                 }
@@ -162,9 +159,16 @@ namespace CitizenManagement_EntityFramework.DAO
                 return false;
             }
         }
+        public string NewMaHo()
+        {
+            string sqlStr = string.Format("DECLARE @NewMaHo VARCHAR(10); SET @NewMaHo = dbo.GenerateMaHo(); SELECT @NewMaHo as MaHo");
+            DataTable dt = DBConnection.Instance.GetDataTable(sqlStr);
+            string maho = (string)dt.Rows[0]["MaHo"];
+            return maho;
+        }
         public bool Delete(string macd)
         {
-            string strSQL = string.Format($"DELETE FROM {CHITIETHOKHAU} WHERE {MACD} = '{macd}' ");
+            string strSQL = string.Format($"EXEC proc_DeleteDetailHousehold @MaCD = '{macd}'");
             return DBConnection.Instance.Execute(strSQL);
         }
     }
