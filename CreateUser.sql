@@ -85,6 +85,8 @@ GRANT EXECUTE ON proc_DeleteTemporarilyStayingData to temporarily_manager
 GRANT EXECUTE ON proc_UpdateTemporarilyStayingStatus to temporarily_manager
 GRANT EXECUTE ON proc_UpdateTemporarilyAbsentStatus to temporarily_manager
 GRANT EXECUTE ON proc_DeleteTemporarilyAbsentData to temporarily_manager
+GRANT EXECUTE ON proc_InsertTemporarilyAbsent to temporarily_manager
+GRANT EXECUTE ON proc_InsertTemporarilyStaying to temporarily_manager
 GRANT SELECT ON View_Temporarily_Absent to temporarily_manager
 GRANT SELECT ON view_TemporarilyStaying to temporarily_manager
 GRANT SELECT ON View_ListExpiredPermission to temporarily_manager

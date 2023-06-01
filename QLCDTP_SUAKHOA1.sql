@@ -447,6 +447,40 @@ RETURN(
 
 GO
 --MẠNH----------------------------------------------------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE proc_InsertTemporarilyStaying  
+(   
+	@ID varchar(10),
+	@MaCD varchar(10),
+	@MaCCCD VARCHAR(max),
+	@Tinh NVARCHAR(max),
+	@Huyen NVARCHAR(max),
+	@Xa NVARCHAR(max),
+	@LyDo NVARCHAR(max),
+	@thoi_gian_bat_dau DATE
+)  
+AS  
+BEGIN   
+	INSERT INTO Temporarily_Staying (ID, MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau)
+	VALUES (@ID, @MaCD, @MaCCCD, @Tinh, @Huyen, @Xa, @LyDo, @thoi_gian_bat_dau)  
+END
+
+CREATE OR ALTER PROCEDURE proc_InsertTemporarilyAbsent  
+(      @ID varchar(10),
+		@MaCD varchar(10),
+		@MaCCCD VARCHAR(max),
+		@Tinh NVARCHAR(max),
+		@Huyen NVARCHAR(max),
+		@Xa NVARCHAR(max),
+		@LyDo NVARCHAR(max),
+		@thoi_gian_bat_dau DATE,
+		@thoi_gian_ket_thuc DATE  )  
+AS  
+BEGIN      
+INSERT INTO Temporarily_Absent (ID, MaCD, MaCCCD, Tinh, Huyen, Xa, LyDo, thoi_gian_bat_dau, thoi_gian_ket_thuc)
+		VALUES (@ID, @MaCD, @MaCCCD, @Tinh, @Huyen, @Xa, @LyDo, @thoi_gian_bat_dau, @thoi_gian_ket_thuc)  
+END
+GO
+GO
 CREATE FUNCTION func_GenerateMaTamTru()
 RETURNS VARCHAR(10)
 AS

@@ -432,5 +432,19 @@ namespace CitizenManagement_EntityFramework
             }
             Xem();
         }
+
+        private void rdoTamVang_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoTamVang.Checked)
+            {
+                btnKiemTraChuaDuyet.Visible = true;
+                btnKiemTraQuaHan.Visible = true;
+            }
+            else
+            {
+                btnKiemTraChuaDuyet.Visible = false;
+                btnKiemTraQuaHan.Visible = false;
+            }
+        }
     }
 }

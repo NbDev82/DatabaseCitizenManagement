@@ -496,6 +496,7 @@
             this.btnKiemTraQuaHan.TabIndex = 30;
             this.btnKiemTraQuaHan.Text = "Đơn quá hạn";
             this.btnKiemTraQuaHan.UseVisualStyleBackColor = true;
+            this.btnKiemTraQuaHan.Visible = false;
             this.btnKiemTraQuaHan.Click += new System.EventHandler(this.btnKiemTraQuaHan_Click);
             // 
             // btnKiemTraChuaDuyet
@@ -506,6 +507,7 @@
             this.btnKiemTraChuaDuyet.TabIndex = 29;
             this.btnKiemTraChuaDuyet.Text = "Đơn hết hạn duyêt";
             this.btnKiemTraChuaDuyet.UseVisualStyleBackColor = true;
+            this.btnKiemTraChuaDuyet.Visible = false;
             this.btnKiemTraChuaDuyet.Click += new System.EventHandler(this.btnKiemTraChuaDuyet_Click);
             // 
             // panel1
@@ -527,6 +529,7 @@
             this.rdoTamVang.TabStop = true;
             this.rdoTamVang.Text = "Tạm vắng";
             this.rdoTamVang.UseVisualStyleBackColor = true;
+            this.rdoTamVang.CheckedChanged += new System.EventHandler(this.rdoTamVang_CheckedChanged);
             // 
             // rdoTamTru
             // 
