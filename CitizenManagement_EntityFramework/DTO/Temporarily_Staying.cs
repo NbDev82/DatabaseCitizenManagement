@@ -19,8 +19,9 @@ namespace CitizenManagement_EntityFramework
         public DateTime thoi_gian_bat_dau { get; set; }
         public string TrangThai { get; set; }
         public Temporarily_Staying() { }
-        public Temporarily_Staying(string MaCD, string MaCCCD, string Tinh, string Huyen, string Xa, string LyDo, DateTime thoi_gian_bat_dau)
+        public Temporarily_Staying(string ID, string MaCD, string MaCCCD, string Tinh, string Huyen, string Xa, string LyDo, DateTime thoi_gian_bat_dau)
         {
+            this.ID = ID;
             this.MaCD = MaCD;
             this.MaCCCD = MaCCCD;
             this.Tinh = Tinh;

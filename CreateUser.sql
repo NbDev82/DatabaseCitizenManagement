@@ -81,8 +81,24 @@ CREATE LOGIN temporarily_manager WITH PASSWORD = 'manager';
 CREATE USER temporarily_manager FOR LOGIN temporarily_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Temporarily_Absent to temporarily_manager
 GRANT SELECT, DELETE, UPDATE, INSERT ON Temporarily_Staying to temporarily_manager
+GRANT EXECUTE ON proc_DeleteTemporarilyStayingData to temporarily_manager
+GRANT EXECUTE ON proc_UpdateTemporarilyStayingStatus to temporarily_manager
+GRANT EXECUTE ON proc_UpdateTemporarilyAbsentStatus to temporarily_manager
+GRANT EXECUTE ON proc_DeleteTemporarilyAbsentData to temporarily_manager
+GRANT SELECT ON View_Temporarily_Absent to temporarily_manager
+GRANT SELECT ON view_TemporarilyStaying to temporarily_manager
+GRANT SELECT ON View_ListExpiredPermission to temporarily_manager
+GRANT SELECT ON View_ListExpired to temporarily_manager
+GRANT EXECUTE ON func_GenerateMaTamVang to temporarily_manager
+GRANT EXECUTE ON func_GenerateMaTamTru to temporarily_manager
+
 
 CREATE LOGIN personal_data_manager WITH PASSWORD = 'manager';
 CREATE USER personal_data_manager FOR LOGIN personal_data_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Citizens to personal_data_manager
 GRANT SELECT, INSERT ON Births to personal_data_manager
+GRANT SELECT ON fn_TimTheoNgheNghiep to personal_data_manager
+GRANT SELECT ON fn_TimCongDanTheoMaCd to personal_data_manager
+GRANT SELECT ON fn_TimTheoDanToc to personal_data_manager
+GRANT SELECT ON fn_TimTheoTen to personal_data_manager
+GRANT SELECT ON PERSONAL_INFORMATION to personal_data_manager

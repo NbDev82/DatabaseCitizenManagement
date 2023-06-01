@@ -58,6 +58,8 @@
             this.txtLyDoTamTru = new System.Windows.Forms.RichTextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.tPQuanLy = new System.Windows.Forms.TabPage();
+            this.btnKiemTraQuaHan = new System.Windows.Forms.Button();
+            this.btnKiemTraChuaDuyet = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rdoTamVang = new System.Windows.Forms.RadioButton();
             this.rdoTamTru = new System.Windows.Forms.RadioButton();
@@ -472,6 +474,8 @@
             // tPQuanLy
             // 
             this.tPQuanLy.BackColor = System.Drawing.Color.Thistle;
+            this.tPQuanLy.Controls.Add(this.btnKiemTraQuaHan);
+            this.tPQuanLy.Controls.Add(this.btnKiemTraChuaDuyet);
             this.tPQuanLy.Controls.Add(this.panel1);
             this.tPQuanLy.Controls.Add(this.label20);
             this.tPQuanLy.Controls.Add(this.txtTimKiem);
@@ -483,6 +487,26 @@
             this.tPQuanLy.Size = new System.Drawing.Size(577, 320);
             this.tPQuanLy.TabIndex = 2;
             this.tPQuanLy.Text = "Quản lý";
+            // 
+            // btnKiemTraQuaHan
+            // 
+            this.btnKiemTraQuaHan.Location = new System.Drawing.Point(130, 6);
+            this.btnKiemTraQuaHan.Name = "btnKiemTraQuaHan";
+            this.btnKiemTraQuaHan.Size = new System.Drawing.Size(116, 64);
+            this.btnKiemTraQuaHan.TabIndex = 30;
+            this.btnKiemTraQuaHan.Text = "Đơn quá hạn";
+            this.btnKiemTraQuaHan.UseVisualStyleBackColor = true;
+            this.btnKiemTraQuaHan.Click += new System.EventHandler(this.btnKiemTraQuaHan_Click);
+            // 
+            // btnKiemTraChuaDuyet
+            // 
+            this.btnKiemTraChuaDuyet.Location = new System.Drawing.Point(7, 6);
+            this.btnKiemTraChuaDuyet.Name = "btnKiemTraChuaDuyet";
+            this.btnKiemTraChuaDuyet.Size = new System.Drawing.Size(105, 65);
+            this.btnKiemTraChuaDuyet.TabIndex = 29;
+            this.btnKiemTraChuaDuyet.Text = "Đơn hết hạn duyêt";
+            this.btnKiemTraChuaDuyet.UseVisualStyleBackColor = true;
+            this.btnKiemTraChuaDuyet.Click += new System.EventHandler(this.btnKiemTraChuaDuyet_Click);
             // 
             // panel1
             // 
@@ -530,9 +554,9 @@
             this.txtTimKiem.BackColor = System.Drawing.Color.Thistle;
             this.txtTimKiem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtTimKiem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.txtTimKiem.Location = new System.Drawing.Point(435, 48);
+            this.txtTimKiem.Location = new System.Drawing.Point(295, 48);
             this.txtTimKiem.Name = "txtTimKiem";
-            this.txtTimKiem.Size = new System.Drawing.Size(130, 27);
+            this.txtTimKiem.Size = new System.Drawing.Size(270, 27);
             this.txtTimKiem.TabIndex = 22;
             this.txtTimKiem.Tag = "";
             // 
@@ -562,6 +586,7 @@
             this.btnTimKiem.TabIndex = 0;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = true;
+            this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
             // 
             // btnXem
             // 
@@ -571,6 +596,7 @@
             this.btnXem.TabIndex = 0;
             this.btnXem.Text = "Xem";
             this.btnXem.UseVisualStyleBackColor = true;
+            this.btnXem.Click += new System.EventHandler(this.btnXem_Click);
             // 
             // btnDuyet
             // 
@@ -580,6 +606,7 @@
             this.btnDuyet.TabIndex = 0;
             this.btnDuyet.Text = "Duyệt";
             this.btnDuyet.UseVisualStyleBackColor = true;
+            this.btnDuyet.Click += new System.EventHandler(this.btnDuyet_Click);
             // 
             // btnTuChoi
             // 
@@ -589,15 +616,16 @@
             this.btnTuChoi.TabIndex = 0;
             this.btnTuChoi.Text = "Từ chối";
             this.btnTuChoi.UseVisualStyleBackColor = true;
+            this.btnTuChoi.Click += new System.EventHandler(this.btnTuChoi_Click);
             // 
             // dtgvThongTin
             // 
             this.dtgvThongTin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgvThongTin.Location = new System.Drawing.Point(7, 48);
+            this.dtgvThongTin.Location = new System.Drawing.Point(7, 84);
             this.dtgvThongTin.Name = "dtgvThongTin";
             this.dtgvThongTin.RowHeadersWidth = 51;
             this.dtgvThongTin.RowTemplate.Height = 24;
-            this.dtgvThongTin.Size = new System.Drawing.Size(422, 266);
+            this.dtgvThongTin.Size = new System.Drawing.Size(422, 230);
             this.dtgvThongTin.TabIndex = 0;
             // 
             // label13
@@ -646,6 +674,7 @@
             this.btnSend.TabIndex = 3;
             this.btnSend.Text = "Gửi";
             this.btnSend.UseVisualStyleBackColor = false;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // btnState
             // 
@@ -659,6 +688,7 @@
             this.btnState.TabIndex = 2;
             this.btnState.Text = "Trạng thái đơn";
             this.btnState.UseVisualStyleBackColor = false;
+            this.btnState.Click += new System.EventHandler(this.btnState_Click);
             // 
             // btnCheck
             // 
@@ -672,6 +702,7 @@
             this.btnCheck.TabIndex = 1;
             this.btnCheck.Text = "Kiểm tra";
             this.btnCheck.UseVisualStyleBackColor = false;
+            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // btnReset
             // 
@@ -685,6 +716,7 @@
             this.btnReset.TabIndex = 0;
             this.btnReset.Text = "Làm lại";
             this.btnReset.UseVisualStyleBackColor = false;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -908,6 +940,7 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "fTamTruTamVang";
             this.Text = "fTamTruTamVang";
+            this.Load += new System.EventHandler(this.fTamTruTamVang_Load);
             this.tCMode.ResumeLayout(false);
             this.tPTamVang.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -1006,5 +1039,7 @@
         private System.Windows.Forms.TextBox txtXa;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnKiemTraQuaHan;
+        private System.Windows.Forms.Button btnKiemTraChuaDuyet;
     }
 }

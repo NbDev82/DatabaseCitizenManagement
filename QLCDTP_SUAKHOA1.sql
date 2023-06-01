@@ -168,6 +168,45 @@ drop table [Certificates]
 GO
 --KHOA----------------------------------------------------------------------------------------------------------------------
 
+CREATE or ALTER FUNCTION fn_TimCongDanTheoMaCd (@MaCD nvarchar(10))
+RETURNS TABLE 
+AS
+RETURN(
+	SELECT *
+	FROM Citizens
+	WHERE MaCD = @MaCD)
+GO
+CREATE or ALTER FUNCTION fn_TimTheoDanToc (@DanToc nvarchar(max))
+RETURNS TABLE 
+AS
+RETURN(
+	SELECT *
+	FROM Citizens
+	WHERE DanToc LIKE '%' + @DanToc + '%'
+	)
+GO
+
+CREATE or ALTER FUNCTION fn_TimTheoTen (@Ten nvarchar(max))
+RETURNS TABLE 
+AS
+RETURN(
+	SELECT *
+	FROM Citizens
+	WHERE HoTen LIKE '%' + @Ten + '%'
+	)
+GO
+go
+CREATE or ALTER FUNCTION fn_TimTheoNgheNghiep (@Nghenghiep nvarchar(max))
+RETURNS TABLE 
+AS
+RETURN(
+	SELECT *
+	FROM Citizens
+	WHERE NgheNghiep LIKE '%' + @Nghenghiep + '%'
+	)
+
+--SELECT * FROM fn_TimCongDanTheoMaCd('cd0001')
+go
 
 CREATE OR ALTER VIEW PERSONAL_INFORMATION
 AS
@@ -408,6 +447,135 @@ RETURN(
 
 GO
 --MẠNH----------------------------------------------------------------------------------------------------------------------
+CREATE FUNCTION func_GenerateMaTamTru()
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @NewMaTamTru VARCHAR(10);
+
+    SET @NewMaTamTru = 'TA000';
+
+    WHILE EXISTS (SELECT 1 FROM Temporarily_Absent WHERE ID = @NewMaTamTru)
+    BEGIN
+        SET @NewMaTamTru = 'TA' + RIGHT('000' + CAST(CAST(RIGHT(@NewMaTamTru, 3) AS INT) + 1 AS VARCHAR(3)), 3);
+    END
+
+    RETURN @NewMaTamTru;
+END
+--
+--
+GO
+CREATE FUNCTION func_GenerateMaTamVang()
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @NewMaTamVang VARCHAR(10);
+
+    SET @NewMaTamVang = 'TS000';
+
+    WHILE EXISTS (SELECT 1 FROM Temporarily_Staying WHERE ID = @NewMaTamVang)
+    BEGIN
+        SET @NewMaTamVang = 'TS' + RIGHT('000' + CAST(CAST(RIGHT(@NewMaTamVang, 3) AS INT) + 1 AS VARCHAR(3)), 3);
+    END
+
+    RETURN @NewMaTamVang;
+END
+--
+GO
+CREATE OR ALTER VIEW view_TemporarilyStaying AS
+SELECT ID AS N'ID',
+       MaCD AS N'Mã CD',
+       MaCCCD AS N'Mã CCCD',
+       Tinh AS N'Tỉnh',
+       Huyen AS N'Huyện',
+       Xa AS N'Xã',
+       LyDo AS N'Lý do',
+       thoi_gian_bat_dau AS N'Thời gian bắt đầu',
+       TrangThai AS N'Trạng thái'
+FROM Temporarily_Staying
+-- View tạm vắng
+CREATE OR ALTER VIEW View_Temporarily_Absent AS
+SELECT ID AS N'ID',
+       MaCD AS N'Mã CD',
+       MaCCCD AS N'Mã CCCD',
+       Tinh AS N'Tỉnh',
+       Huyen AS N'Huyện',
+       Xa AS N'Xã',
+       LyDo AS N'Lý do',
+       thoi_gian_bat_dau AS N'Thời gian bắt đầu',
+	   thoi_gian_ket_thuc AS N'Thời gian kết thúc',
+       TrangThai AS N'Trạng thái'
+FROM Temporarily_Absent
+go
+--select * from View_Temporarily_Absent
+
+--Proc Xóa dữ liệu trong bảng tạm vắng
+CREATE OR ALTER PROCEDURE proc_DeleteTemporarilyAbsentData
+    @ID INT
+AS
+BEGIN
+    DELETE FROM Temporarily_Absent
+    WHERE ID = @ID;
+END;
+--EXEC proc_DeleteTemporarilyAbsentData @ID = 123;
+go
+--Proc Update dữ liệu trong bảng tạm vắng
+CREATE OR ALTER PROCEDURE proc_UpdateTemporarilyAbsentStatus
+    @ID INT,
+    @Status NVARCHAR(50)
+AS
+BEGIN
+    UPDATE Temporarily_Absent
+    SET TrangThai = @Status
+    WHERE ID = @ID;
+END;
+go
+--View đơn đã hết hạn
+CREATE OR ALTER VIEW View_ListExpiredPermission AS
+SELECT
+    ID AS N'ID',
+    MaCD AS N'Mã CD',
+    MaCCCD AS N'Mã CCCD',
+    Tinh AS N'Tỉnh',
+    Huyen AS N'Huyện',
+    Xa AS N'Xã',
+    LyDo AS N'Lý do',
+    thoi_gian_bat_dau AS N'Thời gian bắt đầu',
+    thoi_gian_ket_thuc AS N'Thời gian kết thúc',
+    TrangThai AS N'Trạng thái'
+FROM
+    Temporarily_Absent
+WHERE
+    thoi_gian_ket_thuc < GETDATE() AND TrangThai = N'Chưa duyệt';
+go
+--View đơn đã duyệt quá hạn sử dụng
+CREATE OR ALTER VIEW View_ListExpired AS
+SELECT
+    ID AS N'ID',
+    MaCD AS N'Mã CD',
+    MaCCCD AS N'Mã CCCD',
+    Tinh AS N'Tỉnh',
+    Huyen AS N'Huyện',
+    Xa AS N'Xã',
+    LyDo AS N'Lý do',
+    thoi_gian_bat_dau AS N'Thời gian bắt đầu',
+    thoi_gian_ket_thuc AS N'Thời gian kết thúc',
+    TrangThai AS N'Trạng thái'
+FROM
+    Temporarily_Absent
+WHERE
+    thoi_gian_ket_thuc < GETDATE() AND TrangThai = N'Đã duyệt';
+--select * from View_ListExpired
+GO
+--Proc xóa dữ liệu khỏi bảng tạm trú
+CREATE OR ALTER PROCEDURE proc_DeleteTemporarilyStayingData
+    @ID varchar(10)
+AS
+BEGIN
+    DELETE FROM Temporarily_Staying
+    WHERE ID = @ID;
+END;
+GO
 -- View danh sách thành viên trong một hộ gia đình
 CREATE OR ALTER VIEW view_HouseholdMembersInfo AS
 

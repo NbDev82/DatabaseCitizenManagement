@@ -11,8 +11,9 @@ namespace CitizenManagement_EntityFramework
     {
         public DateTime thoi_gian_ket_thuc { get; set; }
         public Temporarily_Absent() { }
-        public Temporarily_Absent(string MaCD, string MaCCCD, string Tinh, string Huyen, string Xa, string LyDo, DateTime TgianBdau, DateTime TgianKthuc)
+        public Temporarily_Absent(string ID, string MaCD, string MaCCCD, string Tinh, string Huyen, string Xa, string LyDo, DateTime TgianBdau, DateTime TgianKthuc)
         {
+            this.ID = ID;
             this.MaCD = MaCD;
             this.MaCCCD = MaCCCD;
             this.Tinh = Tinh;
