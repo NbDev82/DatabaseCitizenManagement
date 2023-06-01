@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAO\BirthDAO.cs" />
     <Compile Include="DTO\CurrentUser.cs" />
     <Compile Include="DAO\CitizenDAO.cs" />
     <Compile Include="DTO\Accounts.cs" />
@@ -140,6 +141,7 @@
     </Compile>
     <Compile Include="DTO\Households.cs" />
     <Compile Include="DTO\Mails.cs" />
+    <Compile Include="DAO\PeopleMarriageDAO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DTO\Users_Deleted.cs" />
@@ -188,6 +190,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include=".editorconfig" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

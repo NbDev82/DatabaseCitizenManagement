@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class CertificatesDAO
+    public class CertificatesDAO
     {
         private static CertificatesDAO instance;
         public static CertificatesDAO Instance
@@ -92,7 +92,7 @@ namespace CitizenManagement_EntityFramework
                 if (cccd == null)
                     return false;
                 string strSQL = string.Format($"EXEC PROC_RegisterCertificate '{cccd.MaCD}',N'{cccd.QuocTich}',N'{cccd.QueQuan}',N'{cccd.NoiThuongTru}',N'{cccd.DacDiemNhanDang}',@image");
-                return DBConnection.Instance.ExecuteWithParameter(strSQL,"image", Img);
+                return DBConnection.Instance.ExecuteWithParameter(strSQL, "image", Img);
             }
             catch
             {

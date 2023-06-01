@@ -33,5 +33,57 @@ namespace CitizenManagement_EntityFramework.DAO
                 return null;
             }
         }
+
+
+
+        // Cong code
+
+        // Lay ds cac nam nhan chua lap gia dinh
+        public List<Cityzen> MaleNotFamily()
+        {
+            DataTable dt=new DataTable();
+            List<Cityzen> ls= new List<Cityzen>();  
+            string strSQl = string.Format("SELECT * FROM V_MaleNotFamily");
+            dt= DBConnection.Instance.GetDataTable(strSQl);
+            foreach(DataRow dataRow in dt.Rows) 
+            {
+                ls.Add(new Cityzen(dataRow));
+            }
+            return ls;
+        }
+        public List<string> IDMaleNotFamily()
+        {
+            List<Cityzen> ls=MaleNotFamily();
+            List<string> strings=new List<string>();
+            foreach(Cityzen c in ls)
+            {
+                strings.Add(c.Macd);
+            }
+            return strings;
+        }
+        // lay ds cac nu nhan dang e
+        public List<Cityzen> FemaleNotFamily()
+        {
+            DataTable dt = new DataTable();
+            List<Cityzen> ls = new List<Cityzen>();
+            string strSQl = string.Format("SELECT * FROM V_FemaleNotFamily");
+            dt = DBConnection.Instance.GetDataTable(strSQl);
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                ls.Add(new Cityzen(dataRow));
+            }
+            return ls;
+        }
+        public List<string> IDFeMaleNotFamily()
+        {
+            List<Cityzen> ls = FemaleNotFamily();
+            List<string> strings = new List<string>();
+            foreach (Cityzen c in ls)
+            {
+                strings.Add(c.Macd);
+            }
+            return strings;
+        }
+
     }
 }

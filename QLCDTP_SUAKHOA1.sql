@@ -95,8 +95,8 @@ CREATE TABLE [People_Marriage](
 	MaCDVo varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
 	Loai NVARCHAR(255) NOT NULL DEFAULT N'Kết hôn', -- 1: Kết hôn | 0: Ly hôn
 	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	XacNhanLan1 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
-	XacNhanLan2 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
+	XacNhanLan1 varchar(10) DEFAULT NULL,
+	XacNhanLan2 varchar(10) DEFAULT NULL,
 	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'Chưa duyệt'-- 1: Đã duyệt | 0: Chưa duyệt
 )
 GO
@@ -453,18 +453,12 @@ END;
 GO
 -- Tính số người chết trong năm(truyền vào năm cần xem)
 CREATE FUNCTION dbo.Fn_CountDeathInYear(@year int)
-RETURNS int
+RETURNS TABLE
 AS
-BEGIN
-    DECLARE @count int;
-
-    SELECT @count = COUNT(*)
+    return (SELECT *
     FROM Users_Deleted
-    WHERE YEAR(NgayTu) = @year;
-
-    RETURN @count;
-END;
--- SELECT dbo.Fn_CountDeathInYear(2022)
+    WHERE YEAR(NgayTu) = @year);
+-- SELECT * from dbo.Fn_CountDeathInYear(2022)
 GO
 -- Liệt kê các công dân hiện chưa có cccd (citizens)
 CREATE VIEW [Citizens_Without_Certificates]
@@ -700,8 +694,9 @@ AS
 	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD AND c.MaCD = ac.MaCD
 GO
 --SELECT * FROM V_GetDataUser
--- hàm trả về dữ liệu của công dân có MaCD là tham số truyền vào, trả ra bảng
-CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
+-- hàm trả về dữ liệu của công dân có MaCD là tham số truyền vào, trả ra bảng (Certificate) của hoàng
+
+CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) 
 RETURNS TABLE
 AS
 RETURN(

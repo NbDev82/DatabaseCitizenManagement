@@ -10,7 +10,8 @@ namespace CitizenManagement_EntityFramework
 {
     internal class DBConnection
     {
-        SqlConnection conn = new SqlConnection(Properties.Settings.Default.cnnCityzen);
+        //SqlConnection conn = new SqlConnection(Properties.Settings.Default.cnnCityzen);
+        SqlConnection conn = new SqlConnection(Properties.Settings.Default.cnnPeopleMarriage);
         private static DBConnection instance;
         enum Roles
         {

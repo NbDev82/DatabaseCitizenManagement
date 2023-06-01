@@ -40,3 +40,24 @@ D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\P
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.CoreCompileInputs.cache
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.exe
 D:\Tài Liệu Học Tập\Học kỳ 4\Hệ quản trị cơ sở dữ liệu\Project\CitizenManagement_EntityFramework\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.pdb
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\bin\Debug\CitizenManagement_EntityFramework.exe.config
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\bin\Debug\CitizenManagement_EntityFramework.exe
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\bin\Debug\CitizenManagement_EntityFramework.pdb
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.AssemblyReference.cache
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.SuggestedBindingRedirects.cache
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fCCCD.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fDangNhap.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fHoKhau.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fHomThu.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fHonNhan.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fKhaiSinhKhaiTu.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fNguoiDung.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fTaiKhoan.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fTamTruTamVang.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fThongTinCaNhan.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.fThue.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.Properties.Resources.resources
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.GenerateResource.cache
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.csproj.CoreCompileInputs.cache
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.exe
+D:\DoAnHeCoSoDuLieu\HuuCong31.5\CitizenManagement_EntityFramework\obj\Debug\CitizenManagement_EntityFramework.pdb

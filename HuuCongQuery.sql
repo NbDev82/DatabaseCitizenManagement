@@ -1,143 +1,166 @@
-﻿﻿-- Contraint
+﻿-- Addition
 
---  Ngày sinh không được lớn hơn ngày hiện tại(Công)(Births)
+-- Citizens vs People_Marriage
 
-ALTER TABLE Births 
-ADD CONSTRAINT check_ngaysinhhople CHECK(NgaySinh<GETDATE())
+-- View
 
--- Trạng thái chỉ có 2 trạng thái “duyet” và “chua duyet” (Công)(Households)
---USE Backup_CityzenManagement
-GO
-ALTER TABLE Households 
-ADD CONSTRAINT check_trangthai_Households CHECK(TrangThai IN('duyet', 'chua duyet'))
-
---Trigger
+-- View People_Marriage
 go
--- Công dân phải trên 16 tuổi(insert,update)(Công)(Certificates)
-CREATE OR ALTER TRIGGER [dbo].[trg_CheckTuoiCongDan]
-ON Certificates
-for INSERT,UPDATE 
+CREATE VIEW [dbo].[V_GetPeopleMarriage]
 AS
-BEGIN
-	DECLARE @TUOI INT
-	SELECT @TUOI=YEAR(GETDATE())-YEAR(NgaySinh)
-	FROM Certificates ce,Births bi
-	Where ce.MaCD=bi.MaCD
-	if(@TUOI<16)
-	begin 
-		rollback tran 
-		print 'tuoi cua cong dan phai du 16'
-	end
-END
+Select *
+from People_Marriage
 
-GO
--- Giới tính của vợ phải là nữ, giới tính của chồng phải là nam(insert,update)(Công)(People_Marriage)
-CREATE TRIGGER [dbo].[trg_CheckGenderVoChong]
-ON People_Marriage
-FOR INSERT,UPDATE
+--select * from V_GetPeopleMarriage
+go
+-- View Citizen Nam mà chưa kết hôn
+CREATE VIEW [dbo].[V_MaleNotFamily]
 AS
-BEGIN
-	DECLARE @GIOTINHCHONG NVARCHAR(MAX)
-	DECLARE @GIOITINHVO NVARCHAR(MAX)
-	SELECT @GIOTINHCHONG=CH.GioiTinh,@GIOITINHVO=CH.GioiTinh	 
-	FROM Citizens CH,Citizens VO, People_Marriage HN
-	WHERE HN.MaCDChong=CH.MaCD AND HN.MaCDVo=VO.MaCD
-	IF (@GIOITINHVO !='Nữ' OR  @GIOTINHCHONG !='Nam')
-	BEGIN
-	ROLLBACK TRAN 
-	PRINT'gioi tinh chong phai la nam, gioi tinh vo la nu'
-	END
-END
- 
-
-
-
--- Khi delete, chạy qua Detail_Households xóa hết thành viên trong hộ khẩu có MaHo này.(Công)(Households)
-
-GO
-CREATE TRIGGER [dbo].[trg_DELETE_DetailHouseHolds]
-ON Households
-FOR DELETE 
+SELECT *
+FROM Citizens ci
+WHERE ci.GioiTinh=N'Nam' AND ci.MaCD NOT IN(SELECT MaCDChong
+					 FROM People_Marriage);
+--select * from V_MaleNotFamily
+-- View Citizen nữ mà chưa kết hôn
+CREATE VIEW [dbo].[V_FemaleNotFamily]
 AS
-BEGIN
-	DELETE FROM Detail_Households WHERE MaHo IN (SELECT MaHo from deleted);
-END
+Select *
+from Citizens ci
+Where ci.GioiTinh=N'Nữ' AND ci.MaCD NOT IN (Select MaCDVo
+											FROM People_Marriage);
+--select * from [V_FemaleNotFamily]
 
--- Kiểm tra xem công dân đã chết hay chưa khi thêm(Công)(Users_Deleted)
-
-
-GO
-CREATE TRIGGER [dbo].[trg_CheckAlive]
-ON Users_Deleted
-after INSERT 
-AS 
-BEGIN
-	IF( (SELECT COUNT(*) AS RESULTCOUNT 
-	FROM Users_Deleted ud,Citizens ci 
-	where ud.MaCD=ci.MaCD)=0) 
-	begin
-		rollback tran
-		print ' cong dan phai co trong Cirizens moi them vao User_deleted '
-	end
-END; 
-
--- Procedure 
-
---Đưa ra thông tin chi tiết của công dân ở bảng Citizens, Houserholds, Births(Công)(citizens)
-
-
-GO
-CREATE OR ALTER PROC [dbo].[spud_thongtinCongDan]
+-- VIEW danh sách các gia đình chưa duyệt
+go
+CREATE VIEW [dbo].[V_DataFmailyNotBrowse]
 AS
-BEGIN
-	SELECT ci.MaCD,ci.HoTen,ci.GioiTinh,ci.NgheNghiep,ci.DanToc,ci.TonGiao,ci.TinhTrang,ci.TinhTrang, ci.MaHN,ci.MaHoKhau,
-	bi.NgaySinh,bi.NgaySinh,bi.NoiSinh,bi.MaCD_Cha,bi.MaCD_Me,bi.MaCD_Cha,bi.MaCD_Me,bi.NgayKhai,bi.NgayDuyet,
-	ho.ChuHo,ho.TinhThanh,ho.QuanHuyen,ho.PhuongXa,ho.NgayDangKy,ho.TrangThai
-	FROM Citizens ci,Households ho,Births bi
-	WHERE ci.MaCD=bi.MaCD AND ho.MaHo=ci.MaHoKhau
-END
-
--- Thủ tục xuất ra danh sách công dân tạm chú ở khu vực (tham số:thành phố, huyện, xã )
--- mà chưa được duyệt(Công)(Temporarily_Staying)
-GO
-CREATE OR ALTER PROC [dbo].[spud_CongDanTamChu_ChuaDuyet](@Tinh nvarchar(max),@huyen nvarchar(max),@xa nvarchar(max))
-AS
-BEGIN
 	SELECT *
-	FROM Temporarily_Staying
-	WHERE TrangThai='chua duyet'
-END;
+	FROM People_Marriage 
+	WHERE TrangThai= N'Chưa duyệt'
+--Select * from V_DataFmailyNotBrowse
+
+-- View danh sách các cặp đôi đăng ký kết hôn nhưng chưa xác nhận 
+go
+CREATE VIEW [dbo].[V_DataFmailyNotConfirm]
+AS
+SELECT *
+FROM People_Marriage pm
+WHERE (pm.XacNhanLan1 IS NULL OR pm.XacNhanLan2 IS NULL) OR (pm.XacNhanLan1 IS NULL AND pm.XacNhanLan2 IS NULL)
+--select * from dbo.V_DataFmailyNotConfirm
+
+--- Function ---
+-- 
+go
+-- Hàm trả về ngay sinh cua 1 nguoi thong qua ID
+CREATE OR ALTER FUNCTION [dbo].[FN_DataBirthByID](@macd varchar(10))
+RETURNS TABLE
+AS
+	RETURN( SELECT *
+			FROM Births
+			WHERE MaCD=@macd
+	);
+--select * from FN_DataBirthByID('CD0002')
+-- Hàm  tìm kiếm 1 gia đình thông qua mã hôn nhân 
+CREATE OR ALTER FUNCTION [dbo].[FN_DataFindFamily](@mahn varchar(10))
+RETURNS TABLE 
+AS 
+	RETURN (SELECT *
+			FROM People_Marriage pm
+			WHERE pm.MaHN=@mahn);
 
 
+--Hàm trả về danh sách các cặp đôi trong khoảng thời gian
+go 
+Create OR ALTER FUNCTION [dbo].[FN_DataFmailyInTime](@months_to_substract INT)
+RETURNS TABLE
+AS
+	RETURN( SELECT *
+			FROM People_Marriage pm
+			WHERE pm.NgayDangKy>=DATEADD(MONTH,-@months_to_substract,GETDATE())
+	);
+--select * from dbo.FN_DataFmailyInTime(2)
+go 
 
+--- PROCEDURE ---
+-- xay dung 1 gia dinh 
+go
+CREATE OR ALTER PROCEDURE [dbo].[PROC_RegisterMarriage](@mahn varchar(10),@macdchong varchar(10),@macdvo varchar(10),@loai nvarchar(255),@ngaydangnhap date,@xacnhan1 varchar(10),@xacnhan2 varchar(10),@trangthai nvarchar(255))
+AS
+BEGIN
+	INSERT INTO People_Marriage(MaHN,MaCDChong,MaCDVo,Loai,NgayDangKy,XacNhanLan1,XacNhanLan2,TrangThai)
+	VALUES(@mahn,@macdchong,@macdvo,@loai,@ngaydangnhap,@xacnhan1,@xacnhan2,@trangthai)
+END
+--EXEC PROC_RegisterMarriage 'HN0001', 'CD0001', 'CD0002', N'Kết hôn', '2023-04-10', NULL, NULL, N'Chưa duyệt'
+--EXEC PROC_RegisterMarriage 'HN0011', 'CD0003', 'CD0004', N'Kết hôn', '6/1/2023 8:10:02 AM', '', '', N'Chưa duyệt'
+select * from V_GetPeopleMarriage
+
+--DROP PROCEDURE PROC_RegisterMarriage
+go
+-- Ly hon
+CREATE OR ALTER PROCEDURE [dbo].[PROC_DivorceMarriage](@mahn varchar(10))
+AS
+BEGIN
+	DELETE FROM People_Marriage WHERE MaHN=@mahn 
+END
+--EXEC PROC_DivorceMarriage 'HN0001'
+--DROP PROC PROC_DivorceMarriage
+
+-- Thu tục Update Xac nhan 2 vo chong
+go
+CREATE OR ALTER PROCEDURE [dbo].[PROC_UPDATEMarriage](@mahn varchar(10),@xacnhan1 varchar(10), @xacnhan2 varchar(10))
+AS
+BEGIN
+	UPDATE People_Marriage SET XacNhanLan1=@xacnhan1,XacNhanLan2=@xacnhan2 WHERE MaHN=@mahn
+END
+--EXEC PROC_UPDATEMarriage 'HN0001','CD0001', 'CD0002'
+
+--DROP PROC PROC_UPDATEMarriage
+--SS
+
+-- Thủ tục xác duyệt gia đình 
+go
+CREATE OR ALTER PROCEDURE [dbo].[PROC_BROWSEMarriage](@mahn varchar(10),@Trangthai nvarchar(255))
+AS
+BEGIN
+	UPDATE People_Marriage SET TrangThai=@Trangthai WHERE MaHN=@mahn
+END
+--EXEC PROC_BROWSEMarriage 'HN0003',N'Duyệt'
+
+
+-- Briths and Users_Deleted
+
+--VIEW
+go
+CREATE VIEW [dbo].[V_GetBriths]
+AS 
+SELECT *
+FROM Births
+--select * from V_GetBriths
+-- 
+go
+CREATE VIEW [dbo].[V_UserDeleted]
+AS 
+SELECT *
+FROM Users_Deleted
+--select * from V_UserDeleted
 -- Function
 
---  Hàm tính số lượng công dân hiện có(Công)(citizens)
-go
-CREATE OR ALTER FUNCTION [dbo].[Fn_TinhTongDanCu]()
-RETURNS	INT 
+CREATE FUNCTION dbo.Fn_CountBirthsInYear(@year int)
+RETURNS TABLE
 AS
-BEGIN
-	DECLARE @COUNT INT
-	SELECT @COUNT=COUNT(*) 
-	FROM Citizens;
-	RETURN @COUNT;
-END
+    return (SELECT *
+    FROM Births
+    WHERE YEAR(NgaySinh) = @year);
 
--- Liệt kê những công dân có hạn sử dụng năm nay, 
--- hoặc năm sau đi thay thế cccd.(Công)(Certificates)
-GO
-CREATE OR ALTER FUNCTION [dbo].[Fn_CongDanSapHetHanSuDung]()
-RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max),Anh image)
-AS
-BEGIN
-	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang,Anh)
-	SELECT *
-	FROM Certificates
-	WHERE YEAR(HanSuDung)=YEAR(GETDATE())AND YEAR(HanSuDung)=( YEAR(GETDATE()) + 1 );
-	return 
-END
 
---go
---select *
---from Fn_CongDanSapHetHanSuDung();
+
+
+
+
+
+
+
+
+
+
+
