@@ -126,5 +126,27 @@ namespace CitizenManagement_EntityFramework
                 return null;
             }
         }
+        public Image GetImage(string macd)
+        {
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM Certificates WHERE MaCD = '{macd}' ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                if(dt != null)
+                {
+                    Certificate cccd = new Certificate(dt.Rows[0]);
+                    if (cccd != null)
+                        return cccd.Avatar;
+                    else
+                        throw new Exception("Khong tim thay can cuoc");
+                }
+                else
+                    throw new Exception("Khong tim thay can cuoc");
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
