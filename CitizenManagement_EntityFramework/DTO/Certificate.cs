@@ -14,16 +14,16 @@ namespace CitizenManagement_EntityFramework
         public string MaCD { get; set; }
         public string MaCCCD { get; set; }
         public string HoVaTen { get; set; }
-        public string NgaySinh { get; set; }
+        public DateTime NgaySinh { get; set; }
         public string GioiTinh { get; set; }
         public string QuocTich { get; set; }
         public string QueQuan { get; set; }
         public string NoiThuongTru { get; set; }
-        public string HanSuDung { get; set; }
+        public DateTime HanSuDung { get; set; }
         public string DacDiemNhanDang { get; set; }
         public Image Avatar { get; set; }
         public Certificate() { }
-        public Certificate(string MaCD, string HoVaTen, string NgaySinh, string GioiTinh, string QuocTich, string QueQuan, string NoiThuongTru, string DacDiemNhanDang, Image Avatar)
+        public Certificate(string MaCD, string HoVaTen, DateTime NgaySinh, string GioiTinh, string QuocTich, string QueQuan, string NoiThuongTru, string DacDiemNhanDang, Image Avatar)
         {
             this.MaCD = MaCD;
             this.HoVaTen = HoVaTen;
@@ -40,12 +40,12 @@ namespace CitizenManagement_EntityFramework
             this.MaCD = (string)dt["Mã CD"];
             this.MaCCCD = dt["Số CCCD"].ToString();
             this.HoVaTen = dt["Họ và tên"].ToString();
-            this.NgaySinh = dt["Ngày sinh"].ToString();
+            this.NgaySinh = (DateTime)dt["Ngày sinh"];
             this.GioiTinh = dt["Giới tính"].ToString();
             this.QuocTich = dt["Quốc tịch"].ToString();
             this.QueQuan = dt["Quê quán"].ToString();
             this.NoiThuongTru = dt["Nơi thường trú"].ToString();
-            this.HanSuDung = dt["Hạn"].ToString();
+            this.HanSuDung = (DateTime)dt["Hạn"];
             this.DacDiemNhanDang = dt["Đặc điểm nhận dạng"].ToString();
             if (dt["Hình"] != DBNull.Value)
             {

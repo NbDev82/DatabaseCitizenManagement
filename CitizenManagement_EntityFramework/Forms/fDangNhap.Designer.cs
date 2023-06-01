@@ -63,7 +63,7 @@
             this.txtAccount.Name = "txtAccount";
             this.txtAccount.Size = new System.Drawing.Size(464, 34);
             this.txtAccount.TabIndex = 0;
-            this.txtAccount.Text = "households_manager";
+            this.txtAccount.Text = "certificates_manager";
             // 
             // label1
             // 
@@ -119,6 +119,7 @@
             this.cbShowPassword.TabIndex = 18;
             this.cbShowPassword.Text = "Hiện mật khẩu";
             this.cbShowPassword.UseVisualStyleBackColor = true;
+            this.cbShowPassword.CheckedChanged += new System.EventHandler(this.cbShowPassword_CheckedChanged);
             // 
             // btnLogin
             // 
@@ -145,6 +146,7 @@
             this.btnExit.TabIndex = 17;
             this.btnExit.Text = "Thoát";
             this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // rdoAutCitizen
             // 

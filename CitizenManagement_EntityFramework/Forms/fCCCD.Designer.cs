@@ -28,20 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(fCCCD));
             this.pnCaNhan = new System.Windows.Forms.TableLayoutPanel();
             this.btnTaiHinh = new System.Windows.Forms.Button();
             this.btnHuyBo = new System.Windows.Forms.Button();
             this.btnDangKy = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.pnChucNang = new System.Windows.Forms.Panel();
             this.pnThongTin_3 = new System.Windows.Forms.Panel();
             this.txtDacDiemNhanDang = new System.Windows.Forms.RichTextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.dtgvDanhSachCCCD = new System.Windows.Forms.DataGridView();
             this.pnQuanLy = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnCCCDExpired = new System.Windows.Forms.Button();
+            this.btnCCCDNearlyExpired = new System.Windows.Forms.Button();
+            this.btnShowCDProvince = new System.Windows.Forms.Button();
             this.btnCitizenWithoutCertificate = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -77,7 +79,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.picFace = new System.Windows.Forms.PictureBox();
             this.pnCaNhan.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.pnChucNang.SuspendLayout();
             this.pnThongTin_3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvDanhSachCCCD)).BeginInit();
             this.pnQuanLy.SuspendLayout();
@@ -145,22 +147,22 @@
             this.btnDangKy.UseVisualStyleBackColor = true;
             this.btnDangKy.Click += new System.EventHandler(this.btnDangKy_Click);
             // 
-            // panel2
+            // pnChucNang
             // 
-            this.panel2.Controls.Add(this.pnThongTin_3);
-            this.panel2.Controls.Add(this.dtgvDanhSachCCCD);
-            this.panel2.Controls.Add(this.pnQuanLy);
-            this.panel2.Location = new System.Drawing.Point(446, 11);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(414, 484);
-            this.panel2.TabIndex = 4;
+            this.pnChucNang.Controls.Add(this.dtgvDanhSachCCCD);
+            this.pnChucNang.Controls.Add(this.pnQuanLy);
+            this.pnChucNang.Location = new System.Drawing.Point(446, 63);
+            this.pnChucNang.Name = "pnChucNang";
+            this.pnChucNang.Size = new System.Drawing.Size(542, 432);
+            this.pnChucNang.TabIndex = 4;
+            this.pnChucNang.Visible = false;
             // 
             // pnThongTin_3
             // 
             this.pnThongTin_3.BackColor = System.Drawing.Color.BurlyWood;
             this.pnThongTin_3.Controls.Add(this.txtDacDiemNhanDang);
             this.pnThongTin_3.Controls.Add(this.label9);
-            this.pnThongTin_3.Location = new System.Drawing.Point(3, 5);
+            this.pnThongTin_3.Location = new System.Drawing.Point(446, 4);
             this.pnThongTin_3.Name = "pnThongTin_3";
             this.pnThongTin_3.Size = new System.Drawing.Size(408, 54);
             this.pnThongTin_3.TabIndex = 2;
@@ -187,54 +189,79 @@
             // 
             // dtgvDanhSachCCCD
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgvDanhSachCCCD.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgvDanhSachCCCD.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dtgvDanhSachCCCD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgvDanhSachCCCD.DefaultCellStyle = dataGridViewCellStyle6;
-            this.dtgvDanhSachCCCD.Location = new System.Drawing.Point(3, 65);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgvDanhSachCCCD.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dtgvDanhSachCCCD.Location = new System.Drawing.Point(6, 7);
             this.dtgvDanhSachCCCD.Name = "dtgvDanhSachCCCD";
             this.dtgvDanhSachCCCD.RowHeadersWidth = 51;
             this.dtgvDanhSachCCCD.RowTemplate.Height = 24;
-            this.dtgvDanhSachCCCD.Size = new System.Drawing.Size(408, 232);
+            this.dtgvDanhSachCCCD.Size = new System.Drawing.Size(533, 232);
             this.dtgvDanhSachCCCD.TabIndex = 1;
+            this.dtgvDanhSachCCCD.SelectionChanged += new System.EventHandler(this.dtgvDanhSachCCCD_SelectionChanged);
             // 
             // pnQuanLy
             // 
-            this.pnQuanLy.Controls.Add(this.button1);
+            this.pnQuanLy.Controls.Add(this.btnCCCDExpired);
+            this.pnQuanLy.Controls.Add(this.btnCCCDNearlyExpired);
+            this.pnQuanLy.Controls.Add(this.btnShowCDProvince);
             this.pnQuanLy.Controls.Add(this.btnCitizenWithoutCertificate);
             this.pnQuanLy.Controls.Add(this.panel1);
             this.pnQuanLy.Controls.Add(this.pictureBox2);
             this.pnQuanLy.Controls.Add(this.txtTimKiem);
             this.pnQuanLy.Controls.Add(this.brnXem);
             this.pnQuanLy.Controls.Add(this.btnTimKiem);
-            this.pnQuanLy.Location = new System.Drawing.Point(3, 309);
+            this.pnQuanLy.Location = new System.Drawing.Point(6, 251);
             this.pnQuanLy.Name = "pnQuanLy";
-            this.pnQuanLy.Size = new System.Drawing.Size(408, 173);
+            this.pnQuanLy.Size = new System.Drawing.Size(536, 173);
             this.pnQuanLy.TabIndex = 0;
             // 
-            // button1
+            // btnCCCDExpired
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(215, 116);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 49);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Liệt kê công dân thuộc tỉnh";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnCCCDExpired.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCCCDExpired.Location = new System.Drawing.Point(373, 121);
+            this.btnCCCDExpired.Name = "btnCCCDExpired";
+            this.btnCCCDExpired.Size = new System.Drawing.Size(160, 41);
+            this.btnCCCDExpired.TabIndex = 6;
+            this.btnCCCDExpired.Text = "CCCD hết hạn";
+            this.btnCCCDExpired.UseVisualStyleBackColor = true;
+            this.btnCCCDExpired.Click += new System.EventHandler(this.btnCCCDExpired_Click);
+            // 
+            // btnCCCDNearlyExpired
+            // 
+            this.btnCCCDNearlyExpired.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCCCDNearlyExpired.Location = new System.Drawing.Point(373, 54);
+            this.btnCCCDNearlyExpired.Name = "btnCCCDNearlyExpired";
+            this.btnCCCDNearlyExpired.Size = new System.Drawing.Size(160, 55);
+            this.btnCCCDNearlyExpired.TabIndex = 6;
+            this.btnCCCDNearlyExpired.Text = "CCCD sắp hết hạn";
+            this.btnCCCDNearlyExpired.UseVisualStyleBackColor = true;
+            this.btnCCCDNearlyExpired.Click += new System.EventHandler(this.btnCCCDNearlyExpired_Click);
+            // 
+            // btnShowCDProvince
+            // 
+            this.btnShowCDProvince.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowCDProvince.Location = new System.Drawing.Point(195, 116);
+            this.btnShowCDProvince.Name = "btnShowCDProvince";
+            this.btnShowCDProvince.Size = new System.Drawing.Size(172, 49);
+            this.btnShowCDProvince.TabIndex = 5;
+            this.btnShowCDProvince.Text = "Liệt kê công dân thuộc tỉnh";
+            this.btnShowCDProvince.UseVisualStyleBackColor = true;
+            this.btnShowCDProvince.Click += new System.EventHandler(this.btnShowCDProvince_Click);
             // 
             // btnCitizenWithoutCertificate
             // 
@@ -277,7 +304,7 @@
             // brnXem
             // 
             this.brnXem.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.brnXem.Location = new System.Drawing.Point(215, 68);
+            this.brnXem.Location = new System.Drawing.Point(195, 69);
             this.brnXem.Name = "brnXem";
             this.brnXem.Size = new System.Drawing.Size(172, 41);
             this.brnXem.TabIndex = 0;
@@ -592,15 +619,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 564);
+            this.Controls.Add(this.pnThongTin_3);
             this.Controls.Add(this.pnCaNhan);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.pnChucNang);
             this.Controls.Add(this.pnThongTin);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "fCCCD";
             this.Text = "fCCCD";
             this.Load += new System.EventHandler(this.fCCCD_Load);
             this.pnCaNhan.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.pnChucNang.ResumeLayout(false);
             this.pnThongTin_3.ResumeLayout(false);
             this.pnThongTin_3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvDanhSachCCCD)).EndInit();
@@ -637,7 +665,7 @@
         private System.Windows.Forms.Button btnTaiHinh;
         private System.Windows.Forms.Button btnHuyBo;
         private System.Windows.Forms.Button btnDangKy;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel pnChucNang;
         private System.Windows.Forms.Panel pnThongTin_3;
         private System.Windows.Forms.RichTextBox txtDacDiemNhanDang;
         private System.Windows.Forms.Label label9;
@@ -677,6 +705,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox picFace;
         private System.Windows.Forms.Button btnCitizenWithoutCertificate;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnShowCDProvince;
+        private System.Windows.Forms.Button btnCCCDNearlyExpired;
+        private System.Windows.Forms.Button btnCCCDExpired;
     }
 }

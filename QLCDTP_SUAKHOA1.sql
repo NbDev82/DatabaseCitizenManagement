@@ -95,8 +95,8 @@ CREATE TABLE [People_Marriage](
 	MaCDVo varchar(10) FOREIGN KEY REFERENCES [Citizens](MaCD),
 	Loai NVARCHAR(255) NOT NULL DEFAULT N'Kết hôn', -- 1: Kết hôn | 0: Ly hôn
 	NgayDangKy DATE NOT NULL DEFAULT GETDATE(),
-	XacNhanLan1 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
-	XacNhanLan2 varchar(10) REFERENCES [Citizens](MaCD) DEFAULT NULL,
+	XacNhanLan1 varchar(10) DEFAULT NULL,
+	XacNhanLan2 varchar(10) DEFAULT NULL,
 	TrangThai NVARCHAR(255) NOT NULL DEFAULT N'Chưa duyệt'-- 1: Đã duyệt | 0: Chưa duyệt
 )
 GO
@@ -165,111 +165,25 @@ drop table [Certificates]
 	Avatar Image
 )*/
 
-
-
-
-
 GO
-
-
-/*--TRIGGER
--- Trigger cho việc thêm mới công dân vào [Detail_Households]
-CREATE TRIGGER [dbo].[trg_AddCitizenToHousehold]
-ON [dbo].[Detail_Households]
-AFTER INSERT
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    DECLARE @MaHo INT, @MaCD INT;
-    SELECT @MaHo = inserted.MaHo, @MaCD = inserted.MaCD 
-	FROM inserted;
-    
-    -- Kiểm tra xem công dân đã có hộ khẩu trước đó hay chưa
-    IF EXISTS(SELECT 1 FROM [Citizens] WHERE MaCD = @MaCD AND MaHoKhau IS NOT NULL)
-    BEGIN
-        RAISERROR('Citizen already has a household, cannot add to another household', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END
-    
-    -- Cập nhật trạng thái hộ khẩu của công dân
-    UPDATE [Citizens] SET MaHoKhau = @MaHo WHERE MaCD = @MaCD;
-END
-GO
-
--- Trigger cho việc xóa công dân ra khỏi [Detail_Households]
-CREATE TRIGGER [dbo].[trg_RemoveCitizenFromHousehold]
-ON [dbo].[Detail_Households]
-AFTER DELETE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    DECLARE @MaHo INT, @MaCD INT;
-    SELECT @MaHo = deleted.MaHo, @MaCD = deleted.MaCD FROM deleted;
-    
-    -- Cập nhật trạng thái hộ khẩu của công dân
-    UPDATE [Citizens] SET MaHoKhau = NULL WHERE MaCD = @MaCD;
-END
-GO
-
--- Trigger cho việc thêm công dân đã chết vào [Users_Deleted]
-CREATE or ALTER TRIGGER [trg_Citizen_Delete] ON [Users_Deleted] 
-AFTER INSERT
-
-AS
-BEGIN
-  SET NOCOUNT ON;
-
-  DECLARE @MaCD INT;
-  DECLARE @CheckMaCD INT;
-
-  SELECT @MaCD = MaCD FROM inserted;
-
-  -- Kiểm tra xem công dân đã chết hay chưa
-  SELECT @CheckMaCD = COUNT(*) FROM [Citizens] WHERE MaCD = @MaCD AND TinhTrang = N'Đã chết';
-
-  IF @CheckMaCD > 0
-  BEGIN
-    RAISERROR('Không thể thêm công dân đã chết vào bảng Users_Deleted!', 16, 1);
-    ROLLBACK TRANSACTION;
-  END
-
-  UPDATE [Citizens]
-  SET TinhTrang = N'Đã chết'
-  WHERE MaCD = @MaCD
-END
-go
--- Trigger cho việc kiểm tra xem người khai có phải chủ hộ không trong [Users_Deleted] 
-CREATE TRIGGER [Check_Death_NguoiKhai] 
-ON [Users_Deleted]
-FOR INSERT
-AS
-BEGIN
-    DECLARE @MaCD INT, @NguoiKhai INT, @ChuHo INT, @MaHoKhau INT
-    SELECT @MaCD = i.MaCD, @NguoiKhai = i.NguoiKhai, @MaHoKhau = c.MaHoKhau
-    FROM inserted i
-    JOIN [Citizens] c ON i.MaCD = c.MaCD
-
-    SELECT @ChuHo = h.ChuHo
-    FROM [Households] h
-    WHERE h.MaHo = @MaHoKhau
-
-    IF @NguoiKhai != @ChuHo
-    BEGIN
-        RAISERROR ('Nguoi khai phai la chu ho trong cung ho khau', 16, 1)
-        ROLLBACK TRANSACTION
-    END
-END
-*/
-
 --KHOA----------------------------------------------------------------------------------------------------------------------
 
-/* 
-CREATE DATABASE CityzenManagement
-GO 
-*/
+
+CREATE OR ALTER VIEW PERSONAL_INFORMATION
+AS
+SELECT *
+FROM [Citizens]
+--Tạo view hòm thư
+GO
+CREATE OR ALTER VIEW MAILBOX
+AS
+SELECT MaMail, TieuDe, Ngay, ctz1.HoTen AS TenNguoiGui, m.NguoiGui as MaNguoiGui,ctz2.HoTen AS TenNguoiNhan, m.NguoiNhan as MaNguoiNhan, NoiDung
+FROM 
+	Mails m
+	INNER JOIN [Citizens] ctz1 ON m.NguoiGui = ctz1.MaCD
+	INNER JOIN [Citizens] ctz2 ON m.NguoiNhan = ctz2.MaCD
+GO
+
 
 ALTER TABLE [Births]
 ADD CONSTRAINT CHK_Births_NgKhaiNgDuyet CHECK (NgayDuyet is null OR NgayDuyet >= NgayKhai)
@@ -445,15 +359,46 @@ RETURN(
 	WHERE cti.MaCD = ta.MaCD
 	AND ta.Tinh = @Tinh )
 
---Function lấy danh sách CD có cùng chủ hộ
+--Function lấy danh sách CD có cùng hộ khẩu
 GO
-CREATE or ALTER FUNCTION fn_DSCDTamVangTheoTinh(@ChuHo nvarchar(max))
+CREATE or ALTER FUNCTION fn_DSCDCungMaHo(@MaHo nvarchar(max))
 RETURNS TABLE
 AS
 RETURN(
 	SELECT cti.MaCD, HoTen, GioiTinh, NgheNghiep, DanToc, TonGiao, TinhTrang
 	FROM Citizens cti
-	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @ChuHo))
+	WHERE cti.MaCD IN (SELECT MaCD FROM Detail_Households WHERE MaHo = @MaHo))
+
+CREATE or ALTER FUNCTION fn_MailNhanTheoMaCongDan(@MaCD nvarchar(10))
+RETURNS TABLE 
+AS
+RETURN(
+	WITH CTE_Mailbox AS
+    (
+        SELECT *,
+            ROW_NUMBER() OVER (ORDER BY Ngay DESC) AS RowNum
+        FROM MAILBOX
+        WHERE MaNguoiNhan = @MaCD
+    )
+	SELECT MaMail, TieuDe, Ngay, TenNguoiGui, MaNguoiGui, TenNguoiNhan, MaNguoiNhan, NoiDung
+	FROM CTE_Mailbox
+	WHERE MaNguoiNhan = @MaCD)
+GO
+
+CREATE or ALTER FUNCTION fn_MailGuiTheoMaCongDan(@MaCD nvarchar(10))
+RETURNS TABLE 
+AS
+RETURN(
+	WITH CTE_Mailbox AS
+    (
+        SELECT *,
+            ROW_NUMBER() OVER (ORDER BY Ngay DESC) AS RowNum
+        FROM MAILBOX
+        WHERE MaNguoiGui = @MaCD
+    )
+	SELECT MaMail, TieuDe, Ngay, TenNguoiGui, MaNguoiGui, TenNguoiNhan, MaNguoiNhan, NoiDung, RowNum
+	FROM CTE_Mailbox
+	WHERE MaNguoiGui = @MaCD)
 --Khoa----------------------------------------------------------------------------------------------------------------------
 
 
@@ -463,6 +408,124 @@ RETURN(
 
 GO
 --MẠNH----------------------------------------------------------------------------------------------------------------------
+-- View danh sách thành viên trong một hộ gia đình
+CREATE OR ALTER VIEW view_HouseholdMembersInfo AS
+
+SELECT
+	h.MaHo,
+    c.MaCD,
+    c.HoTen,
+    b.NgaySinh,
+    b.NoiSinh,
+    c.GioiTinh,
+    c.NgheNghiep,
+    c.DanToc,
+    c.TonGiao,
+	c.TinhTrangHonNhan,
+    c.TinhTrang,
+	d.QuanHeVoiChuHo
+FROM 
+    Citizens c
+    INNER JOIN Births b ON c.MaCD = b.MaCD
+    INNER JOIN Detail_Households d ON c.MaCD = d.MaCD
+    INNER JOIN Households h ON d.MaHo = h.MaHo
+GO
+--select * from view_HouseholdMembersInfo
+ -- View danh sách các hộ gia đình
+CREATE VIEW View_HouseholdsByMaHo
+AS
+SELECT *
+FROM Households
+GO
+-- View danh sách công dân
+CREATE VIEW View_Citizens
+AS
+SELECT *
+FROM Citizens
+GO
+
+-- View danh sách ngày sinh của công dân
+CREATE VIEW View_Births
+AS
+SELECT *
+FROM Births
+GO
+-- Proc Insert DetailHousehold
+CREATE OR ALTER PROCEDURE proc_InsertDetailHousehold
+(
+    @MaHo varchar(10),
+    @MaCD varchar(10),
+    @TinhTrangCuTru nvarchar(max),
+    @QuanHeVoiChuHo nvarchar(max),
+    @NgayDangKy date,
+    @TrangThai nvarchar(max)
+)
+AS
+BEGIN
+    INSERT INTO Detail_Households (MaHo, MaCD, TinhTrangCuTru, QuanHeVoiChuHo, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @MaCD, @TinhTrangCuTru, @QuanHeVoiChuHo, @NgayDangKy, @TrangThai)
+END
+GO
+-- Function tự động tạo MaHo (Households)
+CREATE OR ALTER FUNCTION func_GenerateMaHo()
+RETURNS VARCHAR(10)
+AS
+BEGIN
+    DECLARE @NewMaHo VARCHAR(10);
+
+    SET @NewMaHo = 'HO000';
+
+    WHILE EXISTS (SELECT 1 FROM Households WHERE MaHo = @NewMaHo)
+    BEGIN
+        SET @NewMaHo = 'HO' + RIGHT('000' + CAST(CAST(RIGHT(@NewMaHo, 3) AS INT) + 1 AS VARCHAR(3)), 3);
+    END
+
+    RETURN @NewMaHo;
+END
+GO
+
+-- Proc Delete thành viên trong một hộ gia đình
+CREATE OR ALTER PROCEDURE proc_DeleteDetailHousehold
+    @MaCD varchar(10)
+AS
+BEGIN
+    DELETE FROM Detail_Households
+    WHERE MaCD = @MaCD;
+END
+GO
+-- PROCEDURE thêm dữ liệu vào bảng Households
+CREATE OR ALTER PROCEDURE proc_InsertHousehold
+(
+    @MaHo varchar(10),
+    @ChuHo varchar(10),
+    @TinhThanh NVARCHAR(255),
+    @QuanHuyen NVARCHAR(255),
+    @PhuongXa NVARCHAR(255),
+    @NgayDangKy DATE,
+    @TrangThai NVARCHAR(255)
+)
+AS
+BEGIN
+    INSERT INTO Households (MaHo, ChuHo, TinhThanh, QuanHuyen, PhuongXa, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @ChuHo, @TinhThanh, @QuanHuyen, @PhuongXa, @NgayDangKy, @TrangThai)
+END
+GO
+-- Proc Insert chia tiết hộ khẩu
+CREATE OR ALTER PROCEDURE proc_InsertDetailHousehold
+(
+    @MaHo varchar(10),
+    @MaCD varchar(10),
+    @TinhTrangCuTru nvarchar(max),
+    @QuanHeVoiChuHo nvarchar(max),
+    @NgayDangKy date,
+    @TrangThai nvarchar(max)
+)
+AS
+BEGIN
+    INSERT INTO Detail_Households (MaHo, MaCD, TinhTrangCuTru, QuanHeVoiChuHo, NgayDangKy, TrangThai)
+    VALUES (@MaHo, @MaCD, @TinhTrangCuTru, @QuanHeVoiChuHo, @NgayDangKy, @TrangThai)
+END
+GO
 -- Ngày duyệt phải lớn hơn ngày khai
 ALTER TABLE [Births]
 ADD CONSTRAINT [CK_Births_Validation] CHECK (NgayDuyet > NgayKhai);
@@ -522,7 +585,7 @@ BEGIN
 END;
 -- SELECT dbo.Fn_GetAddress(1) as Address;
 GO
--- Hàm đếm số lượng người tạm chú tại 1 khu vực (tham số: thành phố, huyện, xã)
+-- Hàm đếm số lượng người tạm trú tại 1 khu vực (tham số: thành phố, huyện, xã)
 CREATE FUNCTION dbo.Fn_CountTemporarilyStaying(@Tinh NVARCHAR(max), @Huyen NVARCHAR(max), @Xa NVARCHAR(max))
 RETURNS int
 AS
@@ -562,7 +625,7 @@ GO
 /*SELECT * FROM Citizens_Without_Certificates;*/
 
 GO
--- 
+-- Hàm đếm số lượng hộ trong khu vực cụ thể(tỉnh,huyện,xã)
 CREATE FUNCTION Fn_CountHouseholdsInArea
 (
     @tinhThanh NVARCHAR(max),
@@ -618,13 +681,13 @@ ALTER TABLE [Users_Deleted]
 ADD CONSTRAINT CK_Users_Deleted_NgayKhai CHECK (NgayKhai > NgayTu);
 GO
 --PROCEDURE
-CREATE OR ALTER PROCEDURE FN_RegisterCertificate (@macd varchar(10), @quoctich nvarchar(max), @quequan nvarchar(max), @noithuongtru nvarchar(max), @dacdiemnhandang nvarchar(max), @img image)
+CREATE OR ALTER PROCEDURE PROC_RegisterCertificate (@macd varchar(10), @quoctich nvarchar(max), @quequan nvarchar(max), @noithuongtru nvarchar(max), @dacdiemnhandang nvarchar(max), @img image)
 AS
 BEGIN
 	INSERT INTO Certificates (MaCD, QuocTich, QueQuan, NoiThuongTru, DacDiemNhanDang, Avatar)
     VALUES (@macd,@quoctich,@quequan,@noithuongtru,@dacdiemnhandang,@img)
 END
---EXEC FN_RegisterCertificate 'CD0001',N'Việt Nam', N'Kon Tum', N'TP. HCM', N'Không', 'D:\198289325_275721070910950_5711389170938825569_n.jpg'
+--EXEC PROC_RegisterCertificate 'CD0001',N'Việt Nam', N'Kon Tum', N'TP. HCM', N'Không', 'D:\198289325_275721070910950_5711389170938825569_n.jpg'
 -- chuyển
 
 ALTER TABLE [Users_Deleted]
@@ -633,25 +696,7 @@ GO
 --TRIGGER
 
 --ngày duyệt phải lớn hơn ngày khai(Hoàng)(Users_Deleted)
-CREATE TRIGGER trg_CheckNgayDuyet_Update
-ON [Users_Deleted]
-FOR UPDATE, INSERT
-AS
-BEGIN
-    -- Kiểm tra ngày duyệt phải lớn hơn ngày khai trong hoạt động UPDATE
-    IF EXISTS (
-        SELECT 1
-        FROM [Users_Deleted] AS UD
-        INNER JOIN inserted AS I ON UD.MaCD = I.MaCD
-        WHERE I.NgayDuyet IS NOT NULL AND I.NgayDuyet < I.NgayKhai
-    )
-    BEGIN
-        RAISERROR ('Ngày duyệt phải lớn hơn ngày khai.', 16, 1)
-        ROLLBACK TRANSACTION
-        RETURN
-    END
-END
-GO
+
 --Quản lý phải là người gửi hoặc người nhận(Hoàng)(Mails)
 --CREATE or ALTER TRIGGER TR_Mails_CheckQuanLy
 --ON [Mails]
@@ -713,8 +758,6 @@ ON [dbo].[Detail_Households]
 AFTER DELETE
 AS
 BEGIN
-    SET NOCOUNT ON;
-    
     DECLARE @MaHo varchar(10), @MaCD varchar(10);
     SELECT @MaHo = deleted.MaHo, @MaCD = deleted.MaCD FROM deleted;
     
@@ -722,7 +765,7 @@ BEGIN
     UPDATE [Citizens] SET MaHoKhau = NULL WHERE MaCD = @MaCD;
 END
 GO
-
+-- trigger cho việc cập nhật trạng thái hộ khẩu khi thêm 1 công dân vào [Detail_Households]
 CREATE TRIGGER TR_UpdateHouseholdStatus
 ON [Detail_Households]
 FOR INSERT, DELETE
@@ -735,15 +778,6 @@ BEGIN
         SET MaHoKhau = I.MaHo
         FROM [Citizens] AS C
         INNER JOIN inserted AS I ON C.MaCD = I.MaCD;
-    END
-
-    -- Update household status after deleting citizen
-    IF EXISTS (SELECT 1 FROM deleted)
-    BEGIN
-        UPDATE [Citizens]
-        SET MaHoKhau = NULL
-        FROM [Citizens] AS C
-        INNER JOIN deleted AS D ON C.MaCD = D.MaCD;
     END
 END;
 
@@ -763,8 +797,8 @@ FROM dbo.FN_CheckAuthentication('CD0001', '12345');*/
 
 GO
 --DROP FUNCTION  GetCitizensByProvince
---Liệt kê các công dân có quên quán ở 1 tỉnh (truyền vào tên tỉnh ), ( truyền ra danh sách công dân )(Hoàng)(Certificates)
-CREATE FUNCTION dbo.GetCitizensByProvince( @Province NVARCHAR(MAX))
+--Liệt kê các công dân có quê quán ở 1 tỉnh (truyền vào tên tỉnh ), ( truyền ra danh sách công dân )(Hoàng)(Certificates)
+CREATE OR ALTER FUNCTION dbo.GetCitizensByProvince( @Province NVARCHAR(MAX))
 RETURNS TABLE
 AS
 RETURN
@@ -790,29 +824,33 @@ RETURN
 -----VIEW------------------------------------------------------------------------------------------------------------------
 GO
 -----CCCD---------------------------Hoàng
-CREATE VIEW V_GetCertificates
+CREATE OR ALTER VIEW V_GetCertificates
 AS
-	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar
+	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh
 	FROM Citizens c, Certificates ce, Births b
 	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD
 GO
-
-CREATE FUNCTION FN_GetCertificates(@macd varchar(10)) --(Certificate) của hoàng
+--drop view V_GetCertificates
+-- hàm tìm CCCD của công dân có MaCD là tham số truyền vào, trả về bảng
+CREATE OR ALTER FUNCTION FN_GetCertificates(@macd varchar(10)) --(Certificate) của hoàng
 RETURNS TABLE
 AS
 RETURN(
-	SELECT * FROM V_GetCertificates v WHERE v.MaCD = @macd
-)
+	SELECT MaCD,MaCCCD ,HoTen ,DacDiemNhanDang ,NoiThuongTru ,QueQuan,QuocTich,NgaySinh,HanSuDung,GioiTinh 
+	FROM V_GetCertificates v 
+	WHERE v.MaCD = @macd)
+--drop FUNCTION FN_GetCertificates
 -- SELECT * FROM FN_GetCertificates('CD0030')
 GO
-CREATE VIEW V_GetDataUser --(Certificate) của hoàng
+CREATE OR ALTER VIEW V_GetDataUser --(Certificate) của hoàng
 AS
-	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ce.Avatar, ac.phanquyen
+	SELECT c.MaCD, ce.MaCCCD, c.HoTen, ce.DacDiemNhanDang, ce.NoiThuongTru, ce.QueQuan, ce.QuocTich, b.NgaySinh, ce.HanSuDung, c.GioiTinh, ac.phanquyen
 	FROM Citizens c, Certificates ce, Births b, Accounts ac
 	WHERE c.MaCD = ce.MaCD AND c.MaCD = b.MaCD AND c.MaCD = ac.MaCD
 GO
 --SELECT * FROM V_GetDataUser
-CREATE FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
+-- hàm trả về dữ liệu của công dân có MaCD là tham số truyền vào, trả ra bảng
+CREATE OR ALTER FUNCTION FN_GetDataUser(@macd varchar(10)) --(Certificate) của hoàng
 RETURNS TABLE
 AS
 RETURN(
@@ -900,7 +938,7 @@ AS
 BEGIN
 	SELECT *
 	FROM Temporarily_Staying
-	WHERE TrangThai='Chưa duyệt'
+	WHERE TrangThai='Chưa duyệt' AND Tinh=@Tinh AND Huyen=@huyen AND Xa=@xa
 END;
 
 
@@ -919,15 +957,14 @@ BEGIN
 	RETURN @COUNT;
 END
 
--- Liệt kê những công dân có hạn sử dụng năm nay, 
--- hoặc năm sau đi thay thế cccd.(Công)(Certificates)
+-- Liệt kê những công dân có hạn sử dụng năm nay, hoặc năm sau đi thay thế cccd.(Công)(Certificates)
 GO
 CREATE OR ALTER FUNCTION [dbo].[Fn_CongDanSapHetHanSuDung]()
-RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max),Anh image)
+RETURNS @SapHetHan TABLE (ID int,MaCCCD nvarchar(12),MaCD varchar(10),QuocTich nvarchar(max),QueQuan nvarchar(max),NoiThuongTru nvarchar(max),HanSuDung nvarchar(max),DacDiemNhanDang nvarchar(max))
 AS
 BEGIN
-	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang,Anh)
-	SELECT *
+	INSERT INTO @SapHetHan(ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang)
+	SELECT ID,MaCCCD,MaCD,QuocTich,QueQuan,NoiThuongTru,HanSuDung,DacDiemNhanDang
 	FROM Certificates
 	WHERE YEAR(HanSuDung)=YEAR(GETDATE())AND YEAR(HanSuDung)=( YEAR(GETDATE()) + 1 );
 	return 
@@ -1266,33 +1303,33 @@ VALUES
 
 INSERT INTO Certificates (MaCD, QuocTich, QueQuan, NoiThuongTru, HanSuDung, DacDiemNhanDang, Avatar)
 VALUES
-    ('CD0001', N'Việt Nam', N'Kon Tum', N'Đắk Hà', N'2033-01-01', N'Không', 'image1.jpg'),
-    ('CD0002', N'Việt Nam', N'Đà Nẵng', N'Hải Châu', N'2034-01-01', N'Không', 'image2.jpg'),
-    ('CD0003', N'Việt Nam', N'Hà Nội', N'Cầu Giấy', N'2035-01-01', N'Không', 'image3.jpg'),
-    ('CD0004', N'Việt Nam', N'Hồ Chí Minh', N'Quận 1', N'2036-01-01', N'Không', 'image4.jpg'),
-    ('CD0005', N'Việt Nam', N'Đồng Nai', N'Biên Hòa', N'2037-01-01', N'Không', 'image5.jpg'),
-    ('CD0006', N'Việt Nam', N'Bình Dương', N'Thủ Dầu Một', N'2038-01-01', N'Không', 'image6.jpg'),
-    ('CD0007', N'Việt Nam', N'Nghệ An', N'Vinh', N'2039-01-01', N'Không', 'image7.jpg'),
-    ('CD0008', N'Việt Nam', N'Hải Phòng', N'Hồng Bàng', N'2040-01-01', N'Không', 'image8.jpg'),
-    ('CD0009', N'Việt Nam', N'Khánh Hòa', N'Nha Trang', N'2041-01-01', N'Không', 'image9.jpg'),
-    ('CD0010', N'Việt Nam', N'Bà Rịa - Vũng Tàu', N'Vũng Tàu', N'2042-01-01', N'Không', 'image10.jpg'),
-    ('CD0011', N'Việt Nam', N'Quảng Ngãi', N'Quảng Ngãi', N'2043-01-01', N'Không', 'image11.jpg'),
-    ('CD0012', N'Việt Nam', N'Đắk Lắk', N'Buôn Ma Thuột', N'2044-01-01', N'Không', 'image12.jpg'),
-    ('CD0013', N'Việt Nam', N'Lâm Đồng', N'Đà Lạt', N'2045-01-01', N'Không', 'image13.jpg'),
-    ('CD0014', N'Việt Nam', N'Thừa Thiên Huế', N'Huế', N'2046-01-01', N'Không', 'image14.jpg'),
-    ('CD0015', N'Việt Nam', N'Hà Tĩnh', N'Hà Tĩnh', N'2047-01-01', N'Không', 'image15.jpg'),
-    ('CD0016', N'Việt Nam', N'Thanh Hóa', N'Thanh Hóa', N'2048-01-01', N'Không', 'image16.jpg'),
-    ('CD0017', N'Việt Nam', N'Nam Định', N'Nam Định', N'2049-01-01', N'Không', 'image17.jpg'),
-    ('CD0018', N'Việt Nam', N'Bắc Ninh', N'Bắc Ninh', N'2050-01-01', N'Không', 'image18.jpg'),
-    ('CD0019', N'Việt Nam', N'Phú Thọ', N'Việt Trì', N'2051-01-01', N'Không', 'image19.jpg'),
-    ('CD0020', N'Việt Nam', N'Bắc Giang', N'Bắc Giang', N'2052-01-01', N'Không', 'image20.jpg'),
-    ('CD0021', N'Việt Nam', N'Hòa Bình', N'Hòa Bình', N'2053-01-01', N'Không', 'image21.jpg'),
-    ('CD0022', N'Việt Nam', N'Hưng Yên', N'Hưng Yên', N'2054-01-01', N'Không', 'image22.jpg'),
-    ('CD0023', N'Việt Nam', N'Hà Nam', N'Phủ Lý', N'2055-01-01', N'Không', 'image23.jpg'),
-    ('CD0024', N'Việt Nam', N'Thái Bình', N'Thái Bình', N'2056-01-01', N'Không', 'image24.jpg'),
-    ('CD0025', N'Việt Nam', N'Hải Dương', N'Hải Dương', N'2057-01-01', N'Không', 'image25.jpg'),
-    ('CD0026', N'Việt Nam', N'Hải Dương', N'Chí Linh', N'2058-01-01', N'Không', 'image26.jpg'),
-    ('CD0027', N'Việt Nam', N'Quảng Ninh', N'Hạ Long', N'2059-01-01', N'Không', 'image27.jpg');
+    ('CD0001', N'Việt Nam', N'Kon Tum', N'Đắk Hà', N'2033-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0002', N'Việt Nam', N'Đà Nẵng', N'Hải Châu', N'2034-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0003', N'Việt Nam', N'Hà Nội', N'Cầu Giấy', N'2035-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0004', N'Việt Nam', N'Hồ Chí Minh', N'Quận 1', N'2036-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0005', N'Việt Nam', N'Đồng Nai', N'Biên Hòa', N'2037-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0006', N'Việt Nam', N'Bình Dương', N'Thủ Dầu Một', N'2038-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0007', N'Việt Nam', N'Nghệ An', N'Vinh', N'2039-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0008', N'Việt Nam', N'Hải Phòng', N'Hồng Bàng', N'2040-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0009', N'Việt Nam', N'Khánh Hòa', N'Nha Trang', N'2041-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0010', N'Việt Nam', N'Bà Rịa - Vũng Tàu', N'Vũng Tàu', N'2042-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0011', N'Việt Nam', N'Quảng Ngãi', N'Quảng Ngãi', N'2043-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0012', N'Việt Nam', N'Đắk Lắk', N'Buôn Ma Thuột', N'2044-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0013', N'Việt Nam', N'Lâm Đồng', N'Đà Lạt', N'2045-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0014', N'Việt Nam', N'Thừa Thiên Huế', N'Huế', N'2046-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0015', N'Việt Nam', N'Hà Tĩnh', N'Hà Tĩnh', N'2047-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0016', N'Việt Nam', N'Thanh Hóa', N'Thanh Hóa', N'2048-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0017', N'Việt Nam', N'Nam Định', N'Nam Định', N'2049-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0018', N'Việt Nam', N'Bắc Ninh', N'Bắc Ninh', N'2050-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0019', N'Việt Nam', N'Phú Thọ', N'Việt Trì', N'2051-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0020', N'Việt Nam', N'Bắc Giang', N'Bắc Giang', N'2052-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0021', N'Việt Nam', N'Hòa Bình', N'Hòa Bình', N'2053-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0022', N'Việt Nam', N'Hưng Yên', N'Hưng Yên', N'2054-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0023', N'Việt Nam', N'Hà Nam', N'Phủ Lý', N'2055-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0024', N'Việt Nam', N'Thái Bình', N'Thái Bình', N'2056-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0025', N'Việt Nam', N'Hải Dương', N'Hải Dương', N'2057-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0026', N'Việt Nam', N'Hải Dương', N'Chí Linh', N'2058-01-01', N'Không', 'D:\meo.jpg'),
+    ('CD0027', N'Việt Nam', N'Quảng Ninh', N'Hạ Long', N'2059-01-01', N'Không', 'D:\meo.jpg');
 
 
 

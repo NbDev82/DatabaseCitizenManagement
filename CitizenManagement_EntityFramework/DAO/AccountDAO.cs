@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CitizenManagement_EntityFramework.DAO;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class AccountDAO
+    public class AccountDAO
     {
         private static AccountDAO instance;
         public static AccountDAO Instance
@@ -40,7 +41,7 @@ namespace CitizenManagement_EntityFramework
                             DBConnection.Instance.ChangeMode(connstr);
                         }
                         connection.Close();
-                        bool role = Role == 1 ? true : false;
+                        bool role = Role == 1;
                         CurrentUser.Instance.CurrentAccount = new Accounts { Macd = username, Matkhau = password, Phanquyen = role }  ;
                         CurrentUser.Instance.CurrentCitizen = new Cityzen { Macd = username };
                         return true;
@@ -51,6 +52,7 @@ namespace CitizenManagement_EntityFramework
                     string SQL = string.Format($"SELECT * FROM dbo.FN_CheckAuthentication('{username}','{password}');");
                     DataTable dt = DBConnection.Instance.GetDataTable(SQL);
                     CurrentUser.Instance.CurrentAccount = new Accounts(dt.Rows[0]);
+                    CurrentUser.Instance.CurrentCitizen = CitizenDAO.Instance.GetCitizenByMaCD(username);
                     return true;
                 }
                 return false;

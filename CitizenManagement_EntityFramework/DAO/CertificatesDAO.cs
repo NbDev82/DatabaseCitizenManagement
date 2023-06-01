@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CitizenManagement_EntityFramework
 {
-    internal class CertificatesDAO
+    public class CertificatesDAO
     {
         private static CertificatesDAO instance;
         public static CertificatesDAO Instance
@@ -18,6 +18,32 @@ namespace CitizenManagement_EntityFramework
                 if (instance == null)
                     instance = new CertificatesDAO();
                 return instance;
+            }
+        }
+        public DataTable GetCertificateNearlyExpired()
+        {
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM [dbo].[Fn_CongDanSapHetHanSuDung] () ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public DataTable GetCertificateExpired()
+        {
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM [dbo].[Fn_CongDanHetHanSuDung]() ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
             }
         }
         public DataRow GetCurrentDataUser(string macd)
@@ -35,15 +61,29 @@ namespace CitizenManagement_EntityFramework
         }
         public DataTable CitizenBelongProvince(string province)
         {
-            string SQL = string.Format($"SELECT * FROM dbo.GetCitizensByProvince (N'{province}') ");
-            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
-            return dt;
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM dbo.GetCitizensByProvince (N'{province}') ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public DataTable CitizenWithoutCertificate()
         {
-            string SQL = string.Format("SELECT * FROM Citizens_Without_Certificates ");
-            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
-            return dt;
+            try
+            {
+                string SQL = string.Format("SELECT * FROM Citizens_Without_Certificates ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public bool Add(Certificate cccd, byte[] Img)
         {
@@ -51,7 +91,7 @@ namespace CitizenManagement_EntityFramework
             {
                 if (cccd == null)
                     return false;
-                string strSQL = string.Format($"EXEC FN_RegisterCertificate '{cccd.MaCD}',N'{cccd.QuocTich}',N'{cccd.QueQuan}',N'{cccd.NoiThuongTru}',N'{cccd.DacDiemNhanDang}',@image");
+                string strSQL = string.Format($"EXEC PROC_RegisterCertificate '{cccd.MaCD}',N'{cccd.QuocTich}',N'{cccd.QueQuan}',N'{cccd.NoiThuongTru}',N'{cccd.DacDiemNhanDang}',@image");
                 return DBConnection.Instance.ExecuteWithParameter(strSQL,"image", Img);
             }
             catch
@@ -61,16 +101,30 @@ namespace CitizenManagement_EntityFramework
         }
         public DataTable GetDataTable()
         {
-            string SQL = string.Format("SELECT * " +
+            try
+            {
+                string SQL = string.Format("SELECT * " +
                                        "FROM V_GetCertificates ");
-            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
-            return dt;
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public DataTable GetCertificateByID(string macd)
         {
-            string SQL = string.Format($"SELECT * FROM FN_GetCertificates('{macd}') ");
-            DataTable dt = DBConnection.Instance.GetDataTable(SQL);
-            return dt;
+            try
+            {
+                string SQL = string.Format($"SELECT * FROM FN_GetCertificates('{macd}') ");
+                DataTable dt = DBConnection.Instance.GetDataTable(SQL);
+                return dt;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

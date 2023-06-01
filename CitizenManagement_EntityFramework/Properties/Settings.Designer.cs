@@ -25,7 +25,9 @@ namespace CitizenManagement_EntityFramework.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=vanhoang;Initial Catalog=CityzenManagement;User ID={0};Password={1}")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;Initial Catalog=CityzenManagement;User ID={0};Password={1};C" +
+            "onnect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=R" +
+            "eadWrite;MultiSubnetFailover=False")]
         public string cnnManager {
             get {
                 return ((string)(this["cnnManager"]));
@@ -34,8 +36,9 @@ namespace CitizenManagement_EntityFramework.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;User ID=sa;Password=sa;Connect Timeout=30;Encrypt=False;Trus" +
-            "tServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=VANHOANG;Initial Catalog=CityzenManagement;User ID=sa;Password=sa;Con" +
+            "nect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=Rea" +
+            "dWrite;MultiSubnetFailover=False")]
         public string cnnCityzen {
             get {
                 return ((string)(this["cnnCityzen"]));
