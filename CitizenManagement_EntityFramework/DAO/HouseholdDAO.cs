@@ -13,15 +13,7 @@ namespace CitizenManagement_EntityFramework.DAO
         private readonly string HOKHAU = "Households";
         private readonly string CHITIETHOKHAU = "Detail_Households";
         private readonly string MAHO = "MaHo";
-        private readonly string CHUHO = "ChuHo";
-        private readonly string TINHTHANH = "TinhThanh";
-        private readonly string QUANHUYEN = "QuanHuyen";
-        private readonly string PHUONGXA = "PhuongXa";
-        private readonly string NGAYDANGKY = "NgayDangKy";
-        private readonly string TRANGTHAI = "TrangThai";
         private readonly string MACD = "MaCD";
-        private readonly string TINHTRANGCUTRU = "TinhTrangCuTru";
-        private readonly string QUANHEVOICHUHO = "QuanHeVoiChuHo";
         private readonly string CONGDAN = "Citizens";
         private readonly string KHAISINH = "Births";
         private static HouseholdDAO instance;

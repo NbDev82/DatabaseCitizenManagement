@@ -42,6 +42,8 @@ namespace CitizenManagement_EntityFramework
 
         private void fThongTinCaNhan_Load(object sender, EventArgs e)
         {
+            if (!CurrentUser.Instance.CurrentAccount.Phanquyen)
+                pnPhanQuyen.Visible = false;
             LoadAvatar();
             BindData(currentCityzen);
         }
