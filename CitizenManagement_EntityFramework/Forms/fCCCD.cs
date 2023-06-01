@@ -14,7 +14,6 @@ namespace CitizenManagement_EntityFramework
 {
     public partial class fCCCD : Form
     {
-        private Accounts tk;
         private DataRow currentDataUser;
 
         public fCCCD()
@@ -38,14 +37,22 @@ namespace CitizenManagement_EntityFramework
                 dtpkNgaySinh.Text = currentDataUser["NgaySinh"].ToString();
                 dtpkThoiHan.Text = currentDataUser["HanSuDung"].ToString();
                 txtGioiTinh.Text = currentDataUser["GioiTinh"].ToString();
-                if (currentDataUser["Avatar"] != DBNull.Value)
-                {
-                    byte[] imageBytes = (byte[])currentDataUser["Avatar"];
-                    using (MemoryStream ms = new MemoryStream(imageBytes))
-                    {
-                        picFace.Image = Image.FromStream(ms);
-                    }
-                }
+                //if (currentDataUser["Avatar"] != DBNull.Value)
+                //{
+                //    try
+                //    {
+                //        byte[] imageBytes = (byte[])currentDataUser["Avatar"];
+                //        using (MemoryStream ms = new MemoryStream(imageBytes))
+                //        {
+                //            picFace.Image = Image.FromStream(ms);
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        MessageBox.Show("Đã xảy ra lỗi: " + ex.Message);
+                //        picFace.Image = null;
+                //    }
+                //}
                 return true;
             }
             catch
@@ -57,16 +64,25 @@ namespace CitizenManagement_EntityFramework
         {
             try
             {
-                currentDataUser = CertificatesDAO.Instance.GetCurrentDataUser(CurrentUser.Instance.CurrentCitizen.Macd);
+                if(CurrentUser.Instance.CurrentAccount.Phanquyen)
+                {
+                    pnChucNang.Visible = true;
+                    pnCaNhan.Visible = false;
+                }
+                else
+                {
+                    currentDataUser = CertificatesDAO.Instance.GetCurrentDataUser(CurrentUser.Instance.CurrentCitizen.Macd);
 
-                if (!LoadDataCurrentUser(currentDataUser))
-                    throw new Exception();
-                pnThongTin.Enabled = false;
-                pnThongTin_3.Enabled = false;
+                    if (!LoadDataCurrentUser(currentDataUser))
+                        throw new Exception("Tải thông tin CCCD thất bại");
+                    pnThongTin.Enabled = false;
+                    pnThongTin_3.Enabled = false;
+                    pnCaNhan.Visible = false;
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Tải thông tin CCCD thất bại");
+                MessageBox.Show(ex.Message);
                 pnCaNhan.Enabled = true;
                 pnThongTin.Enabled = true;
                 pnThongTin_3.Enabled = true;
@@ -78,7 +94,7 @@ namespace CitizenManagement_EntityFramework
             {
                 string MaCD = CurrentUser.Instance.CurrentCitizen.Macd;
                 string HoVaTen = txtHoVaTen.Text;
-                string NgaySinh = dtpkNgaySinh.Value.ToString();
+                DateTime NgaySinh = dtpkNgaySinh.Value;
                 string GioiTinh = txtGioiTinh.Text;
                 string QuocTich = txtQuocTich.Text;
                 string QueQuan = txtQueQuan.Text;
@@ -141,7 +157,6 @@ namespace CitizenManagement_EntityFramework
                 }
             }
         }
-
         private void btnTaiHinh_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -183,6 +198,21 @@ namespace CitizenManagement_EntityFramework
         private void btnCCCDNearlyExpired_Click(object sender, EventArgs e)
         {
             dtgvDanhSachCCCD.DataSource = CertificatesDAO.Instance.GetCertificateNearlyExpired();
+        }
+
+        private void dtgvDanhSachCCCD_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int index = dtgvDanhSachCCCD.CurrentRow.Index;
+                DataTable dttb = (DataTable)dtgvDanhSachCCCD.DataSource;
+                DataRow cccd = dttb.Rows[index];
+                LoadDataCurrentUser(cccd);
+            }
+            catch
+            {
+                MessageBox.Show("Có lỗi xảy ra");
+            }
         }
     }
 }

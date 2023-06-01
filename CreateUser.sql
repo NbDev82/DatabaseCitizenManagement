@@ -10,6 +10,23 @@ CREATE LOGIN households_manager WITH PASSWORD = 'manager';
 CREATE USER households_manager FOR LOGIN households_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Households to households_manager
 GRANT SELECT, DELETE, UPDATE, INSERT ON Detail_Households to households_manager
+GRANT SELECT ON view_HouseholdMembersInfo to households_manager
+GRANT SELECT ON View_HouseholdsByMaHo to households_manager
+GRANT SELECT ON View_Citizens to households_manager
+GRANT SELECT ON View_Births to households_manager
+GRANT EXECUTE ON func_GenerateMaHo to households_manager
+GRANT EXECUTE ON proc_InsertDetailHousehold to households_manager
+GRANT EXECUTE ON proc_DeleteDetailHousehold to households_manager
+GRANT EXECUTE ON proc_InsertHousehold to households_manager
+GRANT EXECUTE ON proc_InsertDetailHousehold to households_manager
+
+
+
+
+
+
+
+
 
 CREATE LOGIN users WITH PASSWORD = 'user';
 CREATE USER users FOR LOGIN users;
@@ -39,9 +56,6 @@ CREATE USER births_manager FOR LOGIN births_manager;
 GRANT SELECT, DELETE, UPDATE, INSERT ON Births to births_manager
 GRANT SELECT, DELETE, UPDATE, INSERT ON Users_Deleted to births_manager
 
-CREATE LOGIN mails_manager WITH PASSWORD = 'manager';
-CREATE USER mails_manager FOR LOGIN mails_manager;
-GRANT SELECT, DELETE, UPDATE, INSERT ON Mails to mails_manager
 
 CREATE LOGIN people_marriage_manager WITH PASSWORD = 'manager';
 CREATE USER people_marriage_manager FOR LOGIN people_marriage_manager;

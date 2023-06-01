@@ -27,17 +27,21 @@ namespace CitizenManagement_EntityFramework
         }
         public void HoKhauLoad()
         {
-            string macd = CurrentUser.Instance.CurrentCitizen.Macd;
-            string MaHo = HouseholdDAO.Instance.LayMaHo(macd);
-            List<Control> ltext = new List<Control>();
-            ltext.Add(txtMaHo);
-            ltext.Add(txtChuHo);
-            ltext.Add(txtTinhThanh);
-            ltext.Add(txtQuanHuyen);
-            ltext.Add(txtPhuongXa);
-            HouseholdDAO.Instance.Fill(MaHo, ltext);
-            pnChucNang.Enabled = false;
-            pnThongTinHoKhau.Enabled = false;
+            try
+            {
+                string macd = CurrentUser.Instance.CurrentCitizen.Macd;
+                string MaHo = HouseholdDAO.Instance.LayMaHo(macd);
+                List<Control> ltext = new List<Control>();
+                ltext.Add(txtMaHo);
+                ltext.Add(txtChuHo);
+                ltext.Add(txtTinhThanh);
+                ltext.Add(txtQuanHuyen);
+                ltext.Add(txtPhuongXa);
+                HouseholdDAO.Instance.Fill(MaHo, ltext);
+                pnChucNang.Enabled = false;
+                pnThongTinHoKhau.Enabled = false;
+            }
+            catch { }
         }
         private void LoadList(string ID)
         {
@@ -47,35 +51,48 @@ namespace CitizenManagement_EntityFramework
 
         private void dtgvChiTietHoKhau_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int r = this.dtgvChiTietHoKhau.CurrentCell.RowIndex;
-            txtMaCD.DataBindings.Clear();
-            txtMaCD.Text = dtgvChiTietHoKhau.Rows[r].Cells[1].Value.ToString();
-            txtHoTen.DataBindings.Clear();
-            txtHoTen.Text = dtgvChiTietHoKhau.Rows[r].Cells[2].Value.ToString();
-            txtNgaySinh.DataBindings.Clear();
-            txtNgaySinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[3].Value.ToString();
-            txtNoiSinh.DataBindings.Clear();
-            txtNoiSinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[4].Value.ToString();
-            txtGioiTinh.DataBindings.Clear();
-            txtGioiTinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[5].Value.ToString();
-            txtNgheNghiep.DataBindings.Clear();
-            txtNgheNghiep.Text = dtgvChiTietHoKhau.Rows[r].Cells[6].Value.ToString();
-            txtDanToc.DataBindings.Clear();
-            txtDanToc.Text = dtgvChiTietHoKhau.Rows[r].Cells[7].Value.ToString();
-            txtTonGiao.DataBindings.Clear();
-            txtTonGiao.Text = dtgvChiTietHoKhau.Rows[r].Cells[8].Value.ToString();
-            txtHonNhan.DataBindings.Clear();
-            txtHonNhan.Text = dtgvChiTietHoKhau.Rows[r].Cells[9].Value.ToString();
-            txtTinhTrang.DataBindings.Clear();
-            txtTinhTrang.Text = dtgvChiTietHoKhau.Rows[r].Cells[10].Value.ToString();
-            txtQuanHe.DataBindings.Clear();
-            txtQuanHe.Text = dtgvChiTietHoKhau.Rows[r].Cells[11].Value.ToString();
+            try
+            {
+                int r = dtgvChiTietHoKhau.CurrentCell.RowIndex;
+                txtMaCD.DataBindings.Clear();
+                txtMaCD.Text = dtgvChiTietHoKhau.Rows[r].Cells[1].Value.ToString();
+                txtHoTen.DataBindings.Clear();
+                txtHoTen.Text = dtgvChiTietHoKhau.Rows[r].Cells[2].Value.ToString();
+                txtNgaySinh.DataBindings.Clear();
+                txtNgaySinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[3].Value.ToString();
+                txtNoiSinh.DataBindings.Clear();
+                txtNoiSinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[4].Value.ToString();
+                txtGioiTinh.DataBindings.Clear();
+                txtGioiTinh.Text = dtgvChiTietHoKhau.Rows[r].Cells[5].Value.ToString();
+                txtNgheNghiep.DataBindings.Clear();
+                txtNgheNghiep.Text = dtgvChiTietHoKhau.Rows[r].Cells[6].Value.ToString();
+                txtDanToc.DataBindings.Clear();
+                txtDanToc.Text = dtgvChiTietHoKhau.Rows[r].Cells[7].Value.ToString();
+                txtTonGiao.DataBindings.Clear();
+                txtTonGiao.Text = dtgvChiTietHoKhau.Rows[r].Cells[8].Value.ToString();
+                txtHonNhan.DataBindings.Clear();
+                txtHonNhan.Text = dtgvChiTietHoKhau.Rows[r].Cells[9].Value.ToString();
+                txtTinhTrang.DataBindings.Clear();
+                txtTinhTrang.Text = dtgvChiTietHoKhau.Rows[r].Cells[10].Value.ToString();
+                txtQuanHe.DataBindings.Clear();
+                txtQuanHe.Text = dtgvChiTietHoKhau.Rows[r].Cells[11].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
-
         private void btnChinhSua_Click(object sender, EventArgs e)
         {
-            fCCCD d = new fCCCD();
-            d.ShowDialog();
+            pnThongTin.Enabled = !pnThongTin.Enabled;
+            if (pnThongTin.Enabled)
+            {
+                BatChinhSua();
+            }
+            else
+            {
+                TatChinhSua();
+            }
         }
         public void BatChinhSua()
         {
@@ -88,18 +105,18 @@ namespace CitizenManagement_EntityFramework
             pnCapNhatHoKhau.Enabled = false;
         }
 
-        private void btnChinhSua_Click_1(object sender, EventArgs e)
-        {
-            pnThongTin.Enabled = !pnThongTin.Enabled;
-            if (pnThongTin.Enabled)
-            {
-                BatChinhSua();
-            }
-            else
-            {
-                TatChinhSua();
-            }
-        }
+        //private void btnChinhSua_Click_1(object sender, EventArgs e)
+        //{
+        //    pnThongTin.Enabled = !pnThongTin.Enabled;
+        //    if (pnThongTin.Enabled)
+        //    {
+        //        BatChinhSua();
+        //    }
+        //    else
+        //    {
+        //        TatChinhSua();
+        //    }
+        //}
         public void LoadCongDan()
         {
             try
@@ -252,6 +269,11 @@ namespace CitizenManagement_EntityFramework
 
         private void btnTaoHoKhau_Click(object sender, EventArgs e)
         {
+            txtChuHo.Clear();
+            txtMaHo.Clear();
+            txtTinhThanh.Clear();
+            txtQuanHuyen.Clear();
+            txtPhuongXa.Clear();
             pnThongTinHoKhau.Enabled = true;
         }
 
@@ -264,7 +286,7 @@ namespace CitizenManagement_EntityFramework
                     MessageBox.Show("Không trong chế độ đăng ký hộ khẩu");
                     return;
                 }
-                string MaCD = "CD0002";
+                string MaCD = txtChuHo.Text;
                 string maHo = HouseholdDAO.Instance.LayMaHo(MaCD);
                 if (maHo != null)
                 {
@@ -275,7 +297,8 @@ namespace CitizenManagement_EntityFramework
                 string TinhThanh = txtTinhThanh.Text;
                 string PhuongXa = txtPhuongXa.Text;
                 string QuanHuyen = txtQuanHuyen.Text;
-                Households hoKhauMoi = new Households("HO00010", MaCD, TinhThanh, QuanHuyen, PhuongXa, "Chưa duyệt", DateTime.Now);
+                maHo = HouseholdDAO.Instance.NewMaHo();
+                Households hoKhauMoi = new Households(maHo, MaCD, TinhThanh, QuanHuyen, PhuongXa, null, DateTime.Now);
                 if (HouseholdDAO.Instance.AddToHoKhau(hoKhauMoi))
                     MessageBox.Show("Tạo hộ khẩu thành công");
                 else
@@ -296,13 +319,29 @@ namespace CitizenManagement_EntityFramework
 
         private void rdoQuanLy_CheckedChanged(object sender, EventArgs e)
         {
-            if (rdoQuanLy.Checked)
+            
+            try
             {
-                pnChinhSuaThongTinThanhVien.Enabled = true;
-                pnChucNang.Enabled = true;
+                if (!CurrentUser.Instance.CurrentAccount.Phanquyen)
+                {
+                    throw new Exception("Bạn không có quyền này");
+                }
+                if (rdoQuanLy.Checked)
+                {
+                    pnChinhSuaThongTinThanhVien.Enabled = true;
+                    pnChucNang.Enabled = true;
+                }
+                else
+                {
+                    pnChinhSuaThongTinThanhVien.Enabled = false;
+                    pnChucNang.Enabled = false;
+                    dtgvDanhSachHoKhau.DataSource = null;
+                }
             }
-            else
-                pnChinhSuaThongTinThanhVien.Enabled = false;
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)

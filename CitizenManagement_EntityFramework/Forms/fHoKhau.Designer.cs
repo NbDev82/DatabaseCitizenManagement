@@ -170,6 +170,7 @@
             this.btnChiTiet.TabIndex = 19;
             this.btnChiTiet.Text = "Chi tiết";
             this.btnChiTiet.UseVisualStyleBackColor = false;
+            this.btnChiTiet.Click += new System.EventHandler(this.btnChiTiet_Click);
             // 
             // btnTaoHoKhau
             // 
@@ -183,6 +184,7 @@
             this.btnTaoHoKhau.TabIndex = 25;
             this.btnTaoHoKhau.Text = "Tạo hộ khẩu mới";
             this.btnTaoHoKhau.UseVisualStyleBackColor = false;
+            this.btnTaoHoKhau.Click += new System.EventHandler(this.btnTaoHoKhau_Click);
             // 
             // btnLoadLaiHoKhau
             // 
@@ -197,6 +199,7 @@
             this.btnLoadLaiHoKhau.TabIndex = 19;
             this.btnLoadLaiHoKhau.Text = "Quay về";
             this.btnLoadLaiHoKhau.UseVisualStyleBackColor = false;
+            this.btnLoadLaiHoKhau.Click += new System.EventHandler(this.btnLoadLaiHoKhau_Click);
             // 
             // btnGui
             // 
@@ -211,6 +214,7 @@
             this.btnGui.TabIndex = 19;
             this.btnGui.Text = "Gửi";
             this.btnGui.UseVisualStyleBackColor = false;
+            this.btnGui.Click += new System.EventHandler(this.btnGui_Click);
             // 
             // pnChiTietHoKhau
             // 
@@ -240,6 +244,7 @@
             this.dtgvChiTietHoKhau.RowHeadersWidth = 51;
             this.dtgvChiTietHoKhau.Size = new System.Drawing.Size(506, 141);
             this.dtgvChiTietHoKhau.TabIndex = 15;
+            this.dtgvChiTietHoKhau.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvChiTietHoKhau_CellClick);
             // 
             // pnChinhSuaThongTinThanhVien
             // 
@@ -266,6 +271,7 @@
             this.btnChinhSua.TabIndex = 0;
             this.btnChinhSua.Text = "Chỉnh sửa";
             this.btnChinhSua.UseVisualStyleBackColor = false;
+            this.btnChinhSua.Click += new System.EventHandler(this.btnChinhSua_Click);
             // 
             // btnLoadLaiCongDan
             // 
@@ -276,6 +282,7 @@
             this.btnLoadLaiCongDan.TabIndex = 0;
             this.btnLoadLaiCongDan.Text = "Quay về";
             this.btnLoadLaiCongDan.UseVisualStyleBackColor = true;
+            this.btnLoadLaiCongDan.Click += new System.EventHandler(this.btnLoadLaiCongDan_Click);
             // 
             // pnThongTinThanhVien
             // 
@@ -726,6 +733,7 @@
             this.btnDien.TabIndex = 0;
             this.btnDien.Text = "Điền";
             this.btnDien.UseVisualStyleBackColor = false;
+            this.btnDien.Click += new System.EventHandler(this.btnDien_Click);
             // 
             // btnThem
             // 
@@ -738,6 +746,7 @@
             this.btnThem.TabIndex = 0;
             this.btnThem.Text = "Thêm";
             this.btnThem.UseVisualStyleBackColor = false;
+            this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
             // 
             // btnXoa
             // 
@@ -750,6 +759,7 @@
             this.btnXoa.TabIndex = 0;
             this.btnXoa.Text = "Xóa";
             this.btnXoa.UseVisualStyleBackColor = false;
+            this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
             // 
             // rdoQuanLy
             // 
@@ -761,6 +771,7 @@
             this.rdoQuanLy.TabIndex = 30;
             this.rdoQuanLy.Text = "Quản lý";
             this.rdoQuanLy.UseVisualStyleBackColor = true;
+            this.rdoQuanLy.CheckedChanged += new System.EventHandler(this.rdoQuanLy_CheckedChanged);
             // 
             // rdoCongDan
             // 
@@ -840,6 +851,7 @@
             this.btnTimKiem.TabIndex = 16;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = false;
+            this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
             // 
             // btnXem
             // 
@@ -854,6 +866,7 @@
             this.btnXem.TabIndex = 17;
             this.btnXem.Text = "Xem";
             this.btnXem.UseVisualStyleBackColor = false;
+            this.btnXem.Click += new System.EventHandler(this.btnXem_Click);
             // 
             // txtTimKiem
             // 
@@ -873,6 +886,7 @@
             this.dtgvDanhSachHoKhau.RowTemplate.Height = 24;
             this.dtgvDanhSachHoKhau.Size = new System.Drawing.Size(630, 172);
             this.dtgvDanhSachHoKhau.TabIndex = 21;
+            this.dtgvDanhSachHoKhau.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvDanhSachHoKhau_CellClick);
             // 
             // pnThongTinHoKhau
             // 
